@@ -1,3 +1,4 @@
+
 # Carpoolr
 
 Private Mitfahr-App für ein kleines Team. (Private carpooling app — simple English below.)
@@ -75,3 +76,4 @@ apps/
 db/       docker-compose.yml (postgres:17) + initdb/ baseline
 Makefile  db-up / db-down / dev-api / dev-web shortcuts
 ```
+
