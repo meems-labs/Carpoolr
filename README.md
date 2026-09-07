@@ -62,7 +62,7 @@ dotnet build apps/api        # 0 warnings, 0 errors
 - **The connection string is plumbed but unused this pass** — the API does not touch the database yet, so `ConnectionStrings__Default` being read from the environment is not covered by a test. The first DB access arrives with the data-model pass.
 - **podman compose is podman-compose 1.6.0** (Python provider), not Docker Compose v2. `up -d --wait` is used to wait for the healthcheck; `start_interval` is not supported.
 - **`db/initdb/` scripts run only on FIRST init** of the empty volume. Once `carpoolr_pgdata` exists, changes there have no effect — use migrations instead (added in a later pass).
-- **Port conflicts (rootless podman on :5432):** set `POSTGRES_PORT` in `.env`.
+- **Port conflicts (rootless podman on :5432):** set `POSTGRES_PORT` in `.env` — and also update `Port=` in `ConnectionStrings__Default` in the same file, or the API will later connect to the old port.
 - **Security:** `.env` is gitignored. The default Postgres password is for local development only — never reuse it elsewhere. Dev CORS is restricted to the two Vite origins (`http://localhost:5173`, `http://127.0.0.1:5173`), not `*`.
 - **Recurring rides:** intentionally not implemented yet. The stack is prepared so RFC 5545 RRULE-based recurrence (BYDAY, INTERVAL, UNTIL, COUNT) can be added cleanly in a later pass.
 
