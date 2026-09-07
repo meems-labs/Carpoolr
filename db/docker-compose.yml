@@ -1,0 +1,23 @@
+services:
+  db:
+    image: docker.io/library/postgres:17
+    container_name: carpoolr-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER missing — copy .env.example to .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD missing — copy .env.example to .env}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB missing — copy .env.example to .env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - carpoolr_pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro,Z
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  carpoolr_pgdata:
+    name: carpoolr_pgdata

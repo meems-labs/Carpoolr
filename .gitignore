@@ -1,0 +1,24 @@
+# --- Env (single root .env; keep .env.example committed) ---
+.env
+
+# --- Bun / Node ---
+node_modules/
+bun.lockb
+.bun/
+dist/
+
+# --- .NET ---
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# --- IDE / editor ---
+.idea/
+.vscode/
+*.swp
+
+# --- OS ---
+.DS_Store
+Thumbs.db

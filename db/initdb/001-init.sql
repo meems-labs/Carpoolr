@@ -1,0 +1,5 @@
+-- Carpoolr schema baseline.
+-- Runs only on FIRST init of an empty volume (docker-entrypoint-initdb.d).
+-- Once the named volume `carpoolr_pgdata` exists, edits here have no effect —
+-- use migrations in a later pass instead.
+-- Intentionally empty for this setup pass: no Trip/Ride tables yet.
