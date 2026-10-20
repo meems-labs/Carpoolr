@@ -1,5 +1,5 @@
 # Build
-FROM oven/bun:canary AS build
+FROM oven/bun@sha256:789674f246b61a3b02edec72a4cd0ebdfaddffab4b24f6e9147dde2937325897 AS build
 WORKDIR /app
 
 COPY apps/web/package.json apps/web/bun.lock ./
