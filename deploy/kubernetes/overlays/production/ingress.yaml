@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: carpoolr
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: carpoolr.splashmich.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: carpoolr-web
+                port:
+                  number: 80
