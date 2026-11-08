@@ -37,6 +37,7 @@ describe('offline navigation boundary', () => {
     '/',
     '/?from=2026-11-08',
     '/profil',
+    '/fahrten',
     '/kosten',
     '/meine-fahrten',
     '/meine-anfragen',

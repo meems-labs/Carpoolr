@@ -19,7 +19,7 @@ export function isStaticShellAsset(url: URL, origin: string): boolean {
 
 export const navigationAllowlist = [
   /^\/(?:\?.*)?$/,
-  /^\/(?:profil|meine-fahrten|meine-anfragen|eingegangene-anfragen|kosten)\/?(?:\?.*)?$/,
+  /^\/(?:fahrten|profil|meine-fahrten|meine-anfragen|eingegangene-anfragen|kosten)\/?(?:\?.*)?$/,
   /^\/fahrten\/(?:neu|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/?(?:\?.*)?$/i,
 ]
 

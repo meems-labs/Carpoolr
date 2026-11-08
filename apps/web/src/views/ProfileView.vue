@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import { clientsForPerson } from '../api/application'
 import { EnergyKind, type UserProfile } from '../api/generated/trips/v1/trips_pb'
 import OperationStatus from '../components/OperationStatus.vue'
+import PwaControls from '../components/PwaControls.vue'
 import { useOperation } from '../composables/useOperation'
 import { useUnsavedChanges } from '../composables/useUnsavedChanges'
 import { decimal, normalizeAddress } from '../lib/format'
@@ -145,8 +146,17 @@ async function save() {
       </div>
       <div class="actions">
         <button type="submit">{{ pending ? 'Wird gespeichert …' : 'Profil speichern' }}</button>
-        <RouterLink class="button secondary" to="/">Fahrten finden</RouterLink>
+        <RouterLink class="button secondary" to="/fahrten">Fahrten finden</RouterLink>
       </div>
     </fieldset>
   </form>
+  <section class="card" style="margin-top: 1.5rem">
+    <p class="eyebrow">Auf deinem Gerät</p>
+    <h2>Carpoolr als App</h2>
+    <p class="small muted">
+      Installiere die App für deinen nächsten Arbeitsweg. Neue Versionen werden automatisch geladen,
+      sobald deine Eingaben gespeichert sind.
+    </p>
+    <PwaControls mode="settings" />
+  </section>
 </template>

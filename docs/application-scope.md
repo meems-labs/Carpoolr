@@ -32,6 +32,7 @@ Diese Datei haelt Entscheidungen fuer die weitere Umsetzung fest. Vorhandener Be
 | Sortierung der Angebote | Naechste zukuenftige Abfahrt zuerst | Benutzeranforderung |
 | Mobile Installation | Vue-Frontend als installierbare PWA mit automatischen Updates | Benutzeranforderung |
 | PWA-Updateverhalten | Automatisch aktivieren, sobald keine ungespeicherten Eingaben oder laufenden Aktionen offen sind; bis dahin Hinweis anzeigen | Bestaetigte Auswahl |
+| Oberflaeche | Einheitliche eigene Designsprache, Mobile First, persoenliche Startseite mit Uebersicht und mobile Menuefuehrung | Benutzeranforderung |
 | Backend | ASP.NET Core / .NET 10; .NET 11 spaeter angedacht | Urspruengliche Benutzeranforderung |
 | API-Kommunikation | gRPC fuer das Frontend; SignalR als spaetere Moeglichkeit | Urspruengliche Benutzeranforderung |
 | Identity Provider | Authentik im Zielcluster vorhanden; Integration spaeter vorgesehen | Urspruengliche Benutzeranforderung |

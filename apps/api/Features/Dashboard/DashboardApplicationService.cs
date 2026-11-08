@@ -22,6 +22,24 @@ public sealed class DashboardApplicationService(CarpoolrDbContext database, Time
 {
     private const int PreviewSizePerKind = 5;
 
+    public Task<Trip?> GetNextTripAsync(UserIdentity actor, CancellationToken cancellationToken)
+    {
+        var now = clock.GetUtcNow();
+        return database.Trips.AsNoTracking()
+            .Where(trip => trip.State == TripState.Planned && trip.DepartureAt > now &&
+                (trip.OwnerIssuer == actor.Issuer && trip.OwnerSubject == actor.Subject ||
+                 trip.Bookings.Any(booking => booking.State == BookingState.Accepted &&
+                     booking.Profile.Issuer == actor.Issuer && booking.Profile.Subject == actor.Subject)))
+            .OrderBy(trip => trip.DepartureAt).ThenBy(trip => trip.Id)
+            .Include(trip => trip.DriverProfile)
+            // Accepted participants are sufficient for capacity, cost preview and MyBooking.
+            // Exclude unbounded request history and load the complete result in one SQL snapshot.
+            .Include(trip => trip.Bookings.Where(booking => booking.State == BookingState.Accepted))
+            .ThenInclude(booking => booking.Profile)
+            .AsSingleQuery()
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<PendingActionsDetails> GetPendingAsync(UserIdentity actor, CancellationToken cancellationToken)
     {
         // Counts and previews must agree even while another person processes a request.

@@ -49,13 +49,13 @@ onMounted(() => load())
 <template>
   <header class="page-header">
     <div>
-      <h1>Meine Anfragen</h1>
+      <h1>Meine Mitfahrten</h1>
       <p>
         Deine angefragten und bestätigten Mitfahrten. Vor der Abfahrt kannst du eine Teilnahme
         zurückziehen.
       </p>
     </div>
-    <RouterLink class="button secondary" to="/">Fahrten finden</RouterLink>
+    <RouterLink class="button secondary" to="/fahrten">Fahrten finden</RouterLink>
   </header>
   <OperationStatus :error="error" :success="success" />
   <p v-if="pending && !loaded" role="status">Deine Anfragen werden geladen …</p>

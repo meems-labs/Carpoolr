@@ -222,24 +222,24 @@ onMounted(() => load())
           <span>Festgeschrieben: {{ formatDate(entry.bill.completedAt) }}</span>
         </div>
         <div class="table-scroll cost-shares">
-          <table>
+          <table data-mobile-cards role="table">
             <thead>
               <tr>
-                <th>Person</th>
-                <th>Anteil</th>
-                <th>Zahlungsstand</th>
-                <th>Aktion</th>
+                <th scope="col">Person</th>
+                <th scope="col">Anteil</th>
+                <th scope="col">Zahlungsstand</th>
+                <th scope="col">Aktion</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="share in entry.bill.shares" :key="share.profileId">
-                <td>
+                <td data-label="Person">
                   {{ share.displayName }}
                   <span v-if="share.isMine" class="small muted">(Du)</span>
                 </td>
-                <td>{{ formatCents(share.amountCents) }}</td>
-                <td>{{ paymentLabel(share.paymentState) }}</td>
-                <td>
+                <td data-label="Anteil">{{ formatCents(share.amountCents) }}</td>
+                <td data-label="Zahlungsstand">{{ paymentLabel(share.paymentState) }}</td>
+                <td data-label="Aktion">
                   <div class="actions cost-actions">
                     <button
                       v-if="share.canReport"
@@ -290,7 +290,7 @@ onMounted(() => load())
 <style scoped>
 .cost-summary {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
   margin-bottom: 1.75rem;
 }
@@ -317,9 +317,9 @@ onMounted(() => load())
 .cost-actions {
   margin-top: 0;
 }
-@media (max-width: 720px) {
+@media (min-width: 760px) {
   .cost-summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>

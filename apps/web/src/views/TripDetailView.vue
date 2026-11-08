@@ -145,7 +145,7 @@ onMounted(load)
 
 <template>
   <div class="actions" style="margin: 0 0 1rem">
-    <RouterLink to="/">← Fahrten finden</RouterLink>
+    <RouterLink to="/fahrten">← Fahrten finden</RouterLink>
   </div>
   <header class="page-header">
     <div>
@@ -409,24 +409,24 @@ onMounted(load)
         <dd>{{ formatCents(bill.totalCents) }}</dd>
       </dl>
       <div class="table-scroll" style="margin-top: 1rem">
-        <table>
+        <table data-mobile-cards role="table">
           <thead>
             <tr>
-              <th>Person</th>
-              <th>Anteil</th>
-              <th>Zahlungsstand</th>
-              <th>Aktion</th>
+              <th scope="col">Person</th>
+              <th scope="col">Anteil</th>
+              <th scope="col">Zahlungsstand</th>
+              <th scope="col">Aktion</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="share in bill.shares" :key="share.profileId">
-              <td>
+              <td data-label="Person">
                 {{ share.displayName }}
                 <span v-if="share.isMine" class="small muted">(Du)</span>
               </td>
-              <td>{{ formatCents(share.amountCents) }}</td>
-              <td>{{ paymentLabel(share.paymentState) }}</td>
-              <td>
+              <td data-label="Anteil">{{ formatCents(share.amountCents) }}</td>
+              <td data-label="Zahlungsstand">{{ paymentLabel(share.paymentState) }}</td>
+              <td data-label="Aktion">
                 <div class="actions" style="margin-top: 0">
                   <button v-if="share.canReport" :disabled="pending" @click="reportPayment">
                     Als bezahlt melden

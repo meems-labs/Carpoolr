@@ -4,6 +4,8 @@ Die Anwendung verwendet Vue 3, TypeScript und Vite. Die Oberfläche ist deutsch 
 
 Carpoolr kann als PWA auf Mobilgeräten installiert werden. Installation, automatische sichere Updates und Offline-Grenzen sind unter [PWA](pwa.md) beschrieben.
 
+Die **Startseite** zeigt die nächste eigene oder bestätigte Fahrt, offene Aufgaben und einen Kostenüberblick. Die mobile Hauptnavigation enthält **Start**, **Suchen**, **Meine Fahrten**, **Kosten** und **Profil**. Unter **Meine Fahrten** wechseln die Tabs zwischen Angeboten, Mitfahrten und eingegangenen Anfragen. Auf großen Bildschirmen wird dieselbe Struktur als Seitenleiste dargestellt. Gestaltungsregeln stehen im [Design-System](design-system.md).
+
 ## Person auswählen und Profil ergänzen
 
 Oben ausdrücklich eine der vom Server angebotenen Testpersonen auswählen. Es gibt keinen Login und keine automatisch gewählte Person. Eine früher gewählte Person wird nur wiederhergestellt, wenn sie weiterhin im Serverkatalog existiert. Gespeichert wird im Browser nur diese Auswahl, nicht die Abholadresse oder ein Token.
@@ -25,7 +27,7 @@ Die Strecke wird **manuell** angegeben. Automatische Routenplanung, Geocoding un
 
 ## Mitfahren und Anfragen bearbeiten
 
-Unter **Fahrten finden** nach Datum suchen. Optionale Start-/Zielfilter vergleichen vollständige Adressen genau. Ergebnisse enthalten nur zukünftige, geplante Fahrten. Weitere Ergebnisse lassen sich nachladen.
+Unter **Suchen** nach Datum suchen. Optionale Start-/Zielfilter vergleichen vollständige Adressen genau. Ergebnisse enthalten nur zukünftige, geplante Fahrten. Weitere Ergebnisse lassen sich nachladen.
 
 In den Fahrtdetails **Einen Platz anfragen** wählen. Ein vollständiges eigenes Profil mit Abholadresse ist erforderlich. Die Anfrage reserviert zunächst keinen Platz. Der Fahrer entscheidet unter **Mitfahranfragen** über **Zusagen** oder **Ablehnen**. Nach einer Zusage wird die Abholadresse für ihn sichtbar und der Platz belegt.
 

@@ -47,6 +47,7 @@ service BillingService {
 
 service DashboardService {
   rpc GetPendingActions(GetPendingActionsRequest) returns (GetPendingActionsResponse);
+  rpc GetNextTrip(GetNextTripRequest) returns (GetNextTripResponse);
 }
 
 message CreateTripRequest {
@@ -317,6 +318,12 @@ message PendingAction {
   int64 amount_cents = 9;
 }
 message GetPendingActionsRequest {}
+message GetNextTripRequest {}
+message GetNextTripResponse {
+  // Earliest planned future trip owned by this person or with their accepted booking.
+  // Absent when there is no eligible upcoming trip; independent of list pagination.
+  Trip trip = 1;
+}
 message GetPendingActionsResponse {
   int64 booking_request_count = 1;
   int64 payment_report_count = 2;

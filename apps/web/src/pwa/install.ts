@@ -128,5 +128,13 @@ export function createInstallController(browser?: InstallBrowser) {
 const controller = createInstallController(typeof window === 'undefined' ? undefined : window)
 
 export const { installed, canInstall, installing, installError, isIos, promptInstall } = controller
-export const initInstall = controller.start
-export const disposeInstall = controller.dispose
+let installConsumers = 0
+export function initInstall() {
+  installConsumers++
+  if (installConsumers === 1) controller.start()
+}
+export function disposeInstall() {
+  if (installConsumers === 0) return
+  installConsumers--
+  if (installConsumers === 0) controller.dispose()
+}

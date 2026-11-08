@@ -207,10 +207,10 @@ onBeforeUnmount(() => {
 }
 .count {
   position: absolute;
-  top: -0.4rem;
-  right: -0.4rem;
-  min-width: 1.4rem;
-  padding: 0.1rem 0.3rem;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  padding: 2px 4px;
   border-radius: 1rem;
   background: #176c56;
   color: white;
@@ -238,7 +238,7 @@ onBeforeUnmount(() => {
   margin: 0.3rem 0;
 }
 .refresh {
-  min-height: 36px;
+  min-height: 44px;
   font-size: 0.8rem;
   padding: 0.4rem 0.65rem;
 }
@@ -267,5 +267,10 @@ onBeforeUnmount(() => {
 }
 .task-list strong {
   font-size: 0.9rem;
+}
+@media (max-width: 1023px) {
+  .notification-panel {
+    max-height: min(75dvh, calc(100dvh - 190px - env(safe-area-inset-bottom)));
+  }
 }
 </style>

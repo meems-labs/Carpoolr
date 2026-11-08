@@ -8,6 +8,8 @@ Die Vue-Anwendung enthält ein Web-App-Manifest, eigene PNG-/Maskable-Symbole, e
 - **iPhone / iPad:** Carpoolr in Safari öffnen, **Teilen → Zum Home-Bildschirm → Hinzufügen** wählen. Falls **Als Web-App öffnen** angezeigt wird, bleibt diese Option eingeschaltet. Die **Installationshilfe** beschreibt diesen Ablauf in der App.
 - **Desktop:** Ein unterstützter Browser kann ein Installationssymbol in der Adressleiste oder einen Menüeintrag anbieten. Die Webansicht bleibt weiterhin nutzbar.
 
+Installationshilfe und manuelle Update-Prüfung stehen in Carpoolr unter **Profil → Carpoolr als App**. Verbindungs- und Update-Hinweise erscheinen weiterhin in jeder Ansicht.
+
 Installationsaufforderungen unterliegen den Regeln des jeweiligen Browsers und lassen sich nicht erzwingen. Apples Ablauf ist im [iPhone-Benutzerhandbuch](https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios) beschrieben.
 
 ## Automatische Updates

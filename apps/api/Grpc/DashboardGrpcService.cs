@@ -8,9 +8,19 @@ using Wire = Carpoolr.Api.Contracts.Trips.V1;
 namespace Carpoolr.Api.Grpc;
 
 [Authorize(Policy = AuthenticationExtensions.ColleaguePolicy)]
-public sealed class DashboardGrpcService(DashboardApplicationService dashboard, ICurrentUser user)
+public sealed class DashboardGrpcService(DashboardApplicationService dashboard, ICurrentUser user, TimeProvider clock)
     : Wire.DashboardService.DashboardServiceBase
 {
+    public override async Task<Wire.GetNextTripResponse> GetNextTrip(
+        Wire.GetNextTripRequest request, ServerCallContext context)
+    {
+        var actor = user.GetRequiredIdentity();
+        var trip = await dashboard.GetNextTripAsync(actor, context.CancellationToken);
+        var response = new Wire.GetNextTripResponse();
+        if (trip is not null) response.Trip = TripWireMapper.Map(trip, actor, clock.GetUtcNow());
+        return response;
+    }
+
     public override async Task<Wire.GetPendingActionsResponse> GetPendingActions(
         Wire.GetPendingActionsRequest request, ServerCallContext context)
     {

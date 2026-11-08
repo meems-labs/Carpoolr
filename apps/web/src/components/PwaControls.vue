@@ -22,6 +22,7 @@ import {
 } from '../pwa/install'
 
 const helpId = useId()
+withDefaults(defineProps<{ mode?: 'all' | 'status' | 'settings' }>(), { mode: 'all' })
 const helpOpen = ref(false)
 const checking = ref(false)
 const message = ref('')
@@ -51,11 +52,21 @@ async function check() {
 </script>
 
 <template>
-  <section class="pwa-controls" aria-label="App installieren und aktualisieren">
-    <p v-if="!isOnline || !apiReachable" class="pwa-notice" role="status">
+  <section
+    class="pwa-controls"
+    :class="{ 'pwa-controls--status': mode === 'status' }"
+    :aria-label="
+      mode === 'status' ? 'Verbindungs- und Update-Status' : 'App installieren und aktualisieren'
+    "
+  >
+    <p v-if="mode !== 'settings' && (!isOnline || !apiReachable)" class="pwa-notice" role="status">
       Keine Verbindung. Für Fahrten, Anfragen und Zahlungen ist eine Internetverbindung nötig.
     </p>
-    <div v-if="updateApplying || updateAvailable" class="pwa-notice" role="status">
+    <div
+      v-if="mode !== 'settings' && (updateApplying || updateAvailable)"
+      class="pwa-notice"
+      role="status"
+    >
       <p v-if="updateApplying">App wird aktualisiert …</p>
       <template v-else>
         <p v-if="updateBlocked">
@@ -74,10 +85,20 @@ async function check() {
         </button>
       </template>
     </div>
-    <p v-if="updateError || installError" class="pwa-error" role="alert">
-      {{ updateError || installError }}
+    <p
+      v-if="(mode !== 'settings' && updateError) || (mode !== 'status' && installError)"
+      class="pwa-error"
+      role="alert"
+    >
+      {{
+        mode === 'status'
+          ? updateError
+          : mode === 'settings'
+            ? installError
+            : updateError || installError
+      }}
     </p>
-    <div class="pwa-actions">
+    <div v-if="mode !== 'status'" class="pwa-actions">
       <button
         v-if="(canInstall || installing) && !installed"
         type="button"
@@ -106,7 +127,7 @@ async function check() {
         {{ checking ? 'Suche nach Updates …' : 'Nach Updates suchen' }}
       </button>
     </div>
-    <div v-if="helpOpen && !installed" :id="helpId" class="pwa-help">
+    <div v-if="mode !== 'status' && helpOpen && !installed" :id="helpId" class="pwa-help">
       <p v-if="isIos">
         Öffne Carpoolr in Safari. Tippe auf „Teilen“, dann auf „Zum Home-Bildschirm“ und
         „Hinzufügen“. Falls „Als Web-App öffnen“ angezeigt wird, lass diese Option eingeschaltet.
@@ -122,7 +143,9 @@ async function check() {
         Änderungen brauchst du eine Internetverbindung.
       </p>
     </div>
-    <p v-if="message && !updateApplying" class="pwa-message" role="status">{{ message }}</p>
+    <p v-if="mode !== 'status' && message && !updateApplying" class="pwa-message" role="status">
+      {{ message }}
+    </p>
   </section>
 </template>
 
@@ -132,6 +155,12 @@ async function check() {
   width: 100%;
   margin-top: 1rem;
   color: #25453a;
+}
+.pwa-controls--status {
+  margin-top: 0;
+}
+.pwa-controls--status:empty {
+  display: none;
 }
 .pwa-actions {
   display: flex;
@@ -143,6 +172,7 @@ async function check() {
 }
 .pwa-notice,
 .pwa-help {
+  overflow-wrap: anywhere;
   margin: 0 0 0.75rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--border);
