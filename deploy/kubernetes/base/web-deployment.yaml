@@ -13,6 +13,7 @@ spec:
       labels:
         app: carpoolr-web
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: ghcr-pull
       containers:

@@ -13,9 +13,9 @@ describe('api client failure path', () => {
   it('health() rejects with a descriptive error on a non-OK response', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(null, { status: 503, statusText: 'Service Unavailable' })
-      )
+      vi
+        .fn()
+        .mockResolvedValue(new Response(null, { status: 503, statusText: 'Service Unavailable' })),
     )
 
     await expect(health()).rejects.toThrow('GET /healthz failed: 503 Service Unavailable')

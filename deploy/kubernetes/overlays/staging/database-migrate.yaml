@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: carpoolr-db-migrate
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 180
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: migrate
+          image: ghcr.io/meems-labs/carpoolr-api:develop
+          imagePullPolicy: Always
+          args: [--migrate]
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Staging
+            - name: DemoMode__Enabled
+              value: "true"
+            - name: ConnectionStrings__Default
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-database
+                  key: ConnectionStrings__Default
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

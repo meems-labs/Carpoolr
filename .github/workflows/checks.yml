@@ -1,0 +1,90 @@
+name: Checks
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend checks
+    runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: Host=localhost;Port=5432;Database=carpoolr_tests;Username=postgres;Password=local-tests-only
+      CARPOOLR_TEST_POSTGRES: Host=localhost;Port=5432;Database=carpoolr_tests;Username=postgres;Password=local-tests-only
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-tests-only
+          POSTGRES_DB: carpoolr_tests
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d carpoolr_tests"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore local tools
+        run: dotnet tool restore
+
+      - name: Verify staging promotion safety
+        run: python3 -m unittest discover -s tests -p test_staging_promotion.py
+
+      - name: Restore backend dependencies
+        run: dotnet restore Carpoolr.slnx
+
+      - name: Verify backend formatting
+        run: dotnet format whitespace Carpoolr.slnx --verify-no-changes --no-restore
+
+      - name: Build backend
+        run: dotnet build Carpoolr.slnx --configuration Release --no-restore
+
+      - name: Check for missing database migrations
+        run: dotnet ef migrations has-pending-model-changes --project apps/api --configuration Release --no-build
+
+      - name: Test backend against PostgreSQL
+        run: dotnet test tests/Carpoolr.Api.Tests --configuration Release --no-build --no-restore
+
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.1
+
+      - name: Install frontend dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Test frontend
+        run: bun run test
+
+      - name: Verify generated gRPC contracts
+        run: bun run proto:check
+
+      - name: Verify frontend formatting
+        run: bun run format:check
+
+      - name: Typecheck and build frontend
+        run: bun run build

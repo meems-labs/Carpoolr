@@ -1,12 +1,12 @@
 # Carpoolr — local dev shortcuts
-# Container runtime: podman (rootless). `docker` is aliased to podman on this machine.
+# Container runtime: Docker Desktop (Linux containers).
 
 ROOT_ENV := .env
-COMPOSE := podman compose --env-file $(ROOT_ENV) -f db/docker-compose.yml
+COMPOSE := docker compose --env-file $(ROOT_ENV) -f db/docker-compose.yml
 
 .PHONY: db-up db-down db-logs db-ps dev-api dev-web
 
-## db-up: start PostgreSQL 17 (rootless podman), wait until healthy
+## db-up: start PostgreSQL 17, wait until healthy
 db-up:
 	$(COMPOSE) up -d --wait
 

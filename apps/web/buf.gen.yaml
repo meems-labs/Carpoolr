@@ -1,0 +1,11 @@
+version: v2
+clean: true
+plugins:
+  # All schemas and the generator stay local; no BSR account or schema upload.
+  - local: [bun, ./node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es]
+    out: src/api/generated
+    opt:
+      - target=ts
+      - import_extension=js
+inputs:
+  - directory: ../api/Protos

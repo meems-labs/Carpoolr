@@ -6,6 +6,12 @@ namespace: staging
 resources:
   - ../../base
   - ingress.yaml
+  - postgres.yaml
+  - database-bootstrap.yaml
+  - database-migrate.yaml
+
+patches:
+  - path: api-demo.patch.yaml
 
 images:
   - name: ghcr.io/meems-labs/carpoolr-api

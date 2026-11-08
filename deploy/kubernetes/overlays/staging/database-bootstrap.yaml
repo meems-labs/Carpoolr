@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: carpoolr-db-bootstrap
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: carpoolr-db-bootstrap
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+rules:
+  - apiGroups: [""]
+    resources: [secrets]
+    resourceNames: [carpoolr-database]
+    verbs: [get]
+  # Kubernetes RBAC cannot restrict create by resourceName. This is namespace-local;
+  # the account cannot list, read other secrets, update or delete any secret.
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [create]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: carpoolr-db-bootstrap
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+subjects:
+  - kind: ServiceAccount
+    name: carpoolr-db-bootstrap
+    namespace: staging
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: carpoolr-db-bootstrap
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: carpoolr-db-bootstrap
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "-3"
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 180
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: carpoolr-db-bootstrap
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: bootstrap
+          image: ghcr.io/meems-labs/carpoolr-api:develop
+          imagePullPolicy: Always
+          args: [--bootstrap-staging-database]
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Staging
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/apps/">
+    <Project Path="apps/api/Carpoolr.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Carpoolr.Api.Tests/Carpoolr.Api.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,73 @@
+# Rider: activate Protocol Buffers + gRPC plugins and start the API with profile https.
+# Add a gitignored http-client.private.env.json beside this file:
+# { "local": { "access_token": "YOUR_TOKEN", "trip_id": "ID_FROM_CREATE_RESPONSE" } }
+# Select environment local. The development HTTPS certificate must be trusted.
+
+### Save the current user's real test profile first. Replace all marked values.
+GRPC grpcs://localhost:7001/carpoolr.trips.v1.ProfileService/UpdateMyProfile
+Authorization: Bearer {{access_token}}
+
+{
+  "displayName": "DEIN TESTNAME",
+  "pickupAddress": "DEINE VOLLSTÄNDIGE ABHOLADRESSE",
+  "vehicle": {
+    "name": "DEIN AUTO",
+    "passengerSeats": 3,
+    "energyKind": "ENERGY_KIND_PETROL",
+    "consumptionPer100Km": "6.5",
+    "unitPriceEur": "1.80"
+  }
+}
+
+### CreateTrip: the same body is retained for retries during this Rider session.
+# To start another trip, clear carpoolr_example_create_body in the pre-request script once.
+< {%
+    const key = "carpoolr_example_create_body";
+    // client.global.clear(key); // Uncomment once to generate a new trip, then comment again.
+    if (!client.global.get(key)) {
+        client.global.set(key, JSON.stringify({
+            requestId: $random.uuid,
+            origin: "DEINE VOLLSTÄNDIGE STARTADRESSE",
+            destination: "DEINE VOLLSTÄNDIGE ZIELADRESSE",
+            departureAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            seatsTotal: 3,
+            distanceKm: "DEINE_MANUELL_ERMITTELTEN_KILOMETER"
+        }));
+    }
+    request.variables.set("create_trip_body", client.global.get(key));
+%}
+GRPC grpcs://localhost:7001/carpoolr.trips.v1.TripService/CreateTrip
+Authorization: Bearer {{access_token}}
+
+{{create_trip_body}}
+
+### GetTrip: copy the returned trip.id into trip_id in your private environment.
+GRPC grpcs://localhost:7001/carpoolr.trips.v1.TripService/GetTrip
+Authorization: Bearer {{access_token}}
+
+{
+  "tripId": "{{trip_id}}"
+}
+
+### SearchTrips: only future, planned trips within the next two days.
+< {%
+    const now = Date.now();
+    request.variables.set("departure_from", new Date(now).toISOString());
+    request.variables.set("departure_until", new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString());
+%}
+GRPC grpcs://localhost:7001/carpoolr.trips.v1.TripService/SearchTrips
+Authorization: Bearer {{access_token}}
+
+{
+  "departureFrom": "{{departure_from}}",
+  "departureUntil": "{{departure_until}}",
+  "pageSize": 20
+}
+
+### CancelTrip: only the creating identity can cancel; repeat calls are safe.
+GRPC grpcs://localhost:7001/carpoolr.trips.v1.TripService/CancelTrip
+Authorization: Bearer {{access_token}}
+
+{
+  "tripId": "{{trip_id}}"
+}

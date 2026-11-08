@@ -17,6 +17,10 @@ obj/
 # --- IDE / editor ---
 .idea/
 .vscode/
+http-client.private.env.json
+.playwright-cli/
+output/
+__pycache__/
 *.swp
 
 # --- OS ---

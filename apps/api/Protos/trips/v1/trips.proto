@@ -1,0 +1,267 @@
+syntax = "proto3";
+
+package carpoolr.trips.v1;
+
+option csharp_namespace = "Carpoolr.Api.Contracts.Trips.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Unary RPCs work with both native gRPC and browser gRPC-Web clients.
+// Every method requires an authenticated colleague (validated issuer + subject).
+service TripService {
+  rpc CreateTrip(CreateTripRequest) returns (CreateTripResponse);
+  rpc GetTrip(GetTripRequest) returns (GetTripResponse);
+  rpc SearchTrips(SearchTripsRequest) returns (SearchTripsResponse);
+  rpc CancelTrip(CancelTripRequest) returns (CancelTripResponse);
+  rpc ListMyTrips(ListMyTripsRequest) returns (SearchTripsResponse);
+}
+
+service ProfileService {
+  rpc GetMyProfile(GetMyProfileRequest) returns (GetMyProfileResponse);
+  rpc UpdateMyProfile(UpdateMyProfileRequest) returns (GetMyProfileResponse);
+}
+
+service BookingService {
+  rpc RequestSeat(RequestSeatRequest) returns (BookingResponse);
+  rpc AcceptBooking(ChangeBookingRequest) returns (BookingResponse);
+  rpc RejectBooking(ChangeBookingRequest) returns (BookingResponse);
+  rpc WithdrawBooking(ChangeBookingRequest) returns (BookingResponse);
+  rpc ListMyBookings(ListMyBookingsRequest) returns (ListMyBookingsResponse);
+}
+
+service RecurringTripService {
+  rpc CreateSeries(CreateSeriesRequest) returns (SeriesResponse);
+  rpc ListMySeries(ListMySeriesRequest) returns (ListMySeriesResponse);
+  rpc CancelSeries(CancelSeriesRequest) returns (SeriesResponse);
+}
+
+service BillingService {
+  rpc CompleteTrip(CompleteTripRequest) returns (BillResponse);
+  rpc GetBill(GetBillRequest) returns (BillResponse);
+  rpc ReportPayment(ReportPaymentRequest) returns (BillResponse);
+  rpc ConfirmPayment(ChangePaymentRequest) returns (BillResponse);
+  rpc RejectPayment(ChangePaymentRequest) returns (BillResponse);
+}
+
+message CreateTripRequest {
+  // Non-empty UUID generated once by the client, reused only for retries.
+  // The server scopes it to the caller; changing its payload is ALREADY_EXISTS.
+  string request_id = 1;
+  string origin = 2;
+  string destination = 3;
+  // Required UTC instant, in the future and at most 366 days ahead.
+  // Stored with microsecond precision (smaller fractions are truncated).
+  google.protobuf.Timestamp departure_at = 4;
+  // Passenger seats, excluding the driver; allowed range: 1..8.
+  int32 seats_total = 5;
+  // Manually supplied route distance; no routing or geocoding is performed.
+  string distance_km = 6;
+}
+
+message CreateTripResponse {
+  Trip trip = 1;
+}
+
+message GetTripRequest {
+  string trip_id = 1;
+}
+
+message GetTripResponse {
+  Trip trip = 1;
+  repeated Booking bookings = 2;
+  repeated RouteStop route_stops = 3;
+  string route_url = 4;
+}
+
+message SearchTripsRequest {
+  // Optional exact location filters; surrounding whitespace is ignored.
+  string origin = 1;
+  string destination = 2;
+  // Required half-open UTC window [from, until), at most 31 days.
+  google.protobuf.Timestamp departure_from = 3;
+  google.protobuf.Timestamp departure_until = 4;
+  // Offset 0..10000. Results ordered by departure_at, then id.
+  int32 offset = 5;
+  // 0 selects the default (20); otherwise 1..100.
+  int32 page_size = 6;
+}
+
+message SearchTripsResponse {
+  repeated Trip trips = 1;
+  // Absent on the last page. Search results can change between calls.
+  optional int32 next_offset = 2;
+}
+
+message CancelTripRequest {
+  string trip_id = 1;
+}
+
+message CancelTripResponse {
+  Trip trip = 1;
+}
+
+message ListMyTripsRequest { int32 offset = 1; int32 page_size = 2; }
+
+message Trip {
+  string id = 1;
+  string origin = 2;
+  string destination = 3;
+  google.protobuf.Timestamp departure_at = 4;
+  int32 seats_total = 5;
+  TripState state = 6;
+  google.protobuf.Timestamp created_at = 7;
+  string driver_display_name = 8;
+  string driver_profile_id = 9;
+  bool is_owner = 10;
+  bool can_cancel = 11;
+  int32 available_seats = 12;
+  string distance_km = 13;
+  Vehicle vehicle = 14;
+  string series_id = 15;
+  Booking my_booking = 16;
+  CostPreview cost_preview = 17;
+  bool can_complete = 18;
+}
+
+enum TripState {
+  TRIP_STATE_UNSPECIFIED = 0;
+  TRIP_STATE_PLANNED = 1;
+  TRIP_STATE_CANCELLED = 2;
+  TRIP_STATE_COMPLETED = 3;
+}
+
+enum EnergyKind {
+  ENERGY_KIND_UNSPECIFIED = 0;
+  ENERGY_KIND_PETROL = 1;
+  ENERGY_KIND_DIESEL = 2;
+  ENERGY_KIND_ELECTRIC = 3;
+}
+
+// Decimal strings use '.' with no exponent. Prices are EUR/litre or EUR/kWh.
+message Vehicle {
+  string name = 1;
+  int32 passenger_seats = 2;
+  EnergyKind energy_kind = 3;
+  string consumption_per_100_km = 4;
+  string unit_price_eur = 5;
+}
+message UserProfile {
+  string id = 1;
+  string display_name = 2;
+  string pickup_address = 3;
+  Vehicle vehicle = 4;
+  bool is_saved = 5;
+}
+message GetMyProfileRequest {}
+message GetMyProfileResponse { UserProfile profile = 1; }
+message UpdateMyProfileRequest {
+  string display_name = 1;
+  string pickup_address = 2;
+  Vehicle vehicle = 3;
+}
+
+enum BookingState {
+  BOOKING_STATE_UNSPECIFIED = 0;
+  BOOKING_STATE_PENDING = 1;
+  BOOKING_STATE_ACCEPTED = 2;
+  BOOKING_STATE_REJECTED = 3;
+  BOOKING_STATE_WITHDRAWN = 4;
+  BOOKING_STATE_CANCELLED = 5;
+}
+message Booking {
+  string id = 1;
+  string trip_id = 2;
+  string requester_profile_id = 3;
+  string requester_display_name = 4;
+  // Address is returned only to its owner or the driver after acceptance.
+  string pickup_address = 5;
+  BookingState state = 6;
+  bool can_accept = 7;
+  bool can_reject = 8;
+  bool can_withdraw = 9;
+  google.protobuf.Timestamp requested_at = 10;
+}
+message RequestSeatRequest { string trip_id = 1; string request_id = 2; }
+message ChangeBookingRequest { string booking_id = 1; }
+message BookingResponse { Booking booking = 1; }
+message ListMyBookingsRequest { int32 offset = 1; int32 page_size = 2; }
+message BookingWithTrip { Booking booking = 1; Trip trip = 2; }
+message ListMyBookingsResponse { repeated BookingWithTrip entries = 1; optional int32 next_offset = 2; }
+message RouteStop { string display_name = 1; string address = 2; }
+
+message CreateSeriesRequest {
+  string request_id = 1;
+  string origin = 2;
+  string destination = 3;
+  int32 seats_total = 4;
+  string distance_km = 5;
+  // ISO yyyy-MM-dd dates, inclusive. ISO weekdays: Monday=1 .. Sunday=7.
+  string start_date = 6;
+  string end_date = 7;
+  repeated int32 weekdays = 8;
+  // HH:mm, always Europe/Berlin. Ambiguous and nonexistent local times are
+  // rejected, never silently shifted or resolved to an unconfirmed offset.
+  string local_departure_time = 9;
+}
+message RecurringSeries {
+  string id = 1;
+  string origin = 2;
+  string destination = 3;
+  int32 seats_total = 4;
+  string distance_km = 5;
+  string start_date = 6;
+  string end_date = 7;
+  repeated int32 weekdays = 8;
+  string local_departure_time = 9;
+  string time_zone = 10;
+  bool is_cancelled = 11;
+}
+message SeriesResponse { RecurringSeries series = 1; }
+message ListMySeriesRequest { int32 offset = 1; int32 page_size = 2; }
+message ListMySeriesResponse { repeated RecurringSeries series = 1; optional int32 next_offset = 2; }
+message CancelSeriesRequest { string series_id = 1; }
+
+message CostPreview {
+  int64 total_cents = 1;
+  int32 person_count = 2;
+  // Includes the driver. Final individual shares can differ by one cent.
+  int64 approximate_share_cents = 3;
+}
+enum PaymentState {
+  PAYMENT_STATE_UNSPECIFIED = 0;
+  PAYMENT_STATE_UNPAID = 1;
+  PAYMENT_STATE_REPORTED = 2;
+  PAYMENT_STATE_CONFIRMED = 3;
+  PAYMENT_STATE_REJECTED = 4;
+  PAYMENT_STATE_DRIVER_SHARE = 5;
+}
+message BillShare {
+  string profile_id = 1;
+  string display_name = 2;
+  int64 amount_cents = 3;
+  PaymentState payment_state = 4;
+  bool is_mine = 5;
+  bool can_report = 6;
+  bool can_confirm = 7;
+  bool can_reject = 8;
+}
+message Bill {
+  string trip_id = 1;
+  string distance_km = 2;
+  string consumption_per_100_km = 3;
+  string unit_price_eur = 4;
+  int64 total_cents = 5;
+  repeated BillShare shares = 6;
+  google.protobuf.Timestamp completed_at = 7;
+  bool is_driver = 8;
+}
+message CompleteTripRequest {
+  string trip_id = 1;
+  string distance_km = 2;
+  string consumption_per_100_km = 3;
+  string unit_price_eur = 4;
+}
+message GetBillRequest { string trip_id = 1; }
+message BillResponse { Bill bill = 1; }
+message ReportPaymentRequest { string trip_id = 1; string request_id = 2; }
+message ChangePaymentRequest { string trip_id = 1; string profile_id = 2; }

@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Protobuf-ES owns generated formatting, including its final separator line.
+apps/web/src/api/generated/** whitespace=-blank-at-eof

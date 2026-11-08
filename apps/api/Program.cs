@@ -1,21 +1,102 @@
-var allowedOrigins = new[]
+using Carpoolr.Api.Data;
+using Carpoolr.Api.Features.Trips;
+using Carpoolr.Api.Features.Billing;
+using Carpoolr.Api.Features.Bookings;
+using Carpoolr.Api.Features.Profiles;
+using Carpoolr.Api.Features.RecurringTrips;
+using Carpoolr.Api.Grpc;
+using Carpoolr.Api.Health;
+using Carpoolr.Api.Infrastructure;
+using Carpoolr.Api.Security;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+
+namespace Carpoolr.Api;
+
+public static partial class Program
 {
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-};
+    public static async Task Main(string[] args)
+    {
+        var migrateOnly = args.Contains("--migrate", StringComparer.Ordinal);
+        var bootstrapOnly = args.Contains("--bootstrap-staging-database", StringComparer.Ordinal);
+        var builder = WebApplication.CreateBuilder(args
+            .Where(value => value is not "--migrate" and not "--bootstrap-staging-database").ToArray());
 
-var builder = WebApplication.CreateBuilder(args);
+        if (bootstrapOnly)
+        {
+            await StagingDatabaseBootstrap.RunAsync(builder.Environment);
+            return;
+        }
 
-builder.Services.AddCors(options =>
-    options.AddDefaultPolicy(policy =>
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()));
+        builder.Services.AddControllers();
+        builder.Services.AddApiAuthentication(builder.Configuration, builder.Environment);
+        builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddDbContext<CarpoolrDbContext>(options =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("Default")
+                ?? throw new InvalidOperationException("Configure ConnectionStrings:Default.");
+            options.UseNpgsql(connectionString);
+        });
+        builder.Services.AddScoped<TripApplicationService>();
+        builder.Services.AddScoped<ProfileApplicationService>();
+        builder.Services.AddScoped<BookingApplicationService>();
+        builder.Services.AddScoped<RecurringTripApplicationService>();
+        builder.Services.AddScoped<BillingApplicationService>();
+        builder.Services.AddHealthChecks().AddCheck<DatabaseReadinessCheck>(
+            "database",
+            tags: ["ready"],
+            timeout: TimeSpan.FromSeconds(3));
+        builder.Services.AddGrpc(options =>
+        {
+            options.EnableDetailedErrors = false;
+            options.MaxReceiveMessageSize = 64 * 1024;
+            options.MaxSendMessageSize = 1024 * 1024;
+            options.Interceptors.Add<GrpcExceptionInterceptor>();
+        });
 
-var app = builder.Build();
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+        builder.Services.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
+                policy.WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST", "OPTIONS")
+                    .WithExposedHeaders(
+                        "Grpc-Status", "Grpc-Message", "Grpc-Encoding",
+                        "Grpc-Accept-Encoding", "Grpc-Status-Details-Bin", "trace-id")));
 
-app.UseCors();
+        var app = builder.Build();
 
-app.MapGet("/healthz", () => Results.Ok(new { status = "ok" }));
+        if (migrateOnly)
+        {
+            await using var scope = app.Services.CreateAsyncScope();
+            var database = scope.ServiceProvider.GetRequiredService<CarpoolrDbContext>();
+            await database.Database.MigrateAsync();
+            return;
+        }
 
-app.Run();
+        app.UseRouting();
+        app.UseGrpcWeb();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        if (builder.Configuration.GetValue<bool>("DemoMode:Enabled"))
+        {
+            app.MapGet("/demo/users", () => Results.Ok(new DemoUsersResponse(true, DemoUserCatalog.Users)))
+                .AllowAnonymous();
+        }
+
+        app.MapControllers();
+        app.MapHealthChecks("/readyz", new HealthCheckOptions
+        {
+            Predicate = registration => registration.Tags.Contains("ready"),
+        }).AllowAnonymous();
+        app.MapGrpcService<TripGrpcService>().EnableGrpcWeb();
+        app.MapGrpcService<ProfileGrpcService>().EnableGrpcWeb();
+        app.MapGrpcService<BookingGrpcService>().EnableGrpcWeb();
+        app.MapGrpcService<RecurringTripGrpcService>().EnableGrpcWeb();
+        app.MapGrpcService<BillingGrpcService>().EnableGrpcWeb();
+
+        await app.RunAsync();
+    }
+}

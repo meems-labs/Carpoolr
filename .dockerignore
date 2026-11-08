@@ -10,12 +10,23 @@
 **/.env
 **/.env.*
 !**/.env.example
+**/http-client*.env.json
+**/secrets*.json
+**/*.pfx
+**/*.p12
+**/*.key
+**/.aws
+**/.ssh
 
 **/TestResults
 **/*.user
 **/*.suo
 
-.vscode
-.idea
+**/.vscode
+**/.idea
+**/.vs
+.codex
+.agents
+.nuget
 
 README.md

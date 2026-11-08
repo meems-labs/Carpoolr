@@ -13,6 +13,7 @@ spec:
       labels:
         app: carpoolr-api
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: ghcr-pull
       containers:
@@ -37,9 +38,10 @@ spec:
             failureThreshold: 30
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /readyz
               port: http
             periodSeconds: 10
+            timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /healthz

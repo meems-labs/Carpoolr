@@ -5,14 +5,26 @@ on:
     branches:
       - main
       - develop
+    paths-ignore:
+      - deploy/kubernetes/overlays/staging/kustomization.yaml
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: container-build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  checks:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/checks.yml
+
   build:
+    needs: checks
     runs-on: ubuntu-latest
 
     strategy:
@@ -49,3 +61,35 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/carpoolr-${{ matrix.name }}:${{ github.sha }}
           build-args: |
             VITE_API_BASE_URL=/api
+
+  promote-staging:
+    name: Promote tested images to staging
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout built source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Update staging image revisions
+        env:
+          IMAGE_REVISION: ${{ github.sha }}
+        run: |
+          git fetch origin develop
+          if [ "$(git rev-parse origin/develop)" != "$IMAGE_REVISION" ]; then
+            echo "A newer develop commit exists; its build owns the next staging promotion."
+            exit 0
+          fi
+          python3 scripts/update-staging-images.py "$IMAGE_REVISION"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add deploy/kubernetes/overlays/staging/kustomization.yaml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "deploy(staging): promote tested images $IMAGE_REVISION"
+          git push origin HEAD:develop
