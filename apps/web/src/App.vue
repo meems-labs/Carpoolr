@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { clientsForPerson } from './api/application'
 import AppIcon from './components/AppIcon.vue'
 import AppNavigation from './components/AppNavigation.vue'
@@ -8,15 +8,31 @@ import OperationStatus from './components/OperationStatus.vue'
 import NotificationBell from './components/NotificationBell.vue'
 import PersonalTripsNav from './components/PersonalTripsNav.vue'
 import PwaControls from './components/PwaControls.vue'
+import ThemeControl from './components/ThemeControl.vue'
 import { updateApplying } from './pwa/client'
 import { errorMessage } from './composables/useOperation'
 import { hasPersonalTripsNavigation } from './lib/navigation'
-import { currentProfile, loadPeople, people, selectedPersonId, selectPerson } from './state/session'
+import { activeOperationCount, beginOperation, dirtyFormCount } from './state/activity'
+import {
+  authenticationMode,
+  currentProfile,
+  initializeSession,
+  loginUrl,
+  logout,
+  people,
+  selectedPersonId,
+  selectPerson,
+  sessionExpired,
+  signedInUser,
+} from './state/session'
 
 const loading = ref(true)
 const error = ref('')
 const profileLoading = ref(false)
+const signingOut = ref(false)
+const authenticationError = ref('')
 const route = useRoute()
+const router = useRouter()
 const publicHome = computed(() => route.path === '/' && !selectedPersonId.value)
 let controller = new AbortController()
 let profileController = new AbortController()
@@ -28,7 +44,17 @@ async function initialize() {
   loading.value = true
   error.value = ''
   try {
-    await loadPeople(callController.signal)
+    await initializeSession(callController.signal)
+    if (authenticationMode.value === 'oidc' && route.query.authError) {
+      authenticationError.value =
+        route.query.authError === 'access_denied'
+          ? 'Dein Konto ist für Carpoolr nicht freigeschaltet.'
+          : 'Die Anmeldung ist fehlgeschlagen. Bitte erneut versuchen.'
+      const query = { ...route.query }
+      delete query.authError
+      await router.replace({ path: route.path, query, hash: route.hash })
+    }
+    if (selectedPersonId.value && !callController.signal.aborted) await refreshProfile()
   } catch (cause) {
     if (controller === callController && !callController.signal.aborted)
       error.value = errorMessage(cause)
@@ -67,7 +93,9 @@ async function refreshProfile() {
   }
 }
 
-watch(selectedPersonId, refreshProfile)
+watch(selectedPersonId, () => {
+  if (!loading.value) void refreshProfile()
+})
 onMounted(initialize)
 onBeforeUnmount(() => {
   controller.abort()
@@ -77,6 +105,44 @@ onBeforeUnmount(() => {
 function select(event: Event) {
   selectPerson((event.target as HTMLSelectElement).value)
 }
+
+function canLeaveSession(): boolean {
+  if (activeOperationCount.value > 0) {
+    error.value = 'Bitte warte, bis die laufende Aktion abgeschlossen ist.'
+    return false
+  }
+  return dirtyFormCount.value === 0 || window.confirm('Ungespeicherte Änderungen verwerfen?')
+}
+
+function signIn() {
+  if (!canLeaveSession()) return
+  authenticationError.value = ''
+  const finish = beginOperation()
+  try {
+    window.location.assign(loginUrl(route.fullPath))
+    // Hold the PWA update gate during navigation; release if the browser stays on this page.
+    window.setTimeout(finish, 15_000)
+  } catch (cause) {
+    finish()
+    error.value = errorMessage(cause)
+  }
+}
+
+async function signOut() {
+  if (signingOut.value || !canLeaveSession()) return
+  const finish = beginOperation()
+  signingOut.value = true
+  error.value = ''
+  try {
+    await logout(controller.signal)
+    await router.replace('/')
+  } catch (cause) {
+    if (!controller.signal.aborted) error.value = errorMessage(cause)
+  } finally {
+    signingOut.value = false
+    finish()
+  }
+}
 </script>
 
 <template>
@@ -85,25 +151,13 @@ function select(event: Event) {
     <aside class="shell-sidebar" data-pwa-update-lock :inert="updateApplying">
       <RouterLink class="shell-brand sidebar-brand" to="/" aria-label="Carpoolr – Startseite">
         <span class="brand-mark"><AppIcon name="car" :size="26" /></span>
-        <span class="brand-name">
-          Carpoolr
-          <small>Ein Weg. Gemeinsam.</small>
-        </span>
+        <span class="brand-name">Carpoolr</span>
       </RouterLink>
-      <div class="sidebar-caption">Dein Alltag</div>
       <AppNavigation variant="desktop" />
       <RouterLink class="sidebar-offer" to="/fahrten/neu">
         <AppIcon name="plus" :size="19" />
         Fahrt anbieten
       </RouterLink>
-      <div class="sidebar-bottom">
-        <span class="sidebar-note-mark"><AppIcon name="users" :size="22" /></span>
-        <p>
-          Gute Gesellschaft.
-          <br />
-          <strong>Ein gemeinsamer Weg.</strong>
-        </p>
-      </div>
     </aside>
 
     <div class="shell-column">
@@ -112,12 +166,8 @@ function select(event: Event) {
           <span class="brand-mark"><AppIcon name="car" :size="23" /></span>
           <span class="brand-name">Carpoolr</span>
         </RouterLink>
-        <div class="desktop-heading">
-          <span>Weniger allein fahren.</span>
-          <strong>Mehr zusammen ankommen.</strong>
-        </div>
         <div class="header-controls">
-          <div class="person-select">
+          <div v-if="authenticationMode === 'demo'" class="person-select">
             <div class="person-caption">
               <label for="active-person">Person auswählen</label>
               <span aria-hidden="true">Testmodus</span>
@@ -140,6 +190,17 @@ function select(event: Event) {
               </option>
             </select>
           </div>
+          <div v-else-if="authenticationMode === 'oidc'" class="account-controls">
+            <template v-if="selectedPersonId">
+              <RouterLink class="account-name" to="/profil">
+                {{ currentProfile?.displayName || signedInUser?.displayName || 'Mein Konto' }}
+              </RouterLink>
+              <button type="button" class="secondary" :disabled="signingOut" @click="signOut">
+                {{ signingOut ? 'Wird abgemeldet …' : 'Abmelden' }}
+              </button>
+            </template>
+            <button v-else type="button" :disabled="loading" @click="signIn">Anmelden</button>
+          </div>
           <NotificationBell v-if="selectedPersonId" :key="selectedPersonId" />
         </div>
       </header>
@@ -154,33 +215,45 @@ function select(event: Event) {
         :inert="updateApplying"
       >
         <OperationStatus :error="error" />
-        <template v-if="publicHome">
-          <div v-if="error" class="connection-retry">
-            <button class="secondary" :disabled="loading" @click="initialize">
-              Verbindung erneut versuchen
-            </button>
-          </div>
-          <RouterView :key="`${selectedPersonId}:${route.path}`" />
-        </template>
-        <section v-else-if="loading || profileLoading" class="shell-state" role="status">
+        <OperationStatus :error="authenticationError" />
+        <div v-if="sessionExpired" class="notice" role="status">
+          <p>
+            Deine Sitzung ist abgelaufen oder hat sich geändert. Melde dich erneut an, um
+            fortzufahren. Ungespeicherte Eingaben bleiben bis dahin sichtbar.
+          </p>
+          <button type="button" @click="signIn">Erneut anmelden</button>
+        </div>
+        <section v-if="loading || profileLoading" class="shell-state" role="status">
           <span class="state-symbol"><AppIcon name="car" :size="28" /></span>
-          <h1>Einen Moment noch.</h1>
+          <h1>Wird geladen …</h1>
           <p>Deine Fahrgemeinschaften werden geladen …</p>
         </section>
         <section v-else-if="error && !currentProfile" class="shell-state">
           <span class="state-symbol"><AppIcon name="arrow-right" :size="26" /></span>
-          <h1>Gerade keine Verbindung.</h1>
-          <p>Versuche es noch einmal, sobald du wieder online bist.</p>
+          <h1>Ansicht konnte nicht geladen werden</h1>
           <button @click="selectedPersonId ? refreshProfile() : initialize()">
             Erneut versuchen
           </button>
         </section>
+        <template v-else-if="publicHome">
+          <RouterView :key="`${selectedPersonId}:${route.path}`" />
+        </template>
+        <section v-else-if="!selectedPersonId && authenticationMode === 'oidc'" class="shell-state">
+          <h1>Anmelden</h1>
+          <p>Melde dich über Authentik an, um Fahrten und Kosten zu öffnen.</p>
+          <button type="button" @click="signIn">Mit Authentik anmelden</button>
+        </section>
+        <section
+          v-else-if="!selectedPersonId && authenticationMode === 'bearer'"
+          class="shell-state"
+        >
+          <h1>Anmeldung noch nicht eingerichtet</h1>
+          <p>Für diesen Server ist noch keine Browser-Anmeldung konfiguriert.</p>
+        </section>
         <section v-else-if="!selectedPersonId" class="shell-state">
           <span class="state-symbol"><AppIcon name="users" :size="28" /></span>
-          <h1>Wer fährt heute mit?</h1>
-          <p>
-            Wähle oben eine Person aus, um Fahrten zu finden und deine gemeinsamen Wege zu planen.
-          </p>
+          <h1>Person auswählen</h1>
+          <p>Wähle oben eine Testperson aus, um ihre Fahrten und ihr Profil zu öffnen.</p>
           <p class="state-hint">Im Testmodus bestimmt die Auswahl, wessen Daten du bearbeitest.</p>
         </section>
         <template v-else>
@@ -189,7 +262,7 @@ function select(event: Event) {
         </template>
       </main>
       <footer class="shell-footer">
-        Gemeinsam unterwegs.
+        <ThemeControl />
         <span>Zeiten in Europe/Berlin.</span>
       </footer>
     </div>
@@ -213,6 +286,7 @@ function select(event: Event) {
 }
 .shell-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   min-height: 92px;
@@ -229,6 +303,23 @@ function select(event: Event) {
   text-decoration: none;
   flex: 0 0 auto;
 }
+.account-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.account-name {
+  max-width: 12rem;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+.account-controls button {
+  padding-inline: 0.75rem;
+}
 .brand-mark {
   display: inline-flex;
   align-items: center;
@@ -236,7 +327,7 @@ function select(event: Event) {
   width: 34px;
   height: 34px;
   flex: 0 0 auto;
-  color: #fff;
+  color: var(--on-brand);
   background: var(--brand, #176c56);
   border-radius: 11px;
 }
@@ -246,23 +337,15 @@ function select(event: Event) {
   letter-spacing: -0.055em;
   line-height: 1.15;
 }
-.brand-name small {
-  display: block;
-  margin-top: 6px;
-  font-size: 0.62rem;
-  color: var(--muted, #64736a);
-  font-weight: 550;
-  letter-spacing: 0;
-}
-.desktop-heading {
-  display: none;
-}
 .header-controls {
+  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
   min-width: 0;
+  max-width: 100%;
+  flex-shrink: 0;
 }
 .person-select {
   width: 142px;
@@ -289,7 +372,7 @@ function select(event: Event) {
   font-size: 0.53rem;
   line-height: 1.3;
   color: var(--brand, #176c56);
-  background: #e3eddf;
+  background: var(--selected-surface);
   padding: 2px 4px;
   border-radius: 4px;
   white-space: nowrap;
@@ -322,6 +405,8 @@ function select(event: Event) {
 }
 .shell-footer {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 8px;
   padding: 0 16px 20px;
@@ -351,7 +436,7 @@ function select(event: Event) {
   justify-content: center;
   width: 68px;
   height: 68px;
-  color: var(--brand, #176c56);
+  color: var(--on-accent);
   border-radius: 22px;
   background: var(--accent, #ddf8a3);
 }
@@ -368,7 +453,7 @@ function select(event: Event) {
   top: 8px;
   transform: translateY(-160%);
   padding: 10px 16px;
-  color: #fff;
+  color: var(--on-brand);
   background: var(--brand, #176c56);
   border-radius: 10px;
   font-weight: 700;
@@ -449,14 +534,6 @@ function select(event: Event) {
   .sidebar-brand .brand-name {
     font-size: 1.35rem;
   }
-  .sidebar-caption {
-    margin: 0 14px 14px;
-    color: var(--muted, #64736a);
-    font-size: 0.6rem;
-    font-weight: 750;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
   .sidebar-offer {
     display: flex;
     align-items: center;
@@ -467,54 +544,16 @@ function select(event: Event) {
     padding: 12px 10px;
     border-radius: 14px;
     background: var(--accent, #ddf8a3);
-    color: var(--ink, #142d25);
+    color: var(--on-accent);
     font-size: 0.78rem;
     font-weight: 800;
     text-decoration: none;
   }
   .sidebar-offer:hover {
-    background: #d2ef91;
-  }
-  .sidebar-bottom {
-    margin-top: auto;
-    padding: 28px 14px 0;
-  }
-  .sidebar-note-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    color: var(--brand, #176c56);
-    background: var(--paper, #f8f8f2);
-    border-radius: 12px;
-    margin-bottom: 12px;
-  }
-  .sidebar-bottom p {
-    margin: 0;
-    font-size: 0.72rem;
-    color: var(--muted, #64736a);
-    line-height: 1.65;
-  }
-  .sidebar-bottom strong {
-    color: var(--ink, #142d25);
-    font-weight: 650;
+    background: var(--accent-hover);
   }
   .mobile-brand {
     display: none;
-  }
-  .desktop-heading {
-    display: grid;
-    gap: 4px;
-  }
-  .desktop-heading span {
-    font-size: 0.68rem;
-    color: var(--muted, #64736a);
-  }
-  .desktop-heading strong {
-    font-size: 0.85rem;
-    color: var(--ink, #142d25);
-    font-weight: 650;
   }
   .shell-header {
     min-height: 100px;

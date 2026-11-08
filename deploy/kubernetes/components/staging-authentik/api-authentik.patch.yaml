@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carpoolr-api
+  namespace: staging
+spec:
+  replicas: 1
+  # A single RWO volume holds the key ring; release it before replacing this pod.
+  strategy:
+    type: Recreate
+    rollingUpdate: null
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1654
+        runAsGroup: 1654
+        fsGroup: 1654
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: api
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Staging
+            - name: DemoMode__Enabled
+              value: "false"
+            - name: ConnectionStrings__Default
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-database
+                  key: ConnectionStrings__Default
+            - name: Authentication__Authority
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-authentik
+                  key: Authentication__Authority
+            - name: Authentication__Audience
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-authentik
+                  key: Authentication__Audience
+            - name: Authentication__Browser__Enabled
+              value: "true"
+            - name: Authentication__Browser__ClientId
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-authentik
+                  key: Authentication__Browser__ClientId
+            - name: Authentication__Browser__ClientSecret
+              valueFrom:
+                secretKeyRef:
+                  name: carpoolr-authentik
+                  key: Authentication__Browser__ClientSecret
+            - name: Authentication__Browser__PublicOrigin
+              value: https://carpoolr.staging.splashmich.net
+            - name: Authentication__Browser__DataProtectionKeysPath
+              value: /var/lib/carpoolr/authentication-keys
+          volumeMounts:
+            - name: authentication-keys
+              mountPath: /var/lib/carpoolr/authentication-keys
+      volumes:
+        - name: authentication-keys
+          persistentVolumeClaim:
+            claimName: carpoolr-authentication-keys

@@ -2,6 +2,8 @@
 
 Das bestaetigte Ziel ist der Branch `develop` und der Pfad `deploy/kubernetes/overlays/staging`. Nur dieses Overlay schaltet `ASPNETCORE_ENVIRONMENT=Staging` und `DemoMode__Enabled=true` ein. Es ist bewusst ohne Anmeldung nutzbar; ueber den Testpersonen-Umschalter lassen sich unterschiedliche Rollen ausprobieren.
 
+Die echte Anmeldung ueber `auth.splashmich.net` ist optional vorbereitet. [Authentik einrichten und im selben GitOps-Pfad aktivieren](authentication.md) beschreibt Provider, geheime Zugangsdaten und den persistenten Sitzungsschluesselring. Bis diese Einrichtung abgeschlossen ist, bleibt das bestehende Overlay im Testmodus; ein fehlender Provider wird nicht durch erfundene Zugangsdaten ersetzt.
+
 ## Ablauf
 
 1. Backend- und Frontend-Pruefungen muessen erfolgreich sein.

@@ -7,7 +7,7 @@ Diese Datei haelt Entscheidungen fuer die weitere Umsetzung fest. Vorhandener Be
 | Thema | Entscheidung | Grundlage |
 | --- | --- | --- |
 | Ergebnis | Vollstaendige Anwendung zum Testen im Staging | Benutzerantwort: "Ich brauche eine im staging testbare anwendung, wo ich einmal alle features testen kann ohne authentication." |
-| Anmeldung im Staging | Ohne Authentication testbar | Dieselbe Benutzerantwort |
+| Anmeldung im Staging | Bisheriger Testmodus ohne Authentication bleibt bis zur separaten Authentik-Aktivierung nutzbar | Urspruengliche Testanforderung und bestaetigte Vorbereitung der echten Anmeldung |
 | Testpersonen | Umschalter zwischen vordefinierten Testpersonen | Bestaetigte Auswahl |
 | Fachliches Modell | Kollegen bieten Fahrten im eigenen Auto an; andere Kollegen fragen an mitzufahren | Benutzerbeschreibung |
 | Profile und Fahrzeuge | Wohnort, Auto, Kosten fuer Laden/Tanken und Verbrauch eintragen | Benutzerbeschreibung |
@@ -33,9 +33,12 @@ Diese Datei haelt Entscheidungen fuer die weitere Umsetzung fest. Vorhandener Be
 | Mobile Installation | Vue-Frontend als installierbare PWA mit automatischen Updates | Benutzeranforderung |
 | PWA-Updateverhalten | Automatisch aktivieren, sobald keine ungespeicherten Eingaben oder laufenden Aktionen offen sind; bis dahin Hinweis anzeigen | Bestaetigte Auswahl |
 | Oberflaeche | Einheitliche eigene Designsprache, Mobile First, persoenliche Startseite mit Uebersicht und mobile Menuefuehrung | Benutzeranforderung |
+| Oberflaechentexte | Dekorative Motto-Texte entfernen; funktionale Beschriftungen und notwendige Hilfetexte beibehalten | Benutzeranforderung |
+| Farbschema | Dark Mode ergaenzen; umgesetzt mit Systemvorgabe sowie expliziter Hell-/Dunkel-Auswahl | Benutzeranforderung; Auswahlverhalten als technische Umsetzung |
 | Backend | ASP.NET Core / .NET 10; .NET 11 spaeter angedacht | Urspruengliche Benutzeranforderung |
 | API-Kommunikation | gRPC fuer das Frontend; SignalR als spaetere Moeglichkeit | Urspruengliche Benutzeranforderung |
-| Identity Provider | Authentik im Zielcluster vorhanden; Integration spaeter vorgesehen | Urspruengliche Benutzeranforderung |
+| Identity Provider | Anmeldung mit Authentik unter auth.splashmich.net integrieren; Provider noch nicht vorhanden, Einrichtung vorbereiten | Aktuelle Benutzeranforderung und bestaetigte Antworten |
+| Erlaubte Benutzer | Alle Benutzer, die in Authentik fuer die Carpoolr-Application freigeschaltet sind; keine zusaetzliche lokale Gruppe | Bestaetigte Auswahl |
 | Zusammenarbeit | Fachliche und Feature-Entscheidungen vor Umsetzung bestaetigen lassen | Benutzer: "assume nichts, was nicht bestaettigt ist" |
 
 ## Vorhandene technische Grundlage
@@ -53,6 +56,7 @@ Diese Bestandsaufnahme bestaetigt keine noch offenen Produktregeln und belegt no
 | --- | --- |
 | Browserpruefung | Benutzer hat Bun-basierte Installation bestaetigt; vollstaendiger Buchungs-/Abrechnungsablauf im echten Browser erfolgreich geprueft |
 | Tatsaechlicher Rollout | Grundanwendung erfolgreich per GitOps veroeffentlicht und oeffentlich im Staging geprueft; Erweiterungen werden erneut validiert |
+| Authentik-Aktivierung | Application/Confidential-OIDC-Provider und Client-Zugangsdaten muessen noch eingerichtet werden; Integration und Aktivierungsschritte sind vorbereitet, aktuelles Staging bleibt im Testmodus |
 
 Mehrere Arbeitsstandorte, Chat, externe Benachrichtigungen und Administration wurden nicht als Pflichtfunktionen ausgewaehlt und sind daher nicht beauftragt. Das ist keine Aussage darueber, ob sie spaeter gewuenscht werden.
 

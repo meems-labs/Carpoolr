@@ -102,7 +102,7 @@ const departure = computed(() => {
   padding: 1.25rem;
 }
 .trip-card--featured {
-  border-color: #b3cbb1;
+  border-color: var(--selected-border);
 }
 .trip-card__header {
   display: flex;
@@ -117,13 +117,17 @@ const departure = computed(() => {
   justify-items: center;
   align-content: center;
   padding: 0.6rem;
-  background: #edf3e4;
+  background: var(--selected-surface);
   color: var(--ink);
   border-radius: 14px;
   line-height: 1.1;
 }
 .trip-card--featured .trip-date {
   background: var(--accent);
+  color: var(--on-accent);
+}
+.trip-card--featured .trip-date small {
+  color: var(--on-accent);
 }
 .trip-date > span {
   font-size: 0.65rem;
@@ -137,7 +141,7 @@ const departure = computed(() => {
 .trip-date small {
   margin-top: 0.1rem;
   font-size: 0.6rem;
-  color: #53654b;
+  color: var(--muted);
 }
 .trip-card__departure {
   flex: 1;
@@ -191,7 +195,7 @@ const departure = computed(() => {
   top: 0.35rem;
   width: 10px;
   height: 10px;
-  background: white;
+  background: var(--surface);
   border: 2px solid var(--brand);
   border-radius: 50%;
 }
@@ -205,7 +209,7 @@ const departure = computed(() => {
   top: 1rem;
   left: -1.3rem;
   height: calc(100% - 0.55rem);
-  border-left: 1px solid #b5c9ad;
+  border-left: 1px solid var(--control-border);
 }
 .trip-stops small {
   display: block;

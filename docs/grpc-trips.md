@@ -1,6 +1,6 @@
 # TripService als Vorlage
 
-Die API stellt fünf gRPC-Services für Fahrten, Profile, Mitfahranfragen, wöchentliche Serien und Abrechnung bereit. `seats_total` bezeichnet angebotene Mitfahrerplätze ohne Fahrer; `available_seats` berücksichtigt bestätigte Mitfahrer. Im Staging wird eine vordefinierte Testperson ausdrücklich ausgewählt, ohne Login. Den fachlichen Ablauf erklären die [Anwendungsanleitung](frontend-application.md) und der [bestätigte Umfang](application-scope.md).
+Die API stellt sechs gRPC-Services für Fahrten, Profile, Mitfahranfragen, wöchentliche Serien, Abrechnung und die persönliche Übersicht bereit. `seats_total` bezeichnet angebotene Mitfahrerplätze ohne Fahrer; `available_seats` berücksichtigt bestätigte Mitfahrer. Das derzeitige Staging verwendet weiterhin ausdrücklich gewählte Testpersonen; die echte Anmeldung mit Authentik ist separat vorbereitet. Den fachlichen Ablauf erklären die [Anwendungsanleitung](frontend-application.md) und der [bestätigte Umfang](application-scope.md).
 
 ## Aufbau und Lesereihenfolge
 
@@ -9,7 +9,7 @@ Die API stellt fünf gRPC-Services für Fahrten, Profile, Mitfahranfragen, wöch
 3. [`TripApplicationService`](../apps/api/Features/Trips/TripApplicationService.cs): Geschäftsregeln, Normalisierung, Eigentümerprüfung und idempotente Änderungen. Die Klasse kennt keine protobuf- oder HTTP-Typen.
 4. [`CarpoolrDbContext`](../apps/api/Data/CarpoolrDbContext.cs): PostgreSQL-Abbildung, Indizes und Constraints. Ein scoped DbContext pro Aufruf; Leseabfragen verwenden `AsNoTracking`. Ein zusätzliches generisches Repository ist hier nicht nötig.
 5. [`GrpcExceptionInterceptor`](../apps/api/Grpc/GrpcExceptionInterceptor.cs): zentrale Übersetzung erwarteter Fehler. Unerwartete Fehler liefern eine allgemeine Nachricht mit `trace-id`; Details stehen im Serverlog.
-6. [`Program.cs`](../apps/api/Program.cs): Dependency Injection, Nachrichtenlimits, CORS und die Reihenfolge Routing → gRPC-Web → CORS → Authentifizierung → Autorisierung.
+6. [`Program.cs`](../apps/api/Program.cs): Dependency Injection, Nachrichtenlimits, CORS und die Reihenfolge Routing → gRPC-Web → CORS → konfigurierte öffentliche Origin → Authentifizierung → Cookie-/CSRF-Prüfung → Autorisierung.
 
 Für einen weiteren Service zuerst Vertrag und Geschäftsregeln ergänzen, dann Adapter und Integrationstests. Gemeinsame Logik gehört in die Anwendungsschicht, damit auch spätere Controller oder SignalR-Aufrufe sie verwenden können.
 
@@ -51,11 +51,13 @@ Zeitpunkte werden in UTC gespeichert. PostgreSQL speichert Mikrosekunden; kleine
 
 ## Security-Entscheidungen
 
-[`AuthenticationExtensions`](../apps/api/Security/AuthenticationExtensions.cs) hat zwei ausdrücklich getrennte Betriebsarten. Mit `DemoMode:Enabled=true` ist ausschließlich in der Umgebung `Staging` eine vordefinierte Personenauswahl erlaubt. `GET /demo/users` liefert den Katalog; `X-Carpoolr-Demo-User` muss die gültige ausgewählte ID enthalten. Fehlende/unbekannte Personen werden abgewiesen; es gibt keine Standardperson. Der Simulationsmodus wird in Development und Production beim Start abgelehnt.
+[`AuthenticationExtensions`](../apps/api/Security/AuthenticationExtensions.cs) trennt Demo-Simulation, Bearer-Authentifizierung und die optional aktivierte Browser-Anmeldung. Mit `DemoMode:Enabled=true` ist ausschließlich in der Umgebung `Staging` eine vordefinierte Personenauswahl erlaubt. `GET /demo/users` liefert den Katalog; `X-Carpoolr-Demo-User` muss die gültige ausgewählte ID enthalten. Fehlende/unbekannte Personen werden abgewiesen; es gibt keine Standardperson. Der Simulationsmodus wird in Development und Production beim Start abgelehnt und kann nicht gleichzeitig mit der Browser-Anmeldung aktiviert werden.
 
-Ohne Demo-Modus werden signierte JWT-Access-Tokens mit Prüfung von Signatur, Issuer, Audience und Laufzeit verwendet. Ein fehlender Token aktiviert keine Umgehung. Neue Endpunkte benötigen standardmäßig eine bestätigte Identität. `/healthz` und `/readyz` sind ausdrücklich öffentlich; der erste prüft nur den Prozess, der zweite die Datenbankbereitschaft einschließlich Migrationen.
+Ohne Demo-Modus werden signierte JWT-Access-Tokens mit Prüfung von Signatur, Issuer, Audience und Laufzeit verwendet. Mit `Authentication:Browser:Enabled=true` ist zusätzlich die serverseitige OIDC-Anmeldung mit HttpOnly-Cookie-Sitzung und CSRF-Schutz verfügbar. In dieser Authentik-Konfiguration muss ein Bearer-Access-Token zusätzlich die erwartete `azp`-Client-ID und einen nicht leeren `scope` enthalten; ein ID-Token allein autorisiert keinen RPC. Ein ungültiger Authorization-Header fällt nicht auf eine Cookie- oder Demo-Identität zurück.
 
-Die Policy `Colleague` verlangt eine bestätigte Identität mit `iss` und `sub`. Das prüft noch keine Unternehmensgruppe: Den erlaubten Benutzerkreis und eine eigene API-Audience am Authentik-Provider festlegen; bei Bedarf die Policy um die tatsächlichen Gruppen-/Scope-Claims erweitern. Fahrer-IDs werden nicht aus Requests übernommen. Eigentum verwendet beide Claims, weil derselbe `sub` bei verschiedenen Issuern unterschiedliche Personen bezeichnet. Diese internen IDs stehen nicht in Fahrtantworten.
+Neue Endpunkte benötigen standardmäßig eine bestätigte Identität. `/healthz` und `/readyz` sind ausdrücklich öffentlich; der erste prüft nur den Prozess, der zweite die Datenbankbereitschaft einschließlich Migrationen. `/auth/session` liefert öffentlich die Betriebsart und den eigenen Anmeldestatus, keine fremden Benutzerdaten. Login-Start und OIDC-Callback müssen ebenfalls ohne bestehende App-Sitzung erreichbar sein.
+
+Die Policy `Colleague` verlangt eine bestätigte Identität mit `iss` und `sub`. Den bestätigten Benutzerkreis legen die Freischaltungen an der Authentik-Application fest; eine zusätzliche lokale Unternehmensgruppe wurde nicht verlangt. Die konfigurierte API-Audience muss mit dem tatsächlichen Access-Token übereinstimmen. Fahrer-IDs werden nicht aus Requests übernommen. Eigentum verwendet beide Identitätsclaims, weil derselbe `sub` bei verschiedenen Issuern unterschiedliche Personen bezeichnet. Diese internen IDs stehen nicht in Fahrtantworten.
 
 Abholadressen sind für die eigene Person und nach Zusage für den Fahrer sichtbar. Fremde Mitfahranfragen und private Routenstopps werden nicht an andere Betrachter ausgegeben. Im Testmodus kann bewusst zwischen den festen Rollen gewechselt werden; dies ist keine echte Anmeldung oder Zugriffstrennung zwischen den Testpersonen.
 
@@ -125,7 +127,7 @@ Clients sollten eine passende Deadline setzen und Abbrüche weiterreichen. Bei e
 
 Eine native gRPC-Verbindung braucht eine gesonderte HTTP/2-fähige Route; diese ist im Cluster noch nicht eingerichtet. Auch TLS am öffentlichen Ingress ist vor dem Betrieb zu konfigurieren. Beim Transport nach TLS-Terminierung muss die Verbindung im Cluster passend abgesichert sein.
 
-Mit ausgeschaltetem Demo-Modus verlangt die API außerhalb von `Development` beim Start `Authentication__Authority` als HTTPS-Adresse des tatsächlichen Authentik-Issuers und `Authentication__Audience` als konfigurierte API-Audience. Außerdem `ConnectionStrings__Default` und bei getrennten Origins `Cors__AllowedOrigins__0` setzen. Die API konsumiert **Access Tokens**; ID Tokens dienen dem Login-Client. Signatur-/Issuer-/Audience-Prüfungen bleiben aktiv. Der aktuelle Staging-Frontendfluss verwendet bewusst Testpersonen; ein OIDC-Login im Frontend ist noch nicht implementiert.
+Mit ausgeschaltetem Demo-Modus verlangt die API außerhalb von `Development` beim Start `Authentication__Authority` als HTTPS-Adresse des tatsächlichen Authentik-Issuers und `Authentication__Audience` als konfigurierte API-Audience. Außerdem `ConnectionStrings__Default` und bei getrennten Origins `Cors__AllowedOrigins__0` setzen. Signatur-/Issuer-/Audience-Prüfungen bleiben aktiv. Vue unterstützt jetzt die ausdrücklich aktivierte serverseitige Authentik-Anmeldung unter derselben HTTPS-Origin mit `/api`; Einrichtung, Cookie-/CSRF-Schutz und persistente Schlüssel beschreibt [Authentik anbinden](authentication.md). Der tatsächliche Provider ist noch nicht erstellt, daher bleibt das beobachtete Staging zunächst im Demo-Modus.
 
 ## Integrationstests
 

@@ -7,6 +7,7 @@ const url = (path: string) => new URL(path, origin)
 describe('static app-shell cache boundary', () => {
   it.each([
     '/index.html',
+    '/theme-init.js',
     '/manifest.webmanifest',
     '/assets/index-123.js',
     '/assets/ProfileView-456.css',
@@ -58,6 +59,8 @@ describe('offline navigation boundary', () => {
     '/kosten?code=private',
     '/?state=private',
     '/?id_token=private',
+    '/?authError=login_failed',
+    '/?%61uthError=access_denied',
     '/?%63ode=private',
     '/kosten?%61ccess_token=private',
     '/profil?%53tAtE=private',

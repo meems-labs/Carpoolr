@@ -40,6 +40,7 @@ export default defineConfig({
         rollupFormat: 'iife',
         globPatterns: [
           'index.html',
+          'theme-init.js',
           'assets/**/*.{js,css,woff,woff2}',
           'icons/*.{png,svg}',
           'manifest.webmanifest',

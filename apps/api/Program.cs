@@ -79,8 +79,12 @@ public static partial class Program
         app.UseRouting();
         app.UseGrpcWeb();
         app.UseCors();
+        app.UseBrowserPublicOrigin();
         app.UseAuthentication();
+        app.UseBrowserSessionSecurity();
         app.UseAuthorization();
+
+        app.MapBrowserAuthentication();
 
         if (builder.Configuration.GetValue<bool>("DemoMode:Enabled"))
         {

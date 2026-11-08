@@ -34,7 +34,7 @@ const route = useRoute()
   padding: 5px;
   margin: 0 0 28px;
   border-radius: 16px;
-  background: #e9ede6;
+  background: var(--surface-muted);
 }
 .personal-trips-link {
   display: flex;
@@ -55,7 +55,7 @@ const route = useRoute()
 .personal-trips-link.is-current {
   color: var(--ink, #142d25);
   background: var(--surface, #fff);
-  box-shadow: 0 2px 5px #142d250a;
+  box-shadow: var(--tab-shadow);
   font-weight: 800;
 }
 .personal-trips-link:focus-visible {

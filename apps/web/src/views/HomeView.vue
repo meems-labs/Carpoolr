@@ -12,7 +12,7 @@ import TripCard from '../components/TripCard.vue'
 import { errorMessage } from '../composables/useOperation'
 import { formatCents } from '../lib/labels'
 import { beginOperation } from '../state/activity'
-import { currentProfile, selectedPersonId } from '../state/session'
+import { authenticationMode, currentProfile, loginUrl, selectedPersonId } from '../state/session'
 
 interface SectionState {
   pending: boolean
@@ -36,18 +36,6 @@ const dateLabel = new Intl.DateTimeFormat('de-DE', {
   month: 'long',
   timeZone: 'Europe/Berlin',
 }).format(today)
-const hour = Number(
-  new Intl.DateTimeFormat('de-DE', {
-    hour: 'numeric',
-    hourCycle: 'h23',
-    timeZone: 'Europe/Berlin',
-  }).format(today),
-)
-const greeting = computed(() => {
-  const salutation = hour < 11 ? 'Guten Morgen' : hour < 18 ? 'Guten Tag' : 'Guten Abend'
-  const name = currentProfile.value?.displayName.trim()
-  return name ? `${salutation}, ${name}.` : `${salutation}.`
-})
 const taskCount = computed(
   () => (tasks.value?.bookingRequestCount ?? 0n) + (tasks.value?.paymentReportCount ?? 0n),
 )
@@ -126,21 +114,9 @@ onBeforeUnmount(() => controller.abort())
   <div class="home">
     <header class="home-hero">
       <div class="home-intro">
-        <p class="home-eyebrow">
-          <template v-if="personId">
-            {{ greeting }}
-            <span>{{ dateLabel }}</span>
-          </template>
-          <template v-else>Fahrgemeinschaften fürs Team</template>
-        </p>
-        <h1>
-          Dein Arbeitsweg.
-          <span>Gemeinsam geplant.</span>
-        </h1>
-        <p class="home-lead">
-          Ein freier Platz. Ein gemeinsamer Weg. Finde deine nächste Mitfahrt oder nimm Kollegen
-          mit.
-        </p>
+        <p v-if="personId" class="home-eyebrow">{{ dateLabel }}</p>
+        <h1>{{ personId ? 'Übersicht' : 'Fahrgemeinschaften' }}</h1>
+
         <div v-if="personId" class="home-hero-actions">
           <RouterLink class="button" to="/fahrten">
             <AppIcon name="search" :size="19" />
@@ -151,13 +127,19 @@ onBeforeUnmount(() => controller.abort())
             Fahrt anbieten
           </RouterLink>
         </div>
-        <div v-else class="home-hero-actions">
+        <div v-else-if="authenticationMode === 'demo'" class="home-hero-actions">
           <button type="button" @click="choosePerson">
             Person auswählen
             <AppIcon name="arrow-right" :size="19" />
           </button>
-          <span class="home-test-note">Zum Ausprobieren ohne Anmeldung.</span>
+          <span class="home-test-note">Testmodus ohne Anmeldung.</span>
         </div>
+        <div v-else-if="authenticationMode === 'oidc'" class="home-hero-actions">
+          <a class="button" :href="loginUrl('/')">Mit Authentik anmelden</a>
+        </div>
+        <p v-else class="muted">
+          Die Browser-Anmeldung ist auf diesem Server noch nicht eingerichtet.
+        </p>
       </div>
       <svg class="home-route-art" viewBox="0 0 280 280" fill="none" aria-hidden="true">
         <circle cx="145" cy="135" r="105" class="route-orbit" />
@@ -174,7 +156,7 @@ onBeforeUnmount(() => controller.abort())
       <aside v-if="!currentProfile?.isSaved" class="home-profile-note">
         <AppIcon name="user" :size="23" />
         <p>
-          <strong>Mach dein Profil startklar.</strong>
+          <strong>Profil vervollständigen</strong>
           Ergänze deine Abholadresse, um einen Platz anzufragen, und dein Auto, wenn du selbst
           fährst.
         </p>
@@ -188,7 +170,6 @@ onBeforeUnmount(() => controller.abort())
         <section class="home-next" aria-labelledby="home-next-heading">
           <div class="home-section-heading">
             <div>
-              <p class="home-eyebrow">Als Nächstes</p>
               <h2 id="home-next-heading">Deine nächste Fahrt</h2>
             </div>
             <AppIcon name="calendar" :size="24" />
@@ -203,7 +184,7 @@ onBeforeUnmount(() => controller.abort())
           <TripCard v-else-if="nextTrip" :trip="nextTrip" featured />
           <div v-else class="home-next-empty">
             <AppIcon name="car" :size="35" />
-            <h3>Noch nichts geplant?</h3>
+            <h3>Keine kommende Fahrt</h3>
             <p>Deine nächste angebotene oder zugesagte Mitfahrt erscheint hier.</p>
             <RouterLink to="/fahrten">
               Fahrt finden
@@ -218,7 +199,7 @@ onBeforeUnmount(() => controller.abort())
 
         <section class="home-tasks" aria-labelledby="home-tasks-heading">
           <div class="home-section-heading">
-            <h2 id="home-tasks-heading">Du bist dran</h2>
+            <h2 id="home-tasks-heading">Offene Aufgaben</h2>
             <span v-if="tasks && !taskState.pending && !taskState.error" class="home-task-total">
               {{ taskCount.toLocaleString('de-DE') }} offen
             </span>
@@ -233,7 +214,7 @@ onBeforeUnmount(() => controller.abort())
           <template v-else-if="tasks">
             <div v-if="taskCount === 0n" class="home-task-empty">
               <AppIcon name="check" :size="30" />
-              <h3>Alles erledigt.</h3>
+              <h3>Keine offenen Aufgaben</h3>
               <p>Neue Mitfahranfragen und gemeldete Zahlungen erscheinen hier.</p>
             </div>
             <div v-else class="home-task-list">
@@ -270,8 +251,7 @@ onBeforeUnmount(() => controller.abort())
 
       <section class="home-costs" aria-labelledby="home-cost-heading">
         <div class="home-cost-intro">
-          <p class="home-eyebrow">Nach der Fahrt</p>
-          <h2 id="home-cost-heading">Kosten, klar geteilt.</h2>
+          <h2 id="home-cost-heading">Kostenübersicht</h2>
           <p>Deine Anteile und Erstattungen aus abgeschlossenen Fahrten.</p>
           <RouterLink to="/kosten">
             Zur Kostenübersicht
@@ -308,22 +288,19 @@ onBeforeUnmount(() => controller.abort())
 
     <section v-else class="home-how" aria-labelledby="home-how-heading">
       <div class="home-section-heading">
-        <p class="home-eyebrow">Einfach zusammen los</p>
-        <h2 id="home-how-heading">Drei Schritte. Ein gemeinsamer Weg.</h2>
+        <h2 id="home-how-heading">Fahrgemeinschaften nutzen</h2>
       </div>
       <ol>
         <li>
           <span class="home-step-number">01</span>
           <AppIcon name="user" :size="26" />
           <h3>Profil ergänzen</h3>
-          <p>
-            Dein Name, deine Abholadresse und bei Bedarf dein Auto. Damit alle wissen, wer mitfährt.
-          </p>
+          <p>Name, Abholadresse und optional dein Auto hinterlegen.</p>
         </li>
         <li>
           <span class="home-step-number">02</span>
           <AppIcon name="car" :size="26" />
-          <h3>Gemeinsam planen</h3>
+          <h3>Fahrt anbieten oder anfragen</h3>
           <p>
             Biete eine Fahrt an oder frage einen freien Platz an. Der Fahrer bestätigt die Mitfahrt.
           </p>
@@ -359,13 +336,6 @@ onBeforeUnmount(() => controller.abort())
   letter-spacing: 0.055em;
   color: var(--brand, #176c56);
 }
-.home-eyebrow span {
-  display: block;
-  margin-top: 0.2rem;
-  color: var(--muted, #68736a);
-  font-weight: 500;
-  letter-spacing: 0;
-}
 .home-hero h1 {
   margin: 0;
   font-size: clamp(2.2rem, 6vw, 4.45rem);
@@ -374,18 +344,8 @@ onBeforeUnmount(() => controller.abort())
   line-height: 1.08;
   color: var(--ink, #142d25);
 }
-.home-hero h1 span {
-  display: block;
-  color: var(--brand, #176c56);
-}
-.home-lead {
-  max-width: 31rem;
-  margin: 1.25rem 0 1.5rem;
-  color: var(--muted, #68736a);
-  font-size: 0.98rem;
-  line-height: 1.65;
-}
 .home-hero-actions {
+  margin-top: 1.25rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -531,8 +491,8 @@ onBeforeUnmount(() => controller.abort())
 .home-tasks {
   padding: 1.4rem;
   border-radius: 1.25rem;
-  background: var(--ink, #142d25);
-  color: #f5f4ef;
+  background: var(--emphasis-surface);
+  color: var(--emphasis-ink);
   align-self: start;
 }
 .home-tasks h2,
@@ -540,12 +500,12 @@ onBeforeUnmount(() => controller.abort())
   color: inherit;
 }
 .home-tasks button.secondary {
-  color: #f5f4ef;
-  border-color: #849b8c;
-  background: #ffffff08;
+  color: var(--emphasis-ink);
+  border-color: var(--emphasis-control-border);
+  background: var(--emphasis-control);
 }
 .home-tasks button.secondary:hover {
-  background: #ffffff18;
+  background: var(--emphasis-control-hover);
 }
 .home-tasks :focus-visible {
   outline-color: var(--accent);
@@ -553,7 +513,7 @@ onBeforeUnmount(() => controller.abort())
 .home-task-total {
   flex-shrink: 0;
   padding: 0.25rem 0.55rem;
-  border: 1px solid #52645a;
+  border: 1px solid var(--emphasis-line);
   border-radius: 999px;
   font-size: 0.7rem;
   color: var(--accent, #ddf8a3);
@@ -564,7 +524,7 @@ onBeforeUnmount(() => controller.abort())
   gap: 0.9rem;
   min-height: 92px;
   padding-block: 0.85rem;
-  border-top: 1px solid #40564b;
+  border-top: 1px solid var(--emphasis-line);
   color: inherit;
   text-decoration: none;
 }
@@ -595,13 +555,13 @@ onBeforeUnmount(() => controller.abort())
 .home-task-list small {
   margin-top: 0.2rem;
   font-size: 0.75rem;
-  color: #bdcbc2;
+  color: var(--emphasis-muted);
 }
 .home-task-empty,
 .home-task-status {
   padding-block: 0.65rem 0.25rem;
   font-size: 0.88rem;
-  color: #c6d1c9;
+  color: var(--emphasis-muted);
 }
 .home-task-empty > svg {
   color: var(--accent, #ddf8a3);
@@ -718,10 +678,6 @@ onBeforeUnmount(() => controller.abort())
 @media (min-width: 640px) {
   .home-hero {
     padding-block: 2.3rem 3rem;
-  }
-  .home-eyebrow span {
-    display: inline;
-    margin-left: 0.8rem;
   }
   .home-how ol {
     grid-template-columns: repeat(3, minmax(0, 1fr));

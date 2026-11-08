@@ -299,7 +299,7 @@ onMounted(() => load())
   font-size: clamp(1.7rem, 4vw, 2.25rem);
   font-weight: 750;
   letter-spacing: -0.03em;
-  color: #17372c;
+  color: var(--ink);
   overflow-wrap: anywhere;
 }
 .cost-note {

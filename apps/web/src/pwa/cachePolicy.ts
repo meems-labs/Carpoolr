@@ -1,6 +1,7 @@
 // Deliberately enumerate the app shell. Personal data and API responses do not belong here.
 const fixedAssets = new Set([
   '/index.html',
+  '/theme-init.js',
   '/manifest.webmanifest',
   '/icons/icon.svg',
   '/icons/icon-192.png',
@@ -26,7 +27,7 @@ export const navigationAllowlist = [
 export const navigationDenylist = [
   /^\/(?:api|auth|oauth|oidc|login|logout|signin|signout|callback|demo|healthz|readyz)(?:\/|\?|$)/i,
   /^\/carpoolr\./i,
-  /[?&](?:code|state|access_token|id_token|session_state|error)=/i,
+  /[?&](?:code|state|access_token|id_token|session_state|error|authError)=/i,
 ]
 
 const authenticationQueryKeys = new Set([
@@ -36,6 +37,7 @@ const authenticationQueryKeys = new Set([
   'id_token',
   'session_state',
   'error',
+  'autherror',
 ])
 
 export function isAppShellNavigation(url: URL, origin: string): boolean {

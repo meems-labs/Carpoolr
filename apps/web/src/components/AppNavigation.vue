@@ -57,7 +57,7 @@ const active = computed(() => activeNavigation(route.path))
     max(8px, env(safe-area-inset-left));
   background: var(--surface, #fff);
   border-top: 1px solid var(--line, #e4e8e1);
-  box-shadow: 0 -8px 32px #142d2508;
+  box-shadow: var(--navigation-shadow);
 }
 .app-navigation--mobile .navigation-list {
   display: grid;
@@ -94,7 +94,7 @@ const active = computed(() => activeNavigation(route.path))
   transition: background 140ms ease;
 }
 .app-navigation--mobile .is-current .navigation-symbol {
-  color: var(--brand, #176c56);
+  color: var(--on-accent);
   background: var(--accent, #ddf8a3);
 }
 .navigation-label {
@@ -145,12 +145,12 @@ const active = computed(() => activeNavigation(route.path))
   }
   .app-navigation--desktop .is-current,
   .app-navigation--desktop .is-current:hover {
-    color: #fff;
+    color: var(--on-brand);
     background: var(--brand, #176c56);
   }
   .navigation-arrow {
     margin-left: auto;
-    color: var(--accent, #ddf8a3);
+    color: var(--on-brand);
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -159,9 +159,7 @@ onBeforeUnmount(() => {
             {{ data.paymentReportCount === 1n ? 'Zahlung' : 'Zahlungen' }} bestätigen
           </RouterLink>
         </div>
-        <p v-if="total === 0n" class="muted">
-          Alles erledigt. Es warten keine Bestätigungen auf dich.
-        </p>
+        <p v-if="total === 0n" class="muted">Keine offenen Aufgaben.</p>
         <ul v-else class="task-list">
           <li
             v-for="action in data.actions"
@@ -212,13 +210,14 @@ onBeforeUnmount(() => {
   min-width: 22px;
   padding: 2px 4px;
   border-radius: 1rem;
-  background: #176c56;
-  color: white;
+  background: var(--brand);
+  color: var(--on-brand);
   font-size: 0.7rem;
-  border: 2px solid white;
+  border: 2px solid var(--paper);
 }
 .error-count {
-  background: #a53131;
+  background: var(--danger-ink);
+  color: var(--danger-surface);
 }
 .notification-panel {
   position: absolute;
@@ -228,11 +227,11 @@ onBeforeUnmount(() => {
   width: min(28rem, calc(100vw - 2rem));
   max-height: min(75vh, 42rem);
   overflow-y: auto;
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 0.8rem;
   padding: 1.1rem;
-  box-shadow: 0 12px 32px #17372c24;
+  box-shadow: var(--popover-shadow);
 }
 .notification-panel h2 {
   margin: 0.3rem 0;

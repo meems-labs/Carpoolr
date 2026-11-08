@@ -14,6 +14,8 @@ public static class AuthenticationExtensions
         IHostEnvironment environment)
     {
         var demoEnabled = configuration.GetValue<bool>("DemoMode:Enabled");
+        var browser = BrowserAuthenticationSettings.FromConfiguration(configuration, environment, demoEnabled);
+        services.AddSingleton(browser);
         if (demoEnabled)
         {
             if (!environment.IsStaging())
@@ -28,6 +30,10 @@ public static class AuthenticationExtensions
         else
         {
             AddJwtAuthentication(services, configuration, environment);
+            if (browser.Enabled)
+            {
+                services.AddBrowserAuthentication(browser, configuration["Authentication:Authority"]!);
+            }
         }
 
         services.AddAuthorization(options =>

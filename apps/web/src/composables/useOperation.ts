@@ -11,9 +11,9 @@ export function errorMessage(cause: unknown): string {
     if (cause.code === Code.DeadlineExceeded)
       return 'Die Anfrage dauert zu lange. Bitte erneut versuchen.'
     if (cause.code === Code.PermissionDenied)
-      return 'Diese Aktion ist für die ausgewählte Person nicht erlaubt.'
+      return 'Diese Aktion ist für dein Konto nicht erlaubt. Prüfe bei Bedarf deine Anmeldung.'
     if (cause.code === Code.Unauthenticated)
-      return 'Die ausgewählte Testperson wird vom Server nicht akzeptiert.'
+      return 'Deine Sitzung ist nicht mehr gültig. Bitte erneut anmelden.'
     return cause.rawMessage || 'Die Anfrage konnte nicht ausgeführt werden.'
   }
   return cause instanceof Error ? cause.message : 'Ein unerwarteter Fehler ist aufgetreten.'

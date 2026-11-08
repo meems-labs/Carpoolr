@@ -1,6 +1,12 @@
 # Carpoolr: Oberfläche und Navigation
 
-Carpoolr ist zuerst für die Nutzung am Telefon gestaltet. Eine warme helle Fläche, Waldgrün, dunkle Schrift und sparsame helle Akzente bilden die gemeinsame Sprache. Die variable Schrift Manrope wird lokal ausgeliefert; es werden keine externen Font-Dienste angefragt. Die Lizenz liegt unter `apps/web/public/licenses/manrope.txt`.
+Carpoolr ist zuerst für die Nutzung am Telefon gestaltet. Warme helle oder dunkle Flächen, Grün und sparsame helle Akzente bilden die gemeinsame Sprache. Die Oberfläche verwendet funktionale Überschriften und Hilfetexte; dekorative Motto- und Werbetexte entfallen. Die variable Schrift Manrope wird lokal ausgeliefert; es werden keine externen Font-Dienste angefragt. Die Lizenz liegt unter `apps/web/public/licenses/manrope.txt`.
+
+## Farbschema
+
+Die Auswahl **System**, **Hell** oder **Dunkel** steht im Seitenfuß und ist auch ohne Anmeldung erreichbar. Standardmäßig gilt die Gerätepräferenz. Eine explizite Auswahl bleibt nur auf diesem Gerät unter `carpoolr.theme` gespeichert; Änderungen in anderen Fenstern werden übernommen. Ohne verfügbaren Browser-Speicher funktioniert der Wechsel für die laufende Nutzung weiterhin.
+
+`theme-init.js` setzt das Farbschema vor dem ersten Rendern; das Skript gehört zur statischen PWA-Hülle. `src/state/theme.ts` reagiert auf Änderungen der Gerätepräferenz und setzt den Theme-Color-Wert der Browser-/PWA-Leiste. Alle Komponenten verwenden semantische Tokens aus `src/styles.css`, einschließlich Formularen, Statusmeldungen, Navigation und Aufgabenpanel. Text auf hellen Akzentflächen verwendet `--on-accent`; Text auf der Hauptfarbe verwendet `--on-brand`. Native Datumsfelder und Auswahlmenüs erhalten das passende `color-scheme`.
 
 ## Gemeinsame Bausteine
 

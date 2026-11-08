@@ -4,13 +4,19 @@ Die Anwendung verwendet Vue 3, TypeScript und Vite. Die Oberfläche ist deutsch 
 
 Carpoolr kann als PWA auf Mobilgeräten installiert werden. Installation, automatische sichere Updates und Offline-Grenzen sind unter [PWA](pwa.md) beschrieben.
 
+Unter **Farbschema** am Seitenende stehen **System**, **Hell** und **Dunkel** zur Auswahl. Standardmäßig folgt die App der Geräteeinstellung; eine eigene Auswahl bleibt auf dem Gerät erhalten. Dekorative Motto- und Werbetexte wurden entfernt; Überschriften und Hilfetexte beschreiben Funktionen und erforderliche Eingaben.
+
 Die **Startseite** zeigt die nächste eigene oder bestätigte Fahrt, offene Aufgaben und einen Kostenüberblick. Die mobile Hauptnavigation enthält **Start**, **Suchen**, **Meine Fahrten**, **Kosten** und **Profil**. Unter **Meine Fahrten** wechseln die Tabs zwischen Angeboten, Mitfahrten und eingegangenen Anfragen. Auf großen Bildschirmen wird dieselbe Struktur als Seitenleiste dargestellt. Gestaltungsregeln stehen im [Design-System](design-system.md).
 
-## Person auswählen und Profil ergänzen
+## Anmelden oder Testperson auswählen
 
-Oben ausdrücklich eine der vom Server angebotenen Testpersonen auswählen. Es gibt keinen Login und keine automatisch gewählte Person. Eine früher gewählte Person wird nur wiederhergestellt, wenn sie weiterhin im Serverkatalog existiert. Gespeichert wird im Browser nur diese Auswahl, nicht die Abholadresse oder ein Token.
+Die App prüft beim Start über `GET /api/auth/session` die ausdrücklich konfigurierte Betriebsart. Im bisherigen Staging ist weiterhin der **Testmodus** aktiv. Ein Carpoolr-Provider in Authentik ist noch nicht angelegt; die [Einrichtung für die echte Anmeldung](authentication.md) ist vorbereitet und wird getrennt aktiviert.
 
-Die Auswahl bestimmt, wessen Profil und Fahrten du gerade bearbeitest. Das ist eine Simulation für den Testbetrieb. Unter **Mein Profil** den Namen und die vollständige Abholadresse speichern. Optional ein Auto mit Bezeichnung, Mitfahrerplätzen ohne Fahrer, Antrieb, Verbrauch pro 100 km und Preis pro Liter bzw. kWh anlegen.
+Im Testmodus oben ausdrücklich eine der vom Server angebotenen Testpersonen auswählen. Es gibt keine automatisch gewählte Person. Eine frühere Auswahl wird nur wiederhergestellt, wenn sie weiterhin im Serverkatalog existiert. Die Auswahl bestimmt, wessen Profil und Fahrten gerade bearbeitet werden; sie ist eine Simulation und keine Anmeldung.
+
+Im ausdrücklich aktivierten **OIDC-Modus** ersetzt **Anmelden** die Testpersonenauswahl. Authentik prüft die Freischaltung für die Carpoolr-Application; anschließend nutzt die App eine eigene HttpOnly-Cookie-Sitzung und einen benutzergebundenen CSRF-Token. OAuth-Tokens werden nicht im Browser gespeichert. **Abmelden** beendet die Carpoolr-Sitzung, lässt aber andere Authentik-Anwendungen angemeldet. Nach Ablauf oder Wechsel der Sitzung bleiben ungespeicherte Eingaben zunächst sichtbar; vor einer erneuten Anmeldung beziehungsweise Abmeldung fragt die App nach dem Verwerfen von Änderungen.
+
+Unter **Mein Profil** den Namen und die vollständige Abholadresse speichern. Optional ein Auto mit Bezeichnung, Mitfahrerplätzen ohne Fahrer, Antrieb, Verbrauch pro 100 km und Preis pro Liter bzw. kWh anlegen. Reale Benutzer erhalten eigene Profile; Demo-Daten werden nicht automatisch übertragen. Lokal gespeichert werden das Farbschema und gegebenenfalls die Testpersonenauswahl, keine Abholadresse oder OAuth-Tokens.
 
 Dezimalwerte dürfen mit Komma eingegeben werden. Die API erhält exakte Dezimalstrings mit Punkt und höchstens vier Nachkommastellen. Adressen können mehrzeilig eingegeben werden; Zeilenumbrüche werden vor dem Speichern zu Leerzeichen normalisiert.
 
@@ -31,7 +37,7 @@ Unter **Suchen** nach Datum suchen. Optionale Start-/Zielfilter vergleichen voll
 
 In den Fahrtdetails **Einen Platz anfragen** wählen. Ein vollständiges eigenes Profil mit Abholadresse ist erforderlich. Die Anfrage reserviert zunächst keinen Platz. Der Fahrer entscheidet unter **Mitfahranfragen** über **Zusagen** oder **Ablehnen**. Nach einer Zusage wird die Abholadresse für ihn sichtbar und der Platz belegt.
 
-Unter **Meine Anfragen** lassen sich eigene Anfragen und Mitfahrten verfolgen. Vor der Abfahrt kann eine Anfrage bzw. Teilnahme zurückgezogen werden. Nach Ablehnung oder Rückzug kann erneut angefragt werden, solange die Fahrt noch offen ist und Plätze frei sind.
+Unter **Meine Mitfahrten** lassen sich eigene Anfragen und Mitfahrten verfolgen. Vor der Abfahrt kann eine Anfrage bzw. Teilnahme zurückgezogen werden. Nach Ablehnung oder Rückzug kann erneut angefragt werden, solange die Fahrt noch offen ist und Plätze frei sind.
 
 Unter **Eingegangene Anfragen** bearbeiten Fahrer die Anfragen zu allen eigenen Angeboten zentral. Standardmäßig werden offene, noch bearbeitbare Anfragen angezeigt. Der Filter kann auch bearbeitete Anfragen und die Historie einblenden. Zusagen und Ablehnen sind direkt in der Übersicht möglich; Abholadressen bleiben bis zur Zusage verborgen.
 
@@ -61,8 +67,8 @@ Ein Mitfahrer meldet den eigenen Anteil mit **Als bezahlt melden** als beglichen
 
 ## Technischer Aufbau
 
-- [`session.ts`](../apps/web/src/state/session.ts) lädt `GET /demo/users`, prüft die gespeicherte Auswahl gegen diesen Katalog und verwaltet das aktuelle Profil.
-- [`application.ts`](../apps/web/src/api/application.ts) erstellt Clients für alle fünf gRPC-Services. Die explizit ausgewählte Person wird pro Clientinstanz im Header `X-Carpoolr-Demo-User` festgehalten; ein laufender Aufruf wechselt beim Umschalten nicht die Identität.
+- [`session.ts`](../apps/web/src/state/session.ts) prüft `GET /auth/session` und verwaltet Betriebsart, aktuelle Identität, Profil und einen ausschließlich im Arbeitsspeicher gehaltenen CSRF-Token. Nur im ausdrücklich gemeldeten Demo-Modus lädt es `GET /demo/users` und prüft eine gespeicherte Testperson gegen diesen Katalog.
+- [`application.ts`](../apps/web/src/api/application.ts) erstellt Clients für alle sechs gRPC-Services. Im Demo-Modus enthalten Aufrufe `X-Carpoolr-Demo-User`; im OIDC-Modus dieselbe Origin, die Sitzungscookies und `X-CSRF-Token`. Die pro Client festgehaltene Identität muss weiterhin der aktiven Identität entsprechen. Authentifizierungsfehler und ein ungültiger CSRF-Token markieren die Sitzung als abgelaufen beziehungsweise gewechselt; Änderungen werden nicht automatisch erneut gesendet.
 - [`grpc.ts`](../apps/web/src/api/grpc.ts) verwendet binäres gRPC-Web, Standardfehlercodes, Deadlines und Abbruchsignale. Generierte Typen kommen ausschließlich aus den lokalen `.proto`-Dateien; siehe [Codegenerierung](frontend-grpc.md).
 - [`useOperation`](../apps/web/src/composables/useOperation.ts) bündelt Lade-/Fehlerzustände, verhindert doppelte gleichzeitige Aktionen einer Ansicht und bricht Aufrufe beim Verlassen ab.
 - [`format.ts`](../apps/web/src/lib/format.ts) konvertiert Berliner Kalenderzeiten und normalisiert Dezimalwerte. [`labels.ts`](../apps/web/src/lib/labels.ts) formatiert Centbeträge ohne Gleitkomma-Konvertierung.
@@ -87,4 +93,4 @@ Das Frontend verwendet lokal `VITE_API_BASE_URL` oder andernfalls `http://localh
 
 Prettier ist als Entwicklungswerkzeug exakt gepinnt. Zum Formatieren in `apps/web` `bun node_modules/prettier/bin/prettier.cjs --write src scripts` ausführen. Generierte protobuf-Dateien bleiben davon ausgeschlossen.
 
-Die Unit-Tests prüfen unter anderem explizite Personenauswahl, verworfene veraltete Identitäten, binäres gRPC-Web, Fehlertrailer, Abbruch/Deadlines, Berliner Zeitumstellung und exakte Centdarstellung. Die Oberfläche muss zusätzlich im echten Browser gegen die laufende API geprüft werden; die Unit-Tests ersetzen diesen Durchstich nicht.
+Die Unit-Tests prüfen unter anderem Betriebsarten und explizite Personenauswahl, verworfene veraltete Identitäten, Cookie-/CSRF-Metadaten, Farbschema, binäres gRPC-Web, Fehlertrailer, Abbruch/Deadlines, Berliner Zeitumstellung und exakte Centdarstellung. Die Oberfläche muss zusätzlich im echten Browser gegen die laufende API geprüft werden; die Unit-Tests ersetzen diesen Durchstich nicht. Ein erfolgreicher Test gegen einen simulierten OIDC-Provider ersetzt keine Prüfung am noch einzurichtenden Authentik-Provider.

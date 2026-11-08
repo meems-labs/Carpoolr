@@ -3,7 +3,7 @@
 
 Private Mitfahr-App für ein kleines Team. (Private carpooling app — simple English below.)
 
-The staging application supports preset test-person selection without login, profiles with one optional car, ride offers and approval-based bookings, weekly recurring trips, equal EUR cost sharing, and payment reporting with driver confirmation. Start with the [application guide](docs/frontend-application.md); the [confirmed scope](docs/application-scope.md) records the product decisions.
+The staging application supports preset test-person selection without login, profiles with one optional car, ride offers and approval-based bookings, weekly recurring trips, equal EUR cost sharing, and payment reporting with driver confirmation. Optional Authentik sign-in uses server-side OpenID Connect and an HttpOnly session cookie; it is enabled separately after the provider and credentials are configured. Start with the [application guide](docs/frontend-application.md); the [confirmed scope](docs/application-scope.md) records the product decisions.
 
 Distances are entered manually. The Google Maps link includes addresses and accepted pickup stops, but does **not** optimize the route. Automatic routing is deferred until a suitable free service and API key are provided; no paid Google routing API is required by this implementation.
 
@@ -41,6 +41,7 @@ Docker Compose reads the root `.env`. ASP.NET Core reads **process environment v
 | `DemoMode__Enabled`           | API      | Explicit preset-person simulation, permitted only in `Staging` |
 | `Cors__AllowedOrigins__0`     | API      | Allowed frontend origin when the browser calls a different API origin |
 | `Authentication__Authority` / `Authentication__Audience` | API | Trusted HTTPS issuer and API audience when demo mode is disabled outside Development |
+| `Authentication__Browser__Enabled` / `ClientId` / `ClientSecret` / `PublicOrigin` / `DataProtectionKeysPath` | API | Optional server-side Authentik login; see [authentication setup](docs/authentication.md) for full variable names and secure deployment |
 
 For local testing of the complete application **without login**, use the Staging/demo configuration in the [API guide](docs/grpc-trips.md#lokal-die-staging-anwendung-testen). The default Rider launch profiles use Development and signed local JWTs; they do not enable the staging simulation.
 
@@ -78,7 +79,7 @@ dotnet test tests/Carpoolr.Api.Tests --configuration Release
 - **`test:integration` is not hermetic:** start the API first (`make dev-api`), then run it. It exercises the real `src/api/client.ts` including `VITE_API_BASE_URL` resolution.
 - **The application uses PostgreSQL:** configure `ConnectionStrings:Default` using User Secrets or process environment variables. Apply migrations separately with `dotnet run --project apps/api --no-launch-profile -- --migrate` under the intended environment and credentials. The process exits after migrating; normal API replicas do not migrate on startup. A dedicated staging Job uses this mode.
 - **Health endpoints:** `/healthz` is anonymous liveness without a database query; `/readyz` checks database availability and the current migration state.
-- **Staging has an explicit no-login simulation.** Set `ASPNETCORE_ENVIRONMENT=Staging` and `DemoMode__Enabled=true`; the UI loads the preset-person catalog and sends the chosen identity. This mode is rejected in Development and Production. With demo mode disabled, RPCs require signed access tokens. Outside Development configure `Authentication:Authority` (HTTPS) and `Authentication:Audience`. See [the API guide](docs/grpc-trips.md).
+- **Staging has an explicit no-login simulation.** Set `ASPNETCORE_ENVIRONMENT=Staging` and `DemoMode__Enabled=true`; the UI loads the preset-person catalog and sends the chosen identity. This mode is rejected in Development and Production. With demo mode disabled, RPCs require signed access tokens or, when explicitly enabled, an Authentik-backed browser session with CSRF protection. Outside Development configure `Authentication:Authority` (HTTPS) and `Authentication:Audience`. The existing Staging overlay remains in demo mode until the optional [Authentik component](docs/authentication.md) is activated with real provider credentials.
 - **Docker Desktop must be running** with Linux containers. `docker compose up -d --wait` waits for the database healthcheck.
 - **`db/initdb/` scripts run only on FIRST init** of the empty volume. Once `carpoolr_pgdata` exists, changes there have no effect — use the included EF Core migrations instead.
 - **Port conflicts (:5432):** set `POSTGRES_PORT` in `.env` — and also update `Port=` in `ConnectionStrings__Default` in the same file, or the API will later connect to the old port.

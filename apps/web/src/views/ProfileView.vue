@@ -154,8 +154,7 @@ async function save() {
     <p class="eyebrow">Auf deinem Gerät</p>
     <h2>Carpoolr als App</h2>
     <p class="small muted">
-      Installiere die App für deinen nächsten Arbeitsweg. Neue Versionen werden automatisch geladen,
-      sobald deine Eingaben gespeichert sind.
+      Neue Versionen werden automatisch geladen, sobald deine Eingaben gespeichert sind.
     </p>
     <PwaControls mode="settings" />
   </section>

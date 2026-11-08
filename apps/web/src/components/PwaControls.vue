@@ -154,7 +154,7 @@ async function check() {
   text-align: left;
   width: 100%;
   margin-top: 1rem;
-  color: #25453a;
+  color: var(--ink);
 }
 .pwa-controls--status {
   margin-top: 0;
@@ -177,7 +177,7 @@ async function check() {
   padding: 0.85rem 1rem;
   border: 1px solid var(--border);
   border-radius: 0.6rem;
-  background: #fff;
+  background: var(--surface);
   font-size: 0.9rem;
 }
 .pwa-notice p:last-child,
@@ -192,7 +192,7 @@ async function check() {
   max-width: 48rem;
 }
 .pwa-error {
-  color: #a53131;
+  color: var(--danger-ink);
 }
 .pwa-message {
   margin: 0.65rem 0 0;

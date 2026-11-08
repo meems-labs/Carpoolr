@@ -14,8 +14,9 @@
     BlinkMacSystemFont,
     'Segoe UI',
     sans-serif;
-  color: #142d25;
-  background: #f5f4ef;
+  color: var(--ink);
+  background: var(--paper);
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44,7 +45,85 @@
   --space-7: 3rem;
   --space-8: 4rem;
   --bottom-nav-height: 76px;
+  --on-brand: #fff;
+  --on-accent: #142d25;
+  --accent-hover: #cfee8e;
+  --control-surface: #fbfcf8;
+  --control-border: #6f8973;
+  --control-border-hover: #5b7e62;
+  --secondary-border: #718673;
+  --secondary-hover: #e8eee3;
+  --selected-surface: #e3eddf;
+  --selected-border: #7b985a;
+  --badge-surface: #eef1e9;
+  --badge-ink: #4a6050;
+  --success-ink: #245b38;
+  --success-surface: #e7f1e2;
+  --success-border: #aec59e;
+  --warning-ink: #7d5a16;
+  --warning-surface: #fff0cc;
+  --danger-ink: #a13530;
+  --danger-surface: #fff0eb;
+  --danger-hover: #ffe9e2;
+  --danger-border: #d49c8d;
+  --notice-ink: #38583e;
+  --notice-surface: #edf2e7;
+  --emphasis-surface: #142d25;
+  --emphasis-ink: #f5f4ef;
+  --emphasis-muted: #c6d1c9;
+  --emphasis-line: #52645a;
+  --emphasis-control-border: #849b8c;
+  --emphasis-control: #ffffff08;
+  --emphasis-control-hover: #ffffff18;
+  --navigation-shadow: 0 -8px 32px #142d2508;
+  --tab-shadow: 0 2px 5px #142d250a;
+  --popover-shadow: 0 12px 32px #17372c24;
 }
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #111b17;
+  --surface: #1b2821;
+  --surface-muted: #25352c;
+  --ink: #e8f1e9;
+  --muted: #acbdb0;
+  --brand: #89d6ae;
+  --brand-strong: #a7e5c4;
+  --on-brand: #10291e;
+  --accent: #d3ed99;
+  --on-accent: #142d25;
+  --accent-hover: #e0f6b5;
+  --line: #394c40;
+  --control-surface: #16231c;
+  --control-border: #718a79;
+  --control-border-hover: #a8bdae;
+  --secondary-border: #718a79;
+  --secondary-hover: #2a3e30;
+  --selected-surface: #2b4434;
+  --selected-border: #8bb478;
+  --badge-surface: #2b3d31;
+  --badge-ink: #c6d9c5;
+  --success-ink: #b8e7b6;
+  --success-surface: #263e2b;
+  --success-border: #63855d;
+  --warning-ink: #f6d990;
+  --warning-surface: #493b20;
+  --danger-ink: #ffc5b7;
+  --danger-surface: #492921;
+  --danger-hover: #5d3429;
+  --danger-border: #a96d5a;
+  --notice-ink: #c5dfc4;
+  --notice-surface: #283a2c;
+  --emphasis-surface: #203a2c;
+  --emphasis-ink: #edf5ec;
+  --emphasis-muted: #c6d7c8;
+  --emphasis-line: #617a66;
+  --emphasis-control-border: #8fae96;
+  --shadow-soft: 0 12px 36px #0004;
+  --navigation-shadow: 0 -8px 32px #0003;
+  --tab-shadow: 0 2px 5px #0003;
+  --popover-shadow: 0 12px 32px #0006;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -101,7 +180,7 @@ button,
   border-radius: var(--radius-sm);
   padding: 0.78rem 1.2rem;
   background: var(--brand);
-  color: white;
+  color: var(--on-brand);
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
@@ -129,29 +208,29 @@ button.secondary,
 .button.secondary {
   color: var(--ink);
   background: transparent;
-  border-color: #cdd8cc;
+  border-color: var(--secondary-border);
 }
 button.secondary:hover,
 .button.secondary:hover {
-  background: #e8eee3;
-  border-color: #b5c9b5;
+  background: var(--secondary-hover);
+  border-color: var(--control-border-hover);
 }
 button.accent,
 .button.accent {
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 button.accent:hover,
 .button.accent:hover {
-  background: #cfee8e;
+  background: var(--accent-hover);
 }
 button.danger {
-  color: #a13530;
-  background: #fff5f2;
-  border-color: #edcbc2;
+  color: var(--danger-ink);
+  background: var(--danger-surface);
+  border-color: var(--danger-border);
 }
 button.danger:hover {
-  background: #ffe9e2;
+  background: var(--danger-hover);
 }
 button.text-button,
 .button.text-button {
@@ -173,9 +252,9 @@ select {
   width: 100%;
   min-width: 0;
   min-height: 50px;
-  border: 1px solid #b9c8b8;
+  border: 1px solid var(--control-border);
   border-radius: var(--radius-sm);
-  background: #fbfcf8;
+  background: var(--control-surface);
   padding: 0.75rem 0.85rem;
   color: var(--ink);
   font-size: 1rem;
@@ -185,12 +264,12 @@ select {
 input:hover,
 textarea:hover,
 select:hover {
-  border-color: #849e88;
+  border-color: var(--control-border-hover);
 }
 input:focus,
 textarea:focus,
 select:focus {
-  background: white;
+  background: var(--surface);
 }
 textarea {
   min-height: 104px;
@@ -345,44 +424,44 @@ main.container {
   align-items: center;
   padding: 0.3rem 0.65rem;
   border-radius: 100px;
-  background: #eef1e9;
-  color: #4a6050;
+  background: var(--badge-surface);
+  color: var(--badge-ink);
   font-size: 0.7rem;
   font-weight: 750;
   white-space: nowrap;
   line-height: 1.4;
 }
 .badge.success {
-  color: #245b38;
-  background: #e7f1e2;
+  color: var(--success-ink);
+  background: var(--success-surface);
 }
 .badge.warning {
-  color: #7d5a16;
-  background: #fff0cc;
+  color: var(--warning-ink);
+  background: var(--warning-surface);
 }
 .badge.danger {
-  color: #a13530;
-  background: #ffebe5;
+  color: var(--danger-ink);
+  background: var(--danger-surface);
 }
 .notice {
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
   padding: 1rem 1.1rem;
   margin: 0 0 1.25rem;
-  background: #edf2e7;
-  color: #38583e;
+  background: var(--notice-surface);
+  color: var(--notice-ink);
   overflow-wrap: anywhere;
   font-size: 0.875rem;
 }
 .notice-error {
-  color: #922e28;
-  background: #fff0eb;
-  border-color: #eac5bb;
+  color: var(--danger-ink);
+  background: var(--danger-surface);
+  border-color: var(--danger-border);
 }
 .notice-success {
-  color: #245b38;
-  background: #eaf2e4;
-  border-color: #cedfc4;
+  color: var(--success-ink);
+  background: var(--success-surface);
+  border-color: var(--success-border);
 }
 .empty {
   text-align: center;
@@ -464,11 +543,11 @@ main.container {
   border: 1px solid var(--line);
   padding: 0.5rem 0.7rem;
   border-radius: var(--radius-sm);
-  background: #fafbf6;
+  background: var(--control-surface);
 }
 .weekdays label:has(input:checked) {
-  background: #e9f3dc;
-  border-color: #90ad70;
+  background: var(--selected-surface);
+  border-color: var(--selected-border);
 }
 .participant {
   padding-block: 1.25rem;

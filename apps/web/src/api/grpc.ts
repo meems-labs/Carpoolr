@@ -13,6 +13,8 @@ export interface GrpcClientOptions {
   defaultTimeoutMs?: number
   /** Optional fetch override, for tests or application-specific browser fetch settings. */
   fetch?: typeof globalThis.fetch
+  /** Observe failures without retrying RPCs or changing their standard error codes. */
+  onError?: (cause: unknown) => void
 }
 
 export type TripClient = Client<typeof TripService>
@@ -44,7 +46,12 @@ export function createGrpcTransport(options: GrpcClientOptions = {}): Transport 
     }
 
     request.signal.throwIfAborted()
-    return next(request)
+    try {
+      return await next(request)
+    } catch (cause) {
+      options.onError?.(cause)
+      throw cause
+    }
   }
 
   return createGrpcWebTransport({
