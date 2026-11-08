@@ -15,6 +15,6 @@ patches:
 
 images:
   - name: ghcr.io/meems-labs/carpoolr-api
-    newTag: 0276def1fd85ae2f8110e3f9b38458a8e4ea6e4f
+    newTag: eb8253ab5831d937bee3db8557b9454d42919a6c
   - name: ghcr.io/meems-labs/carpoolr-web
-    newTag: 0276def1fd85ae2f8110e3f9b38458a8e4ea6e4f
+    newTag: eb8253ab5831d937bee3db8557b9454d42919a6c
