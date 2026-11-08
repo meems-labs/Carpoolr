@@ -32,7 +32,7 @@ public sealed record BillDetails(
 /// Every mutation takes the same trip row lock as bookings so accepted participants cannot
 /// change while the final allocation is being created.
 /// </summary>
-public sealed class BillingApplicationService(CarpoolrDbContext database, TimeProvider timeProvider)
+public sealed partial class BillingApplicationService(CarpoolrDbContext database, TimeProvider timeProvider)
 {
     public async Task<BillDetails> CompleteAsync(
         Guid tripId,

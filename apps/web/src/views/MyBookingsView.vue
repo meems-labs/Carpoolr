@@ -8,6 +8,7 @@ import TripCard from '../components/TripCard.vue'
 import { useOperation } from '../composables/useOperation'
 import { bookingLabel } from '../lib/labels'
 import { selectedPersonId } from '../state/session'
+import { requestDashboardRefresh } from '../state/dashboard'
 
 const client = clientsForPerson(selectedPersonId.value)
 const { pending, error, success, run } = useOperation()
@@ -32,6 +33,7 @@ async function load(append = false) {
 async function withdraw(id: string) {
   const response = await run(async (options) => {
     await client.bookings.withdrawBooking({ bookingId: id }, options)
+    requestDashboardRefresh()
     return client.bookings.listMyBookings({ pageSize: 20 }, options)
   })
   if (response) {

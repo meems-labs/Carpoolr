@@ -26,6 +26,10 @@ Diese Datei haelt Entscheidungen fuer die weitere Umsetzung fest. Vorhandener Be
 | Routing spaeter | Kostenloser Dienst mit kostenlosem API-Key, keine kostenpflichtige Google-API | Bestaetigte Auswahl |
 | Staging-Datenbank | Eigene PostgreSQL-Instanz mit persistentem Speicher im Staging-Namespace vorbereiten | Bestaetigte Auswahl |
 | GitOps-Ziel | ArgoCD beobachtet develop und deploy/kubernetes/overlays/staging | Bestaetigte Auswahl |
+| Kostenuebersicht | Eigene Kosten/Zahlungsstaende und Erstattungen als Fahrer, Gesamtsummen und Aufschluesselung je Fahrt | Bestaetigte Erweiterung |
+| Anfrageeingang | Fahrer sieht und bearbeitet Anfragen ueber alle eigenen Angebote | Benutzeranforderung |
+| Aufgaben-Glocke | Offene Mitfahranfragen und gemeldete Zahlungen; vorerst kein Gelesen-/Ungelesen-Verlauf | Bestaetigte Erweiterung |
+| Sortierung der Angebote | Naechste zukuenftige Abfahrt zuerst | Benutzeranforderung |
 | Backend | ASP.NET Core / .NET 10; .NET 11 spaeter angedacht | Urspruengliche Benutzeranforderung |
 | API-Kommunikation | gRPC fuer das Frontend; SignalR als spaetere Moeglichkeit | Urspruengliche Benutzeranforderung |
 | Identity Provider | Authentik im Zielcluster vorhanden; Integration spaeter vorgesehen | Urspruengliche Benutzeranforderung |
@@ -45,7 +49,7 @@ Diese Bestandsaufnahme bestaetigt keine noch offenen Produktregeln und belegt no
 | Entscheidung | Aktueller Stand |
 | --- | --- |
 | Browserpruefung | Benutzer hat Bun-basierte Installation bestaetigt; vollstaendiger Buchungs-/Abrechnungsablauf im echten Browser erfolgreich geprueft |
-| Tatsaechlicher Rollout | Konfiguration und Anwendung werden geprueft; GitOps-Veroeffentlichung und laufende Anwendung noch nicht verifiziert |
+| Tatsaechlicher Rollout | Grundanwendung erfolgreich per GitOps veroeffentlicht und oeffentlich im Staging geprueft; Erweiterungen werden erneut validiert |
 
 Mehrere Arbeitsstandorte, Chat, externe Benachrichtigungen und Administration wurden nicht als Pflichtfunktionen ausgewaehlt und sind daher nicht beauftragt. Das ist keine Aussage darueber, ob sie spaeter gewuenscht werden.
 

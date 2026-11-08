@@ -64,6 +64,38 @@ public sealed class BillingGrpcService(BillingApplicationService billing, ICurre
         return ToResponse(bill);
     }
 
+    public override async Task<Wire.GetMyCostOverviewResponse> GetMyCostOverview(
+        Wire.GetMyCostOverviewRequest request, ServerCallContext context)
+    {
+        var overview = await billing.GetMyCostOverviewAsync(currentUser.GetRequiredIdentity(),
+            request.Offset, request.PageSize, context.CancellationToken);
+        var totals = overview.Totals;
+        var response = new Wire.GetMyCostOverviewResponse
+        {
+            Totals = new Wire.CostOverviewTotals
+            {
+                OwnCostCents = totals.OwnCostCents,
+                OwnUnpaidCents = totals.OwnUnpaidCents,
+                OwnReportedCents = totals.OwnReportedCents,
+                OwnConfirmedCents = totals.OwnConfirmedCents,
+                OwnRejectedCents = totals.OwnRejectedCents,
+                DriverTotalReceivableCents = totals.DriverTotalReceivableCents,
+                DriverOutstandingCents = totals.DriverOutstandingCents,
+                DriverReportedCents = totals.DriverReportedCents,
+                DriverConfirmedCents = totals.DriverConfirmedCents,
+            },
+        };
+        response.Bills.AddRange(overview.Bills.Select(entry => new Wire.MyBillEntry
+        {
+            Bill = ToResponse(entry.Bill).Bill,
+            Origin = entry.Origin,
+            Destination = entry.Destination,
+            DepartureAt = Timestamp.FromDateTimeOffset(entry.DepartureAt),
+        }));
+        if (overview.NextOffset is { } offset) response.NextOffset = offset;
+        return response;
+    }
+
     private static Wire.BillResponse ToResponse(BillDetails details)
     {
         var bill = new Wire.Bill

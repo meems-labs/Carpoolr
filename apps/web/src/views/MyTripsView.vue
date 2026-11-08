@@ -8,6 +8,7 @@ import TripCard from '../components/TripCard.vue'
 import { useOperation } from '../composables/useOperation'
 import { weekdays } from '../lib/labels'
 import { selectedPersonId } from '../state/session'
+import { requestDashboardRefresh } from '../state/dashboard'
 
 const client = clientsForPerson(selectedPersonId.value)
 const { pending, error, success, run } = useOperation()
@@ -56,6 +57,7 @@ async function moreSeries() {
 async function cancelSeries(id: string) {
   const response = await run(async (options) => {
     await client.series.cancelSeries({ seriesId: id }, options)
+    requestDashboardRefresh()
     return Promise.all([
       client.trips.listMyTrips({ pageSize: 20 }, options),
       client.series.listMySeries({ pageSize: 20 }, options),
@@ -85,7 +87,10 @@ onMounted(load)
       <h1>Meine Angebote</h1>
       <p>Deine einzelnen Fahrten und regelmäßigen Fahrtenserien.</p>
     </div>
-    <RouterLink class="button" to="/fahrten/neu">Fahrt anbieten</RouterLink>
+    <div class="actions" style="margin-top: 0">
+      <RouterLink class="button secondary" to="/eingegangene-anfragen">Anfragen prüfen</RouterLink>
+      <RouterLink class="button" to="/fahrten/neu">Fahrt anbieten</RouterLink>
+    </div>
   </header>
   <OperationStatus :error="error" :success="success" />
   <p v-if="pending && !loaded" role="status">Deine Angebote werden geladen …</p>

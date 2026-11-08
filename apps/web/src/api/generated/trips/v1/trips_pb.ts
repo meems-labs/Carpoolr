@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file trips/v1/trips.proto.
  */
 export const file_trips_v1_trips: GenFile = /*@__PURE__*/
-  fileDesc("ChR0cmlwcy92MS90cmlwcy5wcm90bxIRY2FycG9vbHIudHJpcHMudjEiqAEKEUNyZWF0ZVRyaXBSZXF1ZXN0EhIKCnJlcXVlc3RfaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEjAKDGRlcGFydHVyZV9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLc2VhdHNfdG90YWwYBSABKAUSEwoLZGlzdGFuY2Vfa20YBiABKAkiOwoSQ3JlYXRlVHJpcFJlc3BvbnNlEiUKBHRyaXAYASABKAsyFy5jYXJwb29sci50cmlwcy52MS5UcmlwIiEKDkdldFRyaXBSZXF1ZXN0Eg8KB3RyaXBfaWQYASABKAkirAEKD0dldFRyaXBSZXNwb25zZRIlCgR0cmlwGAEgASgLMhcuY2FycG9vbHIudHJpcHMudjEuVHJpcBIsCghib29raW5ncxgCIAMoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmcSMQoLcm91dGVfc3RvcHMYAyADKAsyHC5jYXJwb29sci50cmlwcy52MS5Sb3V0ZVN0b3ASEQoJcm91dGVfdXJsGAQgASgJIsUBChJTZWFyY2hUcmlwc1JlcXVlc3QSDgoGb3JpZ2luGAEgASgJEhMKC2Rlc3RpbmF0aW9uGAIgASgJEjIKDmRlcGFydHVyZV9mcm9tGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIzCg9kZXBhcnR1cmVfdW50aWwYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg4KBm9mZnNldBgFIAEoBRIRCglwYWdlX3NpemUYBiABKAUiZwoTU2VhcmNoVHJpcHNSZXNwb25zZRImCgV0cmlwcxgBIAMoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLlRyaXASGAoLbmV4dF9vZmZzZXQYAiABKAVIAIgBAUIOCgxfbmV4dF9vZmZzZXQiJAoRQ2FuY2VsVHJpcFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCSI7ChJDYW5jZWxUcmlwUmVzcG9uc2USJQoEdHJpcBgBIAEoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLlRyaXAiNwoSTGlzdE15VHJpcHNSZXF1ZXN0Eg4KBm9mZnNldBgBIAEoBRIRCglwYWdlX3NpemUYAiABKAUiowQKBFRyaXASCgoCaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEjAKDGRlcGFydHVyZV9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLc2VhdHNfdG90YWwYBSABKAUSKwoFc3RhdGUYBiABKA4yHC5jYXJwb29sci50cmlwcy52MS5UcmlwU3RhdGUSLgoKY3JlYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASGwoTZHJpdmVyX2Rpc3BsYXlfbmFtZRgIIAEoCRIZChFkcml2ZXJfcHJvZmlsZV9pZBgJIAEoCRIQCghpc19vd25lchgKIAEoCBISCgpjYW5fY2FuY2VsGAsgASgIEhcKD2F2YWlsYWJsZV9zZWF0cxgMIAEoBRITCgtkaXN0YW5jZV9rbRgNIAEoCRIrCgd2ZWhpY2xlGA4gASgLMhouY2FycG9vbHIudHJpcHMudjEuVmVoaWNsZRIRCglzZXJpZXNfaWQYDyABKAkSLgoKbXlfYm9va2luZxgQIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmcSNAoMY29zdF9wcmV2aWV3GBEgASgLMh4uY2FycG9vbHIudHJpcHMudjEuQ29zdFByZXZpZXcSFAoMY2FuX2NvbXBsZXRlGBIgASgIIpwBCgdWZWhpY2xlEgwKBG5hbWUYASABKAkSFwoPcGFzc2VuZ2VyX3NlYXRzGAIgASgFEjIKC2VuZXJneV9raW5kGAMgASgOMh0uY2FycG9vbHIudHJpcHMudjEuRW5lcmd5S2luZBIeChZjb25zdW1wdGlvbl9wZXJfMTAwX2ttGAQgASgJEhYKDnVuaXRfcHJpY2VfZXVyGAUgASgJIoYBCgtVc2VyUHJvZmlsZRIKCgJpZBgBIAEoCRIUCgxkaXNwbGF5X25hbWUYAiABKAkSFgoOcGlja3VwX2FkZHJlc3MYAyABKAkSKwoHdmVoaWNsZRgEIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLlZlaGljbGUSEAoIaXNfc2F2ZWQYBSABKAgiFQoTR2V0TXlQcm9maWxlUmVxdWVzdCJHChRHZXRNeVByb2ZpbGVSZXNwb25zZRIvCgdwcm9maWxlGAEgASgLMh4uY2FycG9vbHIudHJpcHMudjEuVXNlclByb2ZpbGUicwoWVXBkYXRlTXlQcm9maWxlUmVxdWVzdBIUCgxkaXNwbGF5X25hbWUYASABKAkSFgoOcGlja3VwX2FkZHJlc3MYAiABKAkSKwoHdmVoaWNsZRgDIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLlZlaGljbGUinAIKB0Jvb2tpbmcSCgoCaWQYASABKAkSDwoHdHJpcF9pZBgCIAEoCRIcChRyZXF1ZXN0ZXJfcHJvZmlsZV9pZBgDIAEoCRIeChZyZXF1ZXN0ZXJfZGlzcGxheV9uYW1lGAQgASgJEhYKDnBpY2t1cF9hZGRyZXNzGAUgASgJEi4KBXN0YXRlGAYgASgOMh8uY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1N0YXRlEhIKCmNhbl9hY2NlcHQYByABKAgSEgoKY2FuX3JlamVjdBgIIAEoCBIUCgxjYW5fd2l0aGRyYXcYCSABKAgSMAoMcmVxdWVzdGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCI5ChJSZXF1ZXN0U2VhdFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCRISCgpyZXF1ZXN0X2lkGAIgASgJIioKFENoYW5nZUJvb2tpbmdSZXF1ZXN0EhIKCmJvb2tpbmdfaWQYASABKAkiPgoPQm9va2luZ1Jlc3BvbnNlEisKB2Jvb2tpbmcYASABKAsyGi5jYXJwb29sci50cmlwcy52MS5Cb29raW5nIjoKFUxpc3RNeUJvb2tpbmdzUmVxdWVzdBIOCgZvZmZzZXQYASABKAUSEQoJcGFnZV9zaXplGAIgASgFImUKD0Jvb2tpbmdXaXRoVHJpcBIrCgdib29raW5nGAEgASgLMhouY2FycG9vbHIudHJpcHMudjEuQm9va2luZxIlCgR0cmlwGAIgASgLMhcuY2FycG9vbHIudHJpcHMudjEuVHJpcCJ3ChZMaXN0TXlCb29raW5nc1Jlc3BvbnNlEjMKB2VudHJpZXMYASADKAsyIi5jYXJwb29sci50cmlwcy52MS5Cb29raW5nV2l0aFRyaXASGAoLbmV4dF9vZmZzZXQYAiABKAVIAIgBAUIOCgxfbmV4dF9vZmZzZXQiMgoJUm91dGVTdG9wEhQKDGRpc3BsYXlfbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJIs4BChNDcmVhdGVTZXJpZXNSZXF1ZXN0EhIKCnJlcXVlc3RfaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEhMKC3NlYXRzX3RvdGFsGAQgASgFEhMKC2Rpc3RhbmNlX2ttGAUgASgJEhIKCnN0YXJ0X2RhdGUYBiABKAkSEAoIZW5kX2RhdGUYByABKAkSEAoId2Vla2RheXMYCCADKAUSHAoUbG9jYWxfZGVwYXJ0dXJlX3RpbWUYCSABKAki6wEKD1JlY3VycmluZ1NlcmllcxIKCgJpZBgBIAEoCRIOCgZvcmlnaW4YAiABKAkSEwoLZGVzdGluYXRpb24YAyABKAkSEwoLc2VhdHNfdG90YWwYBCABKAUSEwoLZGlzdGFuY2Vfa20YBSABKAkSEgoKc3RhcnRfZGF0ZRgGIAEoCRIQCghlbmRfZGF0ZRgHIAEoCRIQCgh3ZWVrZGF5cxgIIAMoBRIcChRsb2NhbF9kZXBhcnR1cmVfdGltZRgJIAEoCRIRCgl0aW1lX3pvbmUYCiABKAkSFAoMaXNfY2FuY2VsbGVkGAsgASgIIkQKDlNlcmllc1Jlc3BvbnNlEjIKBnNlcmllcxgBIAEoCzIiLmNhcnBvb2xyLnRyaXBzLnYxLlJlY3VycmluZ1NlcmllcyI4ChNMaXN0TXlTZXJpZXNSZXF1ZXN0Eg4KBm9mZnNldBgBIAEoBRIRCglwYWdlX3NpemUYAiABKAUidAoUTGlzdE15U2VyaWVzUmVzcG9uc2USMgoGc2VyaWVzGAEgAygLMiIuY2FycG9vbHIudHJpcHMudjEuUmVjdXJyaW5nU2VyaWVzEhgKC25leHRfb2Zmc2V0GAIgASgFSACIAQFCDgoMX25leHRfb2Zmc2V0IigKE0NhbmNlbFNlcmllc1JlcXVlc3QSEQoJc2VyaWVzX2lkGAEgASgJIlkKC0Nvc3RQcmV2aWV3EhMKC3RvdGFsX2NlbnRzGAEgASgDEhQKDHBlcnNvbl9jb3VudBgCIAEoBRIfChdhcHByb3hpbWF0ZV9zaGFyZV9jZW50cxgDIAEoAyLRAQoJQmlsbFNoYXJlEhIKCnByb2ZpbGVfaWQYASABKAkSFAoMZGlzcGxheV9uYW1lGAIgASgJEhQKDGFtb3VudF9jZW50cxgDIAEoAxI2Cg1wYXltZW50X3N0YXRlGAQgASgOMh8uY2FycG9vbHIudHJpcHMudjEuUGF5bWVudFN0YXRlEg8KB2lzX21pbmUYBSABKAgSEgoKY2FuX3JlcG9ydBgGIAEoCBITCgtjYW5fY29uZmlybRgHIAEoCBISCgpjYW5fcmVqZWN0GAggASgIIuwBCgRCaWxsEg8KB3RyaXBfaWQYASABKAkSEwoLZGlzdGFuY2Vfa20YAiABKAkSHgoWY29uc3VtcHRpb25fcGVyXzEwMF9rbRgDIAEoCRIWCg51bml0X3ByaWNlX2V1chgEIAEoCRITCgt0b3RhbF9jZW50cxgFIAEoAxIsCgZzaGFyZXMYBiADKAsyHC5jYXJwb29sci50cmlwcy52MS5CaWxsU2hhcmUSMAoMY29tcGxldGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIRCglpc19kcml2ZXIYCCABKAgicwoTQ29tcGxldGVUcmlwUmVxdWVzdBIPCgd0cmlwX2lkGAEgASgJEhMKC2Rpc3RhbmNlX2ttGAIgASgJEh4KFmNvbnN1bXB0aW9uX3Blcl8xMDBfa20YAyABKAkSFgoOdW5pdF9wcmljZV9ldXIYBCABKAkiIQoOR2V0QmlsbFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCSI1CgxCaWxsUmVzcG9uc2USJQoEYmlsbBgBIAEoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLkJpbGwiOwoUUmVwb3J0UGF5bWVudFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCRISCgpyZXF1ZXN0X2lkGAIgASgJIjsKFENoYW5nZVBheW1lbnRSZXF1ZXN0Eg8KB3RyaXBfaWQYASABKAkSEgoKcHJvZmlsZV9pZBgCIAEoCSpzCglUcmlwU3RhdGUSGgoWVFJJUF9TVEFURV9VTlNQRUNJRklFRBAAEhYKElRSSVBfU1RBVEVfUExBTk5FRBABEhgKFFRSSVBfU1RBVEVfQ0FOQ0VMTEVEEAISGAoUVFJJUF9TVEFURV9DT01QTEVURUQQAypzCgpFbmVyZ3lLaW5kEhsKF0VORVJHWV9LSU5EX1VOU1BFQ0lGSUVEEAASFgoSRU5FUkdZX0tJTkRfUEVUUk9MEAESFgoSRU5FUkdZX0tJTkRfRElFU0VMEAISGAoURU5FUkdZX0tJTkRfRUxFQ1RSSUMQAyq6AQoMQm9va2luZ1N0YXRlEh0KGUJPT0tJTkdfU1RBVEVfVU5TUEVDSUZJRUQQABIZChVCT09LSU5HX1NUQVRFX1BFTkRJTkcQARIaChZCT09LSU5HX1NUQVRFX0FDQ0VQVEVEEAISGgoWQk9PS0lOR19TVEFURV9SRUpFQ1RFRBADEhsKF0JPT0tJTkdfU1RBVEVfV0lUSERSQVdOEAQSGwoXQk9PS0lOR19TVEFURV9DQU5DRUxMRUQQBSq8AQoMUGF5bWVudFN0YXRlEh0KGVBBWU1FTlRfU1RBVEVfVU5TUEVDSUZJRUQQABIYChRQQVlNRU5UX1NUQVRFX1VOUEFJRBABEhoKFlBBWU1FTlRfU1RBVEVfUkVQT1JURUQQAhIbChdQQVlNRU5UX1NUQVRFX0NPTkZJUk1FRBADEhoKFlBBWU1FTlRfU1RBVEVfUkVKRUNURUQQBBIeChpQQVlNRU5UX1NUQVRFX0RSSVZFUl9TSEFSRRAFMtEDCgtUcmlwU2VydmljZRJZCgpDcmVhdGVUcmlwEiQuY2FycG9vbHIudHJpcHMudjEuQ3JlYXRlVHJpcFJlcXVlc3QaJS5jYXJwb29sci50cmlwcy52MS5DcmVhdGVUcmlwUmVzcG9uc2USUAoHR2V0VHJpcBIhLmNhcnBvb2xyLnRyaXBzLnYxLkdldFRyaXBSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuR2V0VHJpcFJlc3BvbnNlElwKC1NlYXJjaFRyaXBzEiUuY2FycG9vbHIudHJpcHMudjEuU2VhcmNoVHJpcHNSZXF1ZXN0GiYuY2FycG9vbHIudHJpcHMudjEuU2VhcmNoVHJpcHNSZXNwb25zZRJZCgpDYW5jZWxUcmlwEiQuY2FycG9vbHIudHJpcHMudjEuQ2FuY2VsVHJpcFJlcXVlc3QaJS5jYXJwb29sci50cmlwcy52MS5DYW5jZWxUcmlwUmVzcG9uc2USXAoLTGlzdE15VHJpcHMSJS5jYXJwb29sci50cmlwcy52MS5MaXN0TXlUcmlwc1JlcXVlc3QaJi5jYXJwb29sci50cmlwcy52MS5TZWFyY2hUcmlwc1Jlc3BvbnNlMtgBCg5Qcm9maWxlU2VydmljZRJfCgxHZXRNeVByb2ZpbGUSJi5jYXJwb29sci50cmlwcy52MS5HZXRNeVByb2ZpbGVSZXF1ZXN0GicuY2FycG9vbHIudHJpcHMudjEuR2V0TXlQcm9maWxlUmVzcG9uc2USZQoPVXBkYXRlTXlQcm9maWxlEikuY2FycG9vbHIudHJpcHMudjEuVXBkYXRlTXlQcm9maWxlUmVxdWVzdBonLmNhcnBvb2xyLnRyaXBzLnYxLkdldE15UHJvZmlsZVJlc3BvbnNlMu0DCg5Cb29raW5nU2VydmljZRJYCgtSZXF1ZXN0U2VhdBIlLmNhcnBvb2xyLnRyaXBzLnYxLlJlcXVlc3RTZWF0UmVxdWVzdBoiLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmdSZXNwb25zZRJcCg1BY2NlcHRCb29raW5nEicuY2FycG9vbHIudHJpcHMudjEuQ2hhbmdlQm9va2luZ1JlcXVlc3QaIi5jYXJwb29sci50cmlwcy52MS5Cb29raW5nUmVzcG9uc2USXAoNUmVqZWN0Qm9va2luZxInLmNhcnBvb2xyLnRyaXBzLnYxLkNoYW5nZUJvb2tpbmdSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1Jlc3BvbnNlEl4KD1dpdGhkcmF3Qm9va2luZxInLmNhcnBvb2xyLnRyaXBzLnYxLkNoYW5nZUJvb2tpbmdSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1Jlc3BvbnNlEmUKDkxpc3RNeUJvb2tpbmdzEiguY2FycG9vbHIudHJpcHMudjEuTGlzdE15Qm9va2luZ3NSZXF1ZXN0GikuY2FycG9vbHIudHJpcHMudjEuTGlzdE15Qm9va2luZ3NSZXNwb25zZTKtAgoUUmVjdXJyaW5nVHJpcFNlcnZpY2USWQoMQ3JlYXRlU2VyaWVzEiYuY2FycG9vbHIudHJpcHMudjEuQ3JlYXRlU2VyaWVzUmVxdWVzdBohLmNhcnBvb2xyLnRyaXBzLnYxLlNlcmllc1Jlc3BvbnNlEl8KDExpc3RNeVNlcmllcxImLmNhcnBvb2xyLnRyaXBzLnYxLkxpc3RNeVNlcmllc1JlcXVlc3QaJy5jYXJwb29sci50cmlwcy52MS5MaXN0TXlTZXJpZXNSZXNwb25zZRJZCgxDYW5jZWxTZXJpZXMSJi5jYXJwb29sci50cmlwcy52MS5DYW5jZWxTZXJpZXNSZXF1ZXN0GiEuY2FycG9vbHIudHJpcHMudjEuU2VyaWVzUmVzcG9uc2UyygMKDkJpbGxpbmdTZXJ2aWNlElcKDENvbXBsZXRlVHJpcBImLmNhcnBvb2xyLnRyaXBzLnYxLkNvbXBsZXRlVHJpcFJlcXVlc3QaHy5jYXJwb29sci50cmlwcy52MS5CaWxsUmVzcG9uc2USTQoHR2V0QmlsbBIhLmNhcnBvb2xyLnRyaXBzLnYxLkdldEJpbGxSZXF1ZXN0Gh8uY2FycG9vbHIudHJpcHMudjEuQmlsbFJlc3BvbnNlElkKDVJlcG9ydFBheW1lbnQSJy5jYXJwb29sci50cmlwcy52MS5SZXBvcnRQYXltZW50UmVxdWVzdBofLmNhcnBvb2xyLnRyaXBzLnYxLkJpbGxSZXNwb25zZRJaCg5Db25maXJtUGF5bWVudBInLmNhcnBvb2xyLnRyaXBzLnYxLkNoYW5nZVBheW1lbnRSZXF1ZXN0Gh8uY2FycG9vbHIudHJpcHMudjEuQmlsbFJlc3BvbnNlElkKDVJlamVjdFBheW1lbnQSJy5jYXJwb29sci50cmlwcy52MS5DaGFuZ2VQYXltZW50UmVxdWVzdBofLmNhcnBvb2xyLnRyaXBzLnYxLkJpbGxSZXNwb25zZUIiqgIfQ2FycG9vbHIuQXBpLkNvbnRyYWN0cy5Ucmlwcy5WMWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChR0cmlwcy92MS90cmlwcy5wcm90bxIRY2FycG9vbHIudHJpcHMudjEiqAEKEUNyZWF0ZVRyaXBSZXF1ZXN0EhIKCnJlcXVlc3RfaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEjAKDGRlcGFydHVyZV9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLc2VhdHNfdG90YWwYBSABKAUSEwoLZGlzdGFuY2Vfa20YBiABKAkiOwoSQ3JlYXRlVHJpcFJlc3BvbnNlEiUKBHRyaXAYASABKAsyFy5jYXJwb29sci50cmlwcy52MS5UcmlwIiEKDkdldFRyaXBSZXF1ZXN0Eg8KB3RyaXBfaWQYASABKAkirAEKD0dldFRyaXBSZXNwb25zZRIlCgR0cmlwGAEgASgLMhcuY2FycG9vbHIudHJpcHMudjEuVHJpcBIsCghib29raW5ncxgCIAMoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmcSMQoLcm91dGVfc3RvcHMYAyADKAsyHC5jYXJwb29sci50cmlwcy52MS5Sb3V0ZVN0b3ASEQoJcm91dGVfdXJsGAQgASgJIsUBChJTZWFyY2hUcmlwc1JlcXVlc3QSDgoGb3JpZ2luGAEgASgJEhMKC2Rlc3RpbmF0aW9uGAIgASgJEjIKDmRlcGFydHVyZV9mcm9tGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIzCg9kZXBhcnR1cmVfdW50aWwYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg4KBm9mZnNldBgFIAEoBRIRCglwYWdlX3NpemUYBiABKAUiZwoTU2VhcmNoVHJpcHNSZXNwb25zZRImCgV0cmlwcxgBIAMoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLlRyaXASGAoLbmV4dF9vZmZzZXQYAiABKAVIAIgBAUIOCgxfbmV4dF9vZmZzZXQiJAoRQ2FuY2VsVHJpcFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCSI7ChJDYW5jZWxUcmlwUmVzcG9uc2USJQoEdHJpcBgBIAEoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLlRyaXAiNwoSTGlzdE15VHJpcHNSZXF1ZXN0Eg4KBm9mZnNldBgBIAEoBRIRCglwYWdlX3NpemUYAiABKAUiowQKBFRyaXASCgoCaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEjAKDGRlcGFydHVyZV9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLc2VhdHNfdG90YWwYBSABKAUSKwoFc3RhdGUYBiABKA4yHC5jYXJwb29sci50cmlwcy52MS5UcmlwU3RhdGUSLgoKY3JlYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASGwoTZHJpdmVyX2Rpc3BsYXlfbmFtZRgIIAEoCRIZChFkcml2ZXJfcHJvZmlsZV9pZBgJIAEoCRIQCghpc19vd25lchgKIAEoCBISCgpjYW5fY2FuY2VsGAsgASgIEhcKD2F2YWlsYWJsZV9zZWF0cxgMIAEoBRITCgtkaXN0YW5jZV9rbRgNIAEoCRIrCgd2ZWhpY2xlGA4gASgLMhouY2FycG9vbHIudHJpcHMudjEuVmVoaWNsZRIRCglzZXJpZXNfaWQYDyABKAkSLgoKbXlfYm9va2luZxgQIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmcSNAoMY29zdF9wcmV2aWV3GBEgASgLMh4uY2FycG9vbHIudHJpcHMudjEuQ29zdFByZXZpZXcSFAoMY2FuX2NvbXBsZXRlGBIgASgIIpwBCgdWZWhpY2xlEgwKBG5hbWUYASABKAkSFwoPcGFzc2VuZ2VyX3NlYXRzGAIgASgFEjIKC2VuZXJneV9raW5kGAMgASgOMh0uY2FycG9vbHIudHJpcHMudjEuRW5lcmd5S2luZBIeChZjb25zdW1wdGlvbl9wZXJfMTAwX2ttGAQgASgJEhYKDnVuaXRfcHJpY2VfZXVyGAUgASgJIoYBCgtVc2VyUHJvZmlsZRIKCgJpZBgBIAEoCRIUCgxkaXNwbGF5X25hbWUYAiABKAkSFgoOcGlja3VwX2FkZHJlc3MYAyABKAkSKwoHdmVoaWNsZRgEIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLlZlaGljbGUSEAoIaXNfc2F2ZWQYBSABKAgiFQoTR2V0TXlQcm9maWxlUmVxdWVzdCJHChRHZXRNeVByb2ZpbGVSZXNwb25zZRIvCgdwcm9maWxlGAEgASgLMh4uY2FycG9vbHIudHJpcHMudjEuVXNlclByb2ZpbGUicwoWVXBkYXRlTXlQcm9maWxlUmVxdWVzdBIUCgxkaXNwbGF5X25hbWUYASABKAkSFgoOcGlja3VwX2FkZHJlc3MYAiABKAkSKwoHdmVoaWNsZRgDIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLlZlaGljbGUinAIKB0Jvb2tpbmcSCgoCaWQYASABKAkSDwoHdHJpcF9pZBgCIAEoCRIcChRyZXF1ZXN0ZXJfcHJvZmlsZV9pZBgDIAEoCRIeChZyZXF1ZXN0ZXJfZGlzcGxheV9uYW1lGAQgASgJEhYKDnBpY2t1cF9hZGRyZXNzGAUgASgJEi4KBXN0YXRlGAYgASgOMh8uY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1N0YXRlEhIKCmNhbl9hY2NlcHQYByABKAgSEgoKY2FuX3JlamVjdBgIIAEoCBIUCgxjYW5fd2l0aGRyYXcYCSABKAgSMAoMcmVxdWVzdGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCI5ChJSZXF1ZXN0U2VhdFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCRISCgpyZXF1ZXN0X2lkGAIgASgJIioKFENoYW5nZUJvb2tpbmdSZXF1ZXN0EhIKCmJvb2tpbmdfaWQYASABKAkiPgoPQm9va2luZ1Jlc3BvbnNlEisKB2Jvb2tpbmcYASABKAsyGi5jYXJwb29sci50cmlwcy52MS5Cb29raW5nIjoKFUxpc3RNeUJvb2tpbmdzUmVxdWVzdBIOCgZvZmZzZXQYASABKAUSEQoJcGFnZV9zaXplGAIgASgFIlYKG0xpc3RJbmNvbWluZ0Jvb2tpbmdzUmVxdWVzdBIOCgZvZmZzZXQYASABKAUSEQoJcGFnZV9zaXplGAIgASgFEhQKDHBlbmRpbmdfb25seRgDIAEoCCJlCg9Cb29raW5nV2l0aFRyaXASKwoHYm9va2luZxgBIAEoCzIaLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmcSJQoEdHJpcBgCIAEoCzIXLmNhcnBvb2xyLnRyaXBzLnYxLlRyaXAidwoWTGlzdE15Qm9va2luZ3NSZXNwb25zZRIzCgdlbnRyaWVzGAEgAygLMiIuY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1dpdGhUcmlwEhgKC25leHRfb2Zmc2V0GAIgASgFSACIAQFCDgoMX25leHRfb2Zmc2V0IjIKCVJvdXRlU3RvcBIUCgxkaXNwbGF5X25hbWUYASABKAkSDwoHYWRkcmVzcxgCIAEoCSLOAQoTQ3JlYXRlU2VyaWVzUmVxdWVzdBISCgpyZXF1ZXN0X2lkGAEgASgJEg4KBm9yaWdpbhgCIAEoCRITCgtkZXN0aW5hdGlvbhgDIAEoCRITCgtzZWF0c190b3RhbBgEIAEoBRITCgtkaXN0YW5jZV9rbRgFIAEoCRISCgpzdGFydF9kYXRlGAYgASgJEhAKCGVuZF9kYXRlGAcgASgJEhAKCHdlZWtkYXlzGAggAygFEhwKFGxvY2FsX2RlcGFydHVyZV90aW1lGAkgASgJIusBCg9SZWN1cnJpbmdTZXJpZXMSCgoCaWQYASABKAkSDgoGb3JpZ2luGAIgASgJEhMKC2Rlc3RpbmF0aW9uGAMgASgJEhMKC3NlYXRzX3RvdGFsGAQgASgFEhMKC2Rpc3RhbmNlX2ttGAUgASgJEhIKCnN0YXJ0X2RhdGUYBiABKAkSEAoIZW5kX2RhdGUYByABKAkSEAoId2Vla2RheXMYCCADKAUSHAoUbG9jYWxfZGVwYXJ0dXJlX3RpbWUYCSABKAkSEQoJdGltZV96b25lGAogASgJEhQKDGlzX2NhbmNlbGxlZBgLIAEoCCJECg5TZXJpZXNSZXNwb25zZRIyCgZzZXJpZXMYASABKAsyIi5jYXJwb29sci50cmlwcy52MS5SZWN1cnJpbmdTZXJpZXMiOAoTTGlzdE15U2VyaWVzUmVxdWVzdBIOCgZvZmZzZXQYASABKAUSEQoJcGFnZV9zaXplGAIgASgFInQKFExpc3RNeVNlcmllc1Jlc3BvbnNlEjIKBnNlcmllcxgBIAMoCzIiLmNhcnBvb2xyLnRyaXBzLnYxLlJlY3VycmluZ1NlcmllcxIYCgtuZXh0X29mZnNldBgCIAEoBUgAiAEBQg4KDF9uZXh0X29mZnNldCIoChNDYW5jZWxTZXJpZXNSZXF1ZXN0EhEKCXNlcmllc19pZBgBIAEoCSJZCgtDb3N0UHJldmlldxITCgt0b3RhbF9jZW50cxgBIAEoAxIUCgxwZXJzb25fY291bnQYAiABKAUSHwoXYXBwcm94aW1hdGVfc2hhcmVfY2VudHMYAyABKAMi0QEKCUJpbGxTaGFyZRISCgpwcm9maWxlX2lkGAEgASgJEhQKDGRpc3BsYXlfbmFtZRgCIAEoCRIUCgxhbW91bnRfY2VudHMYAyABKAMSNgoNcGF5bWVudF9zdGF0ZRgEIAEoDjIfLmNhcnBvb2xyLnRyaXBzLnYxLlBheW1lbnRTdGF0ZRIPCgdpc19taW5lGAUgASgIEhIKCmNhbl9yZXBvcnQYBiABKAgSEwoLY2FuX2NvbmZpcm0YByABKAgSEgoKY2FuX3JlamVjdBgIIAEoCCLsAQoEQmlsbBIPCgd0cmlwX2lkGAEgASgJEhMKC2Rpc3RhbmNlX2ttGAIgASgJEh4KFmNvbnN1bXB0aW9uX3Blcl8xMDBfa20YAyABKAkSFgoOdW5pdF9wcmljZV9ldXIYBCABKAkSEwoLdG90YWxfY2VudHMYBSABKAMSLAoGc2hhcmVzGAYgAygLMhwuY2FycG9vbHIudHJpcHMudjEuQmlsbFNoYXJlEjAKDGNvbXBsZXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEQoJaXNfZHJpdmVyGAggASgIInMKE0NvbXBsZXRlVHJpcFJlcXVlc3QSDwoHdHJpcF9pZBgBIAEoCRITCgtkaXN0YW5jZV9rbRgCIAEoCRIeChZjb25zdW1wdGlvbl9wZXJfMTAwX2ttGAMgASgJEhYKDnVuaXRfcHJpY2VfZXVyGAQgASgJIiEKDkdldEJpbGxSZXF1ZXN0Eg8KB3RyaXBfaWQYASABKAkiNQoMQmlsbFJlc3BvbnNlEiUKBGJpbGwYASABKAsyFy5jYXJwb29sci50cmlwcy52MS5CaWxsIjsKFFJlcG9ydFBheW1lbnRSZXF1ZXN0Eg8KB3RyaXBfaWQYASABKAkSEgoKcmVxdWVzdF9pZBgCIAEoCSI7ChRDaGFuZ2VQYXltZW50UmVxdWVzdBIPCgd0cmlwX2lkGAEgASgJEhIKCnByb2ZpbGVfaWQYAiABKAkiPQoYR2V0TXlDb3N0T3ZlcnZpZXdSZXF1ZXN0Eg4KBm9mZnNldBgBIAEoBRIRCglwYWdlX3NpemUYAiABKAUiowIKEkNvc3RPdmVydmlld1RvdGFscxIWCg5vd25fY29zdF9jZW50cxgBIAEoAxIYChBvd25fdW5wYWlkX2NlbnRzGAIgASgDEhoKEm93bl9yZXBvcnRlZF9jZW50cxgDIAEoAxIbChNvd25fY29uZmlybWVkX2NlbnRzGAQgASgDEhoKEm93bl9yZWplY3RlZF9jZW50cxgFIAEoAxIlCh1kcml2ZXJfdG90YWxfcmVjZWl2YWJsZV9jZW50cxgGIAEoAxIgChhkcml2ZXJfb3V0c3RhbmRpbmdfY2VudHMYByABKAMSHQoVZHJpdmVyX3JlcG9ydGVkX2NlbnRzGAggASgDEh4KFmRyaXZlcl9jb25maXJtZWRfY2VudHMYCSABKAMiiwEKC015QmlsbEVudHJ5EiUKBGJpbGwYASABKAsyFy5jYXJwb29sci50cmlwcy52MS5CaWxsEg4KBm9yaWdpbhgCIAEoCRITCgtkZXN0aW5hdGlvbhgDIAEoCRIwCgxkZXBhcnR1cmVfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIqsBChlHZXRNeUNvc3RPdmVydmlld1Jlc3BvbnNlEjUKBnRvdGFscxgBIAEoCzIlLmNhcnBvb2xyLnRyaXBzLnYxLkNvc3RPdmVydmlld1RvdGFscxItCgViaWxscxgCIAMoCzIeLmNhcnBvb2xyLnRyaXBzLnYxLk15QmlsbEVudHJ5EhgKC25leHRfb2Zmc2V0GAMgASgFSACIAQFCDgoMX25leHRfb2Zmc2V0Iv8BCg1QZW5kaW5nQWN0aW9uEjIKBGtpbmQYASABKA4yJC5jYXJwb29sci50cmlwcy52MS5QZW5kaW5nQWN0aW9uS2luZBIPCgd0cmlwX2lkGAIgASgJEhIKCmJvb2tpbmdfaWQYAyABKAkSEgoKcHJvZmlsZV9pZBgEIAEoCRIUCgxkaXNwbGF5X25hbWUYBSABKAkSDgoGb3JpZ2luGAYgASgJEhMKC2Rlc3RpbmF0aW9uGAcgASgJEjAKDGRlcGFydHVyZV9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFAoMYW1vdW50X2NlbnRzGAkgASgDIhoKGEdldFBlbmRpbmdBY3Rpb25zUmVxdWVzdCKLAQoZR2V0UGVuZGluZ0FjdGlvbnNSZXNwb25zZRIdChVib29raW5nX3JlcXVlc3RfY291bnQYASABKAMSHAoUcGF5bWVudF9yZXBvcnRfY291bnQYAiABKAMSMQoHYWN0aW9ucxgDIAMoCzIgLmNhcnBvb2xyLnRyaXBzLnYxLlBlbmRpbmdBY3Rpb24qcwoJVHJpcFN0YXRlEhoKFlRSSVBfU1RBVEVfVU5TUEVDSUZJRUQQABIWChJUUklQX1NUQVRFX1BMQU5ORUQQARIYChRUUklQX1NUQVRFX0NBTkNFTExFRBACEhgKFFRSSVBfU1RBVEVfQ09NUExFVEVEEAMqcwoKRW5lcmd5S2luZBIbChdFTkVSR1lfS0lORF9VTlNQRUNJRklFRBAAEhYKEkVORVJHWV9LSU5EX1BFVFJPTBABEhYKEkVORVJHWV9LSU5EX0RJRVNFTBACEhgKFEVORVJHWV9LSU5EX0VMRUNUUklDEAMqugEKDEJvb2tpbmdTdGF0ZRIdChlCT09LSU5HX1NUQVRFX1VOU1BFQ0lGSUVEEAASGQoVQk9PS0lOR19TVEFURV9QRU5ESU5HEAESGgoWQk9PS0lOR19TVEFURV9BQ0NFUFRFRBACEhoKFkJPT0tJTkdfU1RBVEVfUkVKRUNURUQQAxIbChdCT09LSU5HX1NUQVRFX1dJVEhEUkFXThAEEhsKF0JPT0tJTkdfU1RBVEVfQ0FOQ0VMTEVEEAUqvAEKDFBheW1lbnRTdGF0ZRIdChlQQVlNRU5UX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUUEFZTUVOVF9TVEFURV9VTlBBSUQQARIaChZQQVlNRU5UX1NUQVRFX1JFUE9SVEVEEAISGwoXUEFZTUVOVF9TVEFURV9DT05GSVJNRUQQAxIaChZQQVlNRU5UX1NUQVRFX1JFSkVDVEVEEAQSHgoaUEFZTUVOVF9TVEFURV9EUklWRVJfU0hBUkUQBSqJAQoRUGVuZGluZ0FjdGlvbktpbmQSIwofUEVORElOR19BQ1RJT05fS0lORF9VTlNQRUNJRklFRBAAEicKI1BFTkRJTkdfQUNUSU9OX0tJTkRfQk9PS0lOR19SRVFVRVNUEAESJgoiUEVORElOR19BQ1RJT05fS0lORF9QQVlNRU5UX1JFUE9SVBACMtEDCgtUcmlwU2VydmljZRJZCgpDcmVhdGVUcmlwEiQuY2FycG9vbHIudHJpcHMudjEuQ3JlYXRlVHJpcFJlcXVlc3QaJS5jYXJwb29sci50cmlwcy52MS5DcmVhdGVUcmlwUmVzcG9uc2USUAoHR2V0VHJpcBIhLmNhcnBvb2xyLnRyaXBzLnYxLkdldFRyaXBSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuR2V0VHJpcFJlc3BvbnNlElwKC1NlYXJjaFRyaXBzEiUuY2FycG9vbHIudHJpcHMudjEuU2VhcmNoVHJpcHNSZXF1ZXN0GiYuY2FycG9vbHIudHJpcHMudjEuU2VhcmNoVHJpcHNSZXNwb25zZRJZCgpDYW5jZWxUcmlwEiQuY2FycG9vbHIudHJpcHMudjEuQ2FuY2VsVHJpcFJlcXVlc3QaJS5jYXJwb29sci50cmlwcy52MS5DYW5jZWxUcmlwUmVzcG9uc2USXAoLTGlzdE15VHJpcHMSJS5jYXJwb29sci50cmlwcy52MS5MaXN0TXlUcmlwc1JlcXVlc3QaJi5jYXJwb29sci50cmlwcy52MS5TZWFyY2hUcmlwc1Jlc3BvbnNlMtgBCg5Qcm9maWxlU2VydmljZRJfCgxHZXRNeVByb2ZpbGUSJi5jYXJwb29sci50cmlwcy52MS5HZXRNeVByb2ZpbGVSZXF1ZXN0GicuY2FycG9vbHIudHJpcHMudjEuR2V0TXlQcm9maWxlUmVzcG9uc2USZQoPVXBkYXRlTXlQcm9maWxlEikuY2FycG9vbHIudHJpcHMudjEuVXBkYXRlTXlQcm9maWxlUmVxdWVzdBonLmNhcnBvb2xyLnRyaXBzLnYxLkdldE15UHJvZmlsZVJlc3BvbnNlMuAECg5Cb29raW5nU2VydmljZRJYCgtSZXF1ZXN0U2VhdBIlLmNhcnBvb2xyLnRyaXBzLnYxLlJlcXVlc3RTZWF0UmVxdWVzdBoiLmNhcnBvb2xyLnRyaXBzLnYxLkJvb2tpbmdSZXNwb25zZRJcCg1BY2NlcHRCb29raW5nEicuY2FycG9vbHIudHJpcHMudjEuQ2hhbmdlQm9va2luZ1JlcXVlc3QaIi5jYXJwb29sci50cmlwcy52MS5Cb29raW5nUmVzcG9uc2USXAoNUmVqZWN0Qm9va2luZxInLmNhcnBvb2xyLnRyaXBzLnYxLkNoYW5nZUJvb2tpbmdSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1Jlc3BvbnNlEl4KD1dpdGhkcmF3Qm9va2luZxInLmNhcnBvb2xyLnRyaXBzLnYxLkNoYW5nZUJvb2tpbmdSZXF1ZXN0GiIuY2FycG9vbHIudHJpcHMudjEuQm9va2luZ1Jlc3BvbnNlEmUKDkxpc3RNeUJvb2tpbmdzEiguY2FycG9vbHIudHJpcHMudjEuTGlzdE15Qm9va2luZ3NSZXF1ZXN0GikuY2FycG9vbHIudHJpcHMudjEuTGlzdE15Qm9va2luZ3NSZXNwb25zZRJxChRMaXN0SW5jb21pbmdCb29raW5ncxIuLmNhcnBvb2xyLnRyaXBzLnYxLkxpc3RJbmNvbWluZ0Jvb2tpbmdzUmVxdWVzdBopLmNhcnBvb2xyLnRyaXBzLnYxLkxpc3RNeUJvb2tpbmdzUmVzcG9uc2UyrQIKFFJlY3VycmluZ1RyaXBTZXJ2aWNlElkKDENyZWF0ZVNlcmllcxImLmNhcnBvb2xyLnRyaXBzLnYxLkNyZWF0ZVNlcmllc1JlcXVlc3QaIS5jYXJwb29sci50cmlwcy52MS5TZXJpZXNSZXNwb25zZRJfCgxMaXN0TXlTZXJpZXMSJi5jYXJwb29sci50cmlwcy52MS5MaXN0TXlTZXJpZXNSZXF1ZXN0GicuY2FycG9vbHIudHJpcHMudjEuTGlzdE15U2VyaWVzUmVzcG9uc2USWQoMQ2FuY2VsU2VyaWVzEiYuY2FycG9vbHIudHJpcHMudjEuQ2FuY2VsU2VyaWVzUmVxdWVzdBohLmNhcnBvb2xyLnRyaXBzLnYxLlNlcmllc1Jlc3BvbnNlMroECg5CaWxsaW5nU2VydmljZRJXCgxDb21wbGV0ZVRyaXASJi5jYXJwb29sci50cmlwcy52MS5Db21wbGV0ZVRyaXBSZXF1ZXN0Gh8uY2FycG9vbHIudHJpcHMudjEuQmlsbFJlc3BvbnNlEk0KB0dldEJpbGwSIS5jYXJwb29sci50cmlwcy52MS5HZXRCaWxsUmVxdWVzdBofLmNhcnBvb2xyLnRyaXBzLnYxLkJpbGxSZXNwb25zZRJZCg1SZXBvcnRQYXltZW50EicuY2FycG9vbHIudHJpcHMudjEuUmVwb3J0UGF5bWVudFJlcXVlc3QaHy5jYXJwb29sci50cmlwcy52MS5CaWxsUmVzcG9uc2USWgoOQ29uZmlybVBheW1lbnQSJy5jYXJwb29sci50cmlwcy52MS5DaGFuZ2VQYXltZW50UmVxdWVzdBofLmNhcnBvb2xyLnRyaXBzLnYxLkJpbGxSZXNwb25zZRJZCg1SZWplY3RQYXltZW50EicuY2FycG9vbHIudHJpcHMudjEuQ2hhbmdlUGF5bWVudFJlcXVlc3QaHy5jYXJwb29sci50cmlwcy52MS5CaWxsUmVzcG9uc2USbgoRR2V0TXlDb3N0T3ZlcnZpZXcSKy5jYXJwb29sci50cmlwcy52MS5HZXRNeUNvc3RPdmVydmlld1JlcXVlc3QaLC5jYXJwb29sci50cmlwcy52MS5HZXRNeUNvc3RPdmVydmlld1Jlc3BvbnNlMoIBChBEYXNoYm9hcmRTZXJ2aWNlEm4KEUdldFBlbmRpbmdBY3Rpb25zEisuY2FycG9vbHIudHJpcHMudjEuR2V0UGVuZGluZ0FjdGlvbnNSZXF1ZXN0GiwuY2FycG9vbHIudHJpcHMudjEuR2V0UGVuZGluZ0FjdGlvbnNSZXNwb25zZUIiqgIfQ2FycG9vbHIuQXBpLkNvbnRyYWN0cy5Ucmlwcy5WMWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message carpoolr.trips.v1.CreateTripRequest
@@ -640,6 +640,35 @@ export const ListMyBookingsRequestSchema: GenMessage<ListMyBookingsRequest> = /*
   messageDesc(file_trips_v1_trips, 19);
 
 /**
+ * Only requests on the caller's own offers. Pending-only excludes departed/cancelled trips.
+ *
+ * @generated from message carpoolr.trips.v1.ListIncomingBookingsRequest
+ */
+export type ListIncomingBookingsRequest = Message<"carpoolr.trips.v1.ListIncomingBookingsRequest"> & {
+  /**
+   * @generated from field: int32 offset = 1;
+   */
+  offset: number;
+
+  /**
+   * @generated from field: int32 page_size = 2;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: bool pending_only = 3;
+   */
+  pendingOnly: boolean;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.ListIncomingBookingsRequest.
+ * Use `create(ListIncomingBookingsRequestSchema)` to create a new message.
+ */
+export const ListIncomingBookingsRequestSchema: GenMessage<ListIncomingBookingsRequest> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 20);
+
+/**
  * @generated from message carpoolr.trips.v1.BookingWithTrip
  */
 export type BookingWithTrip = Message<"carpoolr.trips.v1.BookingWithTrip"> & {
@@ -659,7 +688,7 @@ export type BookingWithTrip = Message<"carpoolr.trips.v1.BookingWithTrip"> & {
  * Use `create(BookingWithTripSchema)` to create a new message.
  */
 export const BookingWithTripSchema: GenMessage<BookingWithTrip> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 20);
+  messageDesc(file_trips_v1_trips, 21);
 
 /**
  * @generated from message carpoolr.trips.v1.ListMyBookingsResponse
@@ -681,7 +710,7 @@ export type ListMyBookingsResponse = Message<"carpoolr.trips.v1.ListMyBookingsRe
  * Use `create(ListMyBookingsResponseSchema)` to create a new message.
  */
 export const ListMyBookingsResponseSchema: GenMessage<ListMyBookingsResponse> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 21);
+  messageDesc(file_trips_v1_trips, 22);
 
 /**
  * @generated from message carpoolr.trips.v1.RouteStop
@@ -703,7 +732,7 @@ export type RouteStop = Message<"carpoolr.trips.v1.RouteStop"> & {
  * Use `create(RouteStopSchema)` to create a new message.
  */
 export const RouteStopSchema: GenMessage<RouteStop> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 22);
+  messageDesc(file_trips_v1_trips, 23);
 
 /**
  * @generated from message carpoolr.trips.v1.CreateSeriesRequest
@@ -765,7 +794,7 @@ export type CreateSeriesRequest = Message<"carpoolr.trips.v1.CreateSeriesRequest
  * Use `create(CreateSeriesRequestSchema)` to create a new message.
  */
 export const CreateSeriesRequestSchema: GenMessage<CreateSeriesRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 23);
+  messageDesc(file_trips_v1_trips, 24);
 
 /**
  * @generated from message carpoolr.trips.v1.RecurringSeries
@@ -832,7 +861,7 @@ export type RecurringSeries = Message<"carpoolr.trips.v1.RecurringSeries"> & {
  * Use `create(RecurringSeriesSchema)` to create a new message.
  */
 export const RecurringSeriesSchema: GenMessage<RecurringSeries> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 24);
+  messageDesc(file_trips_v1_trips, 25);
 
 /**
  * @generated from message carpoolr.trips.v1.SeriesResponse
@@ -849,7 +878,7 @@ export type SeriesResponse = Message<"carpoolr.trips.v1.SeriesResponse"> & {
  * Use `create(SeriesResponseSchema)` to create a new message.
  */
 export const SeriesResponseSchema: GenMessage<SeriesResponse> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 25);
+  messageDesc(file_trips_v1_trips, 26);
 
 /**
  * @generated from message carpoolr.trips.v1.ListMySeriesRequest
@@ -871,7 +900,7 @@ export type ListMySeriesRequest = Message<"carpoolr.trips.v1.ListMySeriesRequest
  * Use `create(ListMySeriesRequestSchema)` to create a new message.
  */
 export const ListMySeriesRequestSchema: GenMessage<ListMySeriesRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 26);
+  messageDesc(file_trips_v1_trips, 27);
 
 /**
  * @generated from message carpoolr.trips.v1.ListMySeriesResponse
@@ -893,7 +922,7 @@ export type ListMySeriesResponse = Message<"carpoolr.trips.v1.ListMySeriesRespon
  * Use `create(ListMySeriesResponseSchema)` to create a new message.
  */
 export const ListMySeriesResponseSchema: GenMessage<ListMySeriesResponse> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 27);
+  messageDesc(file_trips_v1_trips, 28);
 
 /**
  * @generated from message carpoolr.trips.v1.CancelSeriesRequest
@@ -910,7 +939,7 @@ export type CancelSeriesRequest = Message<"carpoolr.trips.v1.CancelSeriesRequest
  * Use `create(CancelSeriesRequestSchema)` to create a new message.
  */
 export const CancelSeriesRequestSchema: GenMessage<CancelSeriesRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 28);
+  messageDesc(file_trips_v1_trips, 29);
 
 /**
  * @generated from message carpoolr.trips.v1.CostPreview
@@ -939,7 +968,7 @@ export type CostPreview = Message<"carpoolr.trips.v1.CostPreview"> & {
  * Use `create(CostPreviewSchema)` to create a new message.
  */
 export const CostPreviewSchema: GenMessage<CostPreview> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 29);
+  messageDesc(file_trips_v1_trips, 30);
 
 /**
  * @generated from message carpoolr.trips.v1.BillShare
@@ -991,7 +1020,7 @@ export type BillShare = Message<"carpoolr.trips.v1.BillShare"> & {
  * Use `create(BillShareSchema)` to create a new message.
  */
 export const BillShareSchema: GenMessage<BillShare> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 30);
+  messageDesc(file_trips_v1_trips, 31);
 
 /**
  * @generated from message carpoolr.trips.v1.Bill
@@ -1043,7 +1072,7 @@ export type Bill = Message<"carpoolr.trips.v1.Bill"> & {
  * Use `create(BillSchema)` to create a new message.
  */
 export const BillSchema: GenMessage<Bill> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 31);
+  messageDesc(file_trips_v1_trips, 32);
 
 /**
  * @generated from message carpoolr.trips.v1.CompleteTripRequest
@@ -1075,7 +1104,7 @@ export type CompleteTripRequest = Message<"carpoolr.trips.v1.CompleteTripRequest
  * Use `create(CompleteTripRequestSchema)` to create a new message.
  */
 export const CompleteTripRequestSchema: GenMessage<CompleteTripRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 32);
+  messageDesc(file_trips_v1_trips, 33);
 
 /**
  * @generated from message carpoolr.trips.v1.GetBillRequest
@@ -1092,7 +1121,7 @@ export type GetBillRequest = Message<"carpoolr.trips.v1.GetBillRequest"> & {
  * Use `create(GetBillRequestSchema)` to create a new message.
  */
 export const GetBillRequestSchema: GenMessage<GetBillRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 33);
+  messageDesc(file_trips_v1_trips, 34);
 
 /**
  * @generated from message carpoolr.trips.v1.BillResponse
@@ -1109,7 +1138,7 @@ export type BillResponse = Message<"carpoolr.trips.v1.BillResponse"> & {
  * Use `create(BillResponseSchema)` to create a new message.
  */
 export const BillResponseSchema: GenMessage<BillResponse> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 34);
+  messageDesc(file_trips_v1_trips, 35);
 
 /**
  * @generated from message carpoolr.trips.v1.ReportPaymentRequest
@@ -1131,7 +1160,7 @@ export type ReportPaymentRequest = Message<"carpoolr.trips.v1.ReportPaymentReque
  * Use `create(ReportPaymentRequestSchema)` to create a new message.
  */
 export const ReportPaymentRequestSchema: GenMessage<ReportPaymentRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 35);
+  messageDesc(file_trips_v1_trips, 36);
 
 /**
  * @generated from message carpoolr.trips.v1.ChangePaymentRequest
@@ -1153,7 +1182,248 @@ export type ChangePaymentRequest = Message<"carpoolr.trips.v1.ChangePaymentReque
  * Use `create(ChangePaymentRequestSchema)` to create a new message.
  */
 export const ChangePaymentRequestSchema: GenMessage<ChangePaymentRequest> = /*@__PURE__*/
-  messageDesc(file_trips_v1_trips, 36);
+  messageDesc(file_trips_v1_trips, 37);
+
+/**
+ * @generated from message carpoolr.trips.v1.GetMyCostOverviewRequest
+ */
+export type GetMyCostOverviewRequest = Message<"carpoolr.trips.v1.GetMyCostOverviewRequest"> & {
+  /**
+   * @generated from field: int32 offset = 1;
+   */
+  offset: number;
+
+  /**
+   * @generated from field: int32 page_size = 2;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.GetMyCostOverviewRequest.
+ * Use `create(GetMyCostOverviewRequestSchema)` to create a new message.
+ */
+export const GetMyCostOverviewRequestSchema: GenMessage<GetMyCostOverviewRequest> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 38);
+
+/**
+ * Exact EUR cents across all finalized bills, independent of the current result page.
+ *
+ * @generated from message carpoolr.trips.v1.CostOverviewTotals
+ */
+export type CostOverviewTotals = Message<"carpoolr.trips.v1.CostOverviewTotals"> & {
+  /**
+   * @generated from field: int64 own_cost_cents = 1;
+   */
+  ownCostCents: bigint;
+
+  /**
+   * @generated from field: int64 own_unpaid_cents = 2;
+   */
+  ownUnpaidCents: bigint;
+
+  /**
+   * @generated from field: int64 own_reported_cents = 3;
+   */
+  ownReportedCents: bigint;
+
+  /**
+   * @generated from field: int64 own_confirmed_cents = 4;
+   */
+  ownConfirmedCents: bigint;
+
+  /**
+   * @generated from field: int64 own_rejected_cents = 5;
+   */
+  ownRejectedCents: bigint;
+
+  /**
+   * @generated from field: int64 driver_total_receivable_cents = 6;
+   */
+  driverTotalReceivableCents: bigint;
+
+  /**
+   * Includes reported payments until the driver confirms receipt.
+   *
+   * @generated from field: int64 driver_outstanding_cents = 7;
+   */
+  driverOutstandingCents: bigint;
+
+  /**
+   * @generated from field: int64 driver_reported_cents = 8;
+   */
+  driverReportedCents: bigint;
+
+  /**
+   * @generated from field: int64 driver_confirmed_cents = 9;
+   */
+  driverConfirmedCents: bigint;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.CostOverviewTotals.
+ * Use `create(CostOverviewTotalsSchema)` to create a new message.
+ */
+export const CostOverviewTotalsSchema: GenMessage<CostOverviewTotals> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 39);
+
+/**
+ * @generated from message carpoolr.trips.v1.MyBillEntry
+ */
+export type MyBillEntry = Message<"carpoolr.trips.v1.MyBillEntry"> & {
+  /**
+   * @generated from field: carpoolr.trips.v1.Bill bill = 1;
+   */
+  bill?: Bill | undefined;
+
+  /**
+   * @generated from field: string origin = 2;
+   */
+  origin: string;
+
+  /**
+   * @generated from field: string destination = 3;
+   */
+  destination: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp departure_at = 4;
+   */
+  departureAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.MyBillEntry.
+ * Use `create(MyBillEntrySchema)` to create a new message.
+ */
+export const MyBillEntrySchema: GenMessage<MyBillEntry> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 40);
+
+/**
+ * @generated from message carpoolr.trips.v1.GetMyCostOverviewResponse
+ */
+export type GetMyCostOverviewResponse = Message<"carpoolr.trips.v1.GetMyCostOverviewResponse"> & {
+  /**
+   * @generated from field: carpoolr.trips.v1.CostOverviewTotals totals = 1;
+   */
+  totals?: CostOverviewTotals | undefined;
+
+  /**
+   * @generated from field: repeated carpoolr.trips.v1.MyBillEntry bills = 2;
+   */
+  bills: MyBillEntry[];
+
+  /**
+   * @generated from field: optional int32 next_offset = 3;
+   */
+  nextOffset?: number | undefined;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.GetMyCostOverviewResponse.
+ * Use `create(GetMyCostOverviewResponseSchema)` to create a new message.
+ */
+export const GetMyCostOverviewResponseSchema: GenMessage<GetMyCostOverviewResponse> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 41);
+
+/**
+ * @generated from message carpoolr.trips.v1.PendingAction
+ */
+export type PendingAction = Message<"carpoolr.trips.v1.PendingAction"> & {
+  /**
+   * @generated from field: carpoolr.trips.v1.PendingActionKind kind = 1;
+   */
+  kind: PendingActionKind;
+
+  /**
+   * @generated from field: string trip_id = 2;
+   */
+  tripId: string;
+
+  /**
+   * @generated from field: string booking_id = 3;
+   */
+  bookingId: string;
+
+  /**
+   * @generated from field: string profile_id = 4;
+   */
+  profileId: string;
+
+  /**
+   * @generated from field: string display_name = 5;
+   */
+  displayName: string;
+
+  /**
+   * @generated from field: string origin = 6;
+   */
+  origin: string;
+
+  /**
+   * @generated from field: string destination = 7;
+   */
+  destination: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp departure_at = 8;
+   */
+  departureAt?: Timestamp | undefined;
+
+  /**
+   * @generated from field: int64 amount_cents = 9;
+   */
+  amountCents: bigint;
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.PendingAction.
+ * Use `create(PendingActionSchema)` to create a new message.
+ */
+export const PendingActionSchema: GenMessage<PendingAction> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 42);
+
+/**
+ * @generated from message carpoolr.trips.v1.GetPendingActionsRequest
+ */
+export type GetPendingActionsRequest = Message<"carpoolr.trips.v1.GetPendingActionsRequest"> & {
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.GetPendingActionsRequest.
+ * Use `create(GetPendingActionsRequestSchema)` to create a new message.
+ */
+export const GetPendingActionsRequestSchema: GenMessage<GetPendingActionsRequest> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 43);
+
+/**
+ * @generated from message carpoolr.trips.v1.GetPendingActionsResponse
+ */
+export type GetPendingActionsResponse = Message<"carpoolr.trips.v1.GetPendingActionsResponse"> & {
+  /**
+   * @generated from field: int64 booking_request_count = 1;
+   */
+  bookingRequestCount: bigint;
+
+  /**
+   * @generated from field: int64 payment_report_count = 2;
+   */
+  paymentReportCount: bigint;
+
+  /**
+   * At most five actions per kind; counts include every actionable item.
+   *
+   * @generated from field: repeated carpoolr.trips.v1.PendingAction actions = 3;
+   */
+  actions: PendingAction[];
+};
+
+/**
+ * Describes the message carpoolr.trips.v1.GetPendingActionsResponse.
+ * Use `create(GetPendingActionsResponseSchema)` to create a new message.
+ */
+export const GetPendingActionsResponseSchema: GenMessage<GetPendingActionsResponse> = /*@__PURE__*/
+  messageDesc(file_trips_v1_trips, 44);
 
 /**
  * @generated from enum carpoolr.trips.v1.TripState
@@ -1300,6 +1570,32 @@ export const PaymentStateSchema: GenEnum<PaymentState> = /*@__PURE__*/
   enumDesc(file_trips_v1_trips, 3);
 
 /**
+ * @generated from enum carpoolr.trips.v1.PendingActionKind
+ */
+export enum PendingActionKind {
+  /**
+   * @generated from enum value: PENDING_ACTION_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: PENDING_ACTION_KIND_BOOKING_REQUEST = 1;
+   */
+  BOOKING_REQUEST = 1,
+
+  /**
+   * @generated from enum value: PENDING_ACTION_KIND_PAYMENT_REPORT = 2;
+   */
+  PAYMENT_REPORT = 2,
+}
+
+/**
+ * Describes the enum carpoolr.trips.v1.PendingActionKind.
+ */
+export const PendingActionKindSchema: GenEnum<PendingActionKind> = /*@__PURE__*/
+  enumDesc(file_trips_v1_trips, 4);
+
+/**
  * Unary RPCs work with both native gRPC and browser gRPC-Web clients.
  * Every method requires an authenticated colleague (validated issuer + subject).
  *
@@ -1416,6 +1712,14 @@ export const BookingService: GenService<{
     input: typeof ListMyBookingsRequestSchema;
     output: typeof ListMyBookingsResponseSchema;
   },
+  /**
+   * @generated from rpc carpoolr.trips.v1.BookingService.ListIncomingBookings
+   */
+  listIncomingBookings: {
+    methodKind: "unary";
+    input: typeof ListIncomingBookingsRequestSchema;
+    output: typeof ListMyBookingsResponseSchema;
+  },
 }> = /*@__PURE__*/
   serviceDesc(file_trips_v1_trips, 2);
 
@@ -1494,6 +1798,29 @@ export const BillingService: GenService<{
     input: typeof ChangePaymentRequestSchema;
     output: typeof BillResponseSchema;
   },
+  /**
+   * @generated from rpc carpoolr.trips.v1.BillingService.GetMyCostOverview
+   */
+  getMyCostOverview: {
+    methodKind: "unary";
+    input: typeof GetMyCostOverviewRequestSchema;
+    output: typeof GetMyCostOverviewResponseSchema;
+  },
 }> = /*@__PURE__*/
   serviceDesc(file_trips_v1_trips, 4);
+
+/**
+ * @generated from service carpoolr.trips.v1.DashboardService
+ */
+export const DashboardService: GenService<{
+  /**
+   * @generated from rpc carpoolr.trips.v1.DashboardService.GetPendingActions
+   */
+  getPendingActions: {
+    methodKind: "unary";
+    input: typeof GetPendingActionsRequestSchema;
+    output: typeof GetPendingActionsResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_trips_v1_trips, 5);
 

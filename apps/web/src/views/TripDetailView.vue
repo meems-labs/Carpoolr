@@ -22,6 +22,7 @@ import {
   unitLabel,
 } from '../lib/labels'
 import { currentProfile, selectedPersonId } from '../state/session'
+import { requestDashboardRefresh } from '../state/dashboard'
 
 const route = useRoute()
 const tripId = String(route.params.id)
@@ -83,6 +84,7 @@ async function load() {
 async function change(operation: (options: CallOptions) => Promise<unknown>, message: string) {
   const result = await run(async (options) => {
     await operation(options)
+    requestDashboardRefresh()
     await refresh(options)
     return true
   })
@@ -115,14 +117,15 @@ function complete() {
 
 function reportPayment() {
   const mine = bill.value?.shares.find((share) => share.isMine)
-  return change(
-    (options) =>
-      client.billing.reportPayment(
-        { tripId, requestId: requestId(`payment:${mine?.paymentState}`) },
-        options,
-      ),
-    'Du hast deine Zahlung gemeldet. Der Fahrer muss den Eingang noch bestätigen.',
-  )
+  const key = `payment:${mine?.paymentState}`
+  return change(async (options) => {
+    const response = await client.billing.reportPayment(
+      { tripId, requestId: requestId(key) },
+      options,
+    )
+    requestIds.delete(key)
+    return response
+  }, 'Du hast deine Zahlung gemeldet. Der Fahrer muss den Eingang noch bestätigen.')
 }
 
 onMounted(load)

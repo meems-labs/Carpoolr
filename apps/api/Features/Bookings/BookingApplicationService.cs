@@ -116,6 +116,40 @@ public sealed class BookingApplicationService(
         return new BookingPage(entries, more && offset + pageSize <= 10000 ? offset + pageSize : null);
     }
 
+    public async Task<BookingPage> ListIncomingAsync(
+        UserIdentity actor, int offset, int pageSize, bool pendingOnly, CancellationToken cancellationToken)
+    {
+        offset = ApplicationRules.Offset(offset);
+        pageSize = ApplicationRules.PageSize(pageSize);
+        var now = clock.GetUtcNow();
+        var query = database.Bookings.AsNoTracking().Include(booking => booking.Profile)
+            .Where(booking => booking.Trip.OwnerIssuer == actor.Issuer && booking.Trip.OwnerSubject == actor.Subject);
+        if (pendingOnly)
+        {
+            // A stale pending request on a departed or closed trip cannot be acted on.
+            query = query.Where(booking => booking.State == BookingState.Pending &&
+                booking.Trip.State == TripState.Planned && booking.Trip.DepartureAt > now);
+        }
+
+        var bookings = await query
+            .OrderByDescending(booking => booking.State == BookingState.Pending &&
+                booking.Trip.State == TripState.Planned && booking.Trip.DepartureAt > now)
+            .ThenByDescending(booking => booking.Trip.DepartureAt > now)
+            .ThenBy(booking => booking.Trip.DepartureAt > now ? booking.Trip.DepartureAt : now)
+            .ThenByDescending(booking => booking.Trip.DepartureAt)
+            .ThenBy(booking => booking.TripId)
+            .ThenBy(booking => booking.RequestedAt)
+            .ThenBy(booking => booking.Id)
+            .Skip(offset).Take(pageSize + 1).ToListAsync(cancellationToken);
+        var more = bookings.Count > pageSize;
+        if (more) bookings.RemoveAt(bookings.Count - 1);
+
+        // Fetch one bounded batch of trip details, preserving the global request ordering.
+        var tripDetails = await trips.GetManyAsync(bookings.Select(booking => booking.TripId), cancellationToken);
+        var entries = bookings.Select(booking => new BookingDetails(booking, tripDetails[booking.TripId])).ToArray();
+        return new BookingPage(entries, more && offset + pageSize <= 10000 ? offset + pageSize : null);
+    }
+
     private async Task<BookingDetails> ReadAsync(Guid id, CancellationToken cancellationToken)
     {
         var booking = await database.Bookings.AsNoTracking().Include(value => value.Profile)

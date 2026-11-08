@@ -3,6 +3,7 @@ import { createGrpcTransport } from './grpc'
 import {
   BillingService,
   BookingService,
+  DashboardService,
   ProfileService,
   RecurringTripService,
   TripService,
@@ -24,5 +25,6 @@ export function clientsForPerson(personId: string) {
     bookings: createClient(BookingService, transport),
     series: createClient(RecurringTripService, transport),
     billing: createClient(BillingService, transport),
+    dashboard: createClient(DashboardService, transport),
   }
 }

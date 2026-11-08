@@ -2,6 +2,7 @@ using Carpoolr.Api.Data;
 using Carpoolr.Api.Features.Trips;
 using Carpoolr.Api.Features.Billing;
 using Carpoolr.Api.Features.Bookings;
+using Carpoolr.Api.Features.Dashboard;
 using Carpoolr.Api.Features.Profiles;
 using Carpoolr.Api.Features.RecurringTrips;
 using Carpoolr.Api.Grpc;
@@ -42,6 +43,7 @@ public static partial class Program
         builder.Services.AddScoped<BookingApplicationService>();
         builder.Services.AddScoped<RecurringTripApplicationService>();
         builder.Services.AddScoped<BillingApplicationService>();
+        builder.Services.AddScoped<DashboardApplicationService>();
         builder.Services.AddHealthChecks().AddCheck<DatabaseReadinessCheck>(
             "database",
             tags: ["ready"],
@@ -96,6 +98,7 @@ public static partial class Program
         app.MapGrpcService<BookingGrpcService>().EnableGrpcWeb();
         app.MapGrpcService<RecurringTripGrpcService>().EnableGrpcWeb();
         app.MapGrpcService<BillingGrpcService>().EnableGrpcWeb();
+        app.MapGrpcService<DashboardGrpcService>().EnableGrpcWeb();
 
         await app.RunAsync();
     }

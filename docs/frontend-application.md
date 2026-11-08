@@ -27,7 +27,21 @@ Unter **Fahrten finden** nach Datum suchen. Optionale Start-/Zielfilter vergleic
 
 In den Fahrtdetails **Einen Platz anfragen** wählen. Ein vollständiges eigenes Profil mit Abholadresse ist erforderlich. Die Anfrage reserviert zunächst keinen Platz. Der Fahrer entscheidet unter **Mitfahranfragen** über **Zusagen** oder **Ablehnen**. Nach einer Zusage wird die Abholadresse für ihn sichtbar und der Platz belegt.
 
-Unter **Meine Anfragen** lassen sich eigene Anfragen und Mitfahrten verfolgen. Vor der Abfahrt kann eine Anfrage bzw. Teilnahme zurückgezogen werden. Nach Ablehnung oder Rückzug kann erneut angefragt werden, solange die Fahrt noch offen ist und Plätze frei sind. **Aktualisieren** lädt in den Fahrtdetails den aktuellen Stand; es gibt noch keine Live-Benachrichtigungen.
+Unter **Meine Anfragen** lassen sich eigene Anfragen und Mitfahrten verfolgen. Vor der Abfahrt kann eine Anfrage bzw. Teilnahme zurückgezogen werden. Nach Ablehnung oder Rückzug kann erneut angefragt werden, solange die Fahrt noch offen ist und Plätze frei sind.
+
+Unter **Eingegangene Anfragen** bearbeiten Fahrer die Anfragen zu allen eigenen Angeboten zentral. Standardmäßig werden offene, noch bearbeitbare Anfragen angezeigt. Der Filter kann auch bearbeitete Anfragen und die Historie einblenden. Zusagen und Ablehnen sind direkt in der Übersicht möglich; Abholadressen bleiben bis zur Zusage verborgen.
+
+**Meine Angebote** zeigt zuerst die nächsten geplanten Abfahrten, danach sonstige zukünftige Angebote und zuletzt vergangene Fahrten mit den jüngsten zuerst. Auch die Fahrtsuche beginnt mit der nächsten Abfahrt.
+
+## Offene Aufgaben und Kostenübersicht
+
+Die Glocke im Kopfbereich zählt offene Mitfahranfragen und Zahlungsmitteilungen, die der ausgewählte Fahrer bestätigen oder ablehnen muss. Sie zeigt eine begrenzte Vorschau und Links zu den vollständigen Übersichten. Bearbeitete, zurückgezogene oder wegen Abfahrt/Absage nicht mehr bearbeitbare Anfragen verschwinden aus der Aufgabenliste. Es gibt keinen separaten Gelesen-Status und keine externen Benachrichtigungen.
+
+Die Glocke lädt beim Öffnen, nach eigenen Aktionen, beim Wechsel der Ansicht und bei Rückkehr ins Fenster neu. Solange die Seite sichtbar ist, wird zusätzlich alle 30 Sekunden aktualisiert. Bei einem Fehler wird der letzte Stand ausdrücklich als möglicherweise veraltet gekennzeichnet.
+
+Unter **Meine Kosten** stehen eigene Kostenanteile einschließlich des Fahreranteils sowie offene, gemeldete und bestätigte Zahlungen. Fahrer sehen außerdem die Erstattungen ihrer Mitfahrer und können Zahlungseingänge direkt bestätigen oder ablehnen. Mitfahrer sehen ausschließlich ihren eigenen Anteil; Fahrer sehen die Anteile ihrer Mitfahrer.
+
+Die Gesamtsummen werden serverseitig über alle festgeschriebenen Abrechnungen berechnet, unabhängig von der aktuell geladenen Seite. Kostenvorschauen geplanter Fahrten zählen nicht hinein. Gemeldete Erstattungen sind Teil der ausstehenden Summe, bis der Fahrer den Eingang bestätigt. Darunter sind Strecke, Datum und Zahlungsstände je Fahrt aufgeschlüsselt.
 
 Der Fahrer sieht einen Maps-Link mit vollständiger Start-/Zieladresse und bestätigten Abholstopps. Die angezeigte Reihenfolge wird nicht als optimiert ausgegeben. Der Link öffnet die externe Karte erst bei einem Klick.
 

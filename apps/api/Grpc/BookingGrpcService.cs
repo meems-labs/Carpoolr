@@ -27,11 +27,26 @@ public sealed class BookingGrpcService(BookingApplicationService bookings, ICurr
     {
         var actor = user.GetRequiredIdentity();
         var page = await bookings.ListMineAsync(actor, request.Offset, request.PageSize, context.CancellationToken);
+        return PageResponse(page, actor);
+    }
+
+    public override async Task<ListMyBookingsResponse> ListIncomingBookings(
+        ListIncomingBookingsRequest request, ServerCallContext context)
+    {
+        var actor = user.GetRequiredIdentity();
+        var page = await bookings.ListIncomingAsync(actor, request.Offset, request.PageSize,
+            request.PendingOnly, context.CancellationToken);
+        return PageResponse(page, actor);
+    }
+
+    private ListMyBookingsResponse PageResponse(BookingPage page, UserIdentity actor)
+    {
+        var now = clock.GetUtcNow();
         var response = new ListMyBookingsResponse();
         response.Entries.AddRange(page.Entries.Select(entry => new BookingWithTrip
         {
-            Booking = TripWireMapper.MapBooking(entry.Booking, entry.Trip, actor, clock.GetUtcNow()),
-            Trip = TripWireMapper.Map(entry.Trip, actor, clock.GetUtcNow()),
+            Booking = TripWireMapper.MapBooking(entry.Booking, entry.Trip, actor, now),
+            Trip = TripWireMapper.Map(entry.Trip, actor, now),
         }));
         if (page.NextOffset is { } offset) response.NextOffset = offset;
         return response;

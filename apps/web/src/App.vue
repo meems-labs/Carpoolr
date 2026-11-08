@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { clientsForPerson } from './api/application'
 import OperationStatus from './components/OperationStatus.vue'
+import NotificationBell from './components/NotificationBell.vue'
 import { errorMessage } from './composables/useOperation'
 import { currentProfile, loadPeople, people, selectedPersonId, selectPerson } from './state/session'
 
@@ -73,17 +74,20 @@ function select(event: Event) {
         Carpoolr
         <small>Fahrgemeinschaften fürs Team</small>
       </RouterLink>
-      <div class="person-select">
-        <span class="badge warning">Testmodus</span>
-        <label>
-          Person auswählen
-          <select :value="selectedPersonId" :disabled="loading" @change="select">
-            <option value="">Bitte auswählen …</option>
-            <option v-for="person in people" :key="person.id" :value="person.id">
-              {{ person.displayName }}
-            </option>
-          </select>
-        </label>
+      <div class="header-controls">
+        <div class="person-select">
+          <span class="badge warning">Testmodus</span>
+          <label>
+            Person auswählen
+            <select :value="selectedPersonId" :disabled="loading" @change="select">
+              <option value="">Bitte auswählen …</option>
+              <option v-for="person in people" :key="person.id" :value="person.id">
+                {{ person.displayName }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <NotificationBell v-if="selectedPersonId" :key="selectedPersonId" />
       </div>
     </div>
     <nav class="container nav" aria-label="Hauptnavigation">
@@ -91,6 +95,8 @@ function select(event: Event) {
       <RouterLink to="/fahrten/neu">Fahrt anbieten</RouterLink>
       <RouterLink to="/meine-fahrten">Meine Angebote</RouterLink>
       <RouterLink to="/meine-anfragen">Meine Anfragen</RouterLink>
+      <RouterLink to="/eingegangene-anfragen">Eingegangene Anfragen</RouterLink>
+      <RouterLink to="/kosten">Meine Kosten</RouterLink>
       <RouterLink to="/profil">Mein Profil</RouterLink>
     </nav>
   </header>
@@ -118,6 +124,20 @@ function select(event: Event) {
 </template>
 
 <style scoped>
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .header-controls {
+    width: 100%;
+  }
+  .person-select {
+    flex: 1;
+    min-width: 0;
+  }
+}
 .skip-link {
   position: absolute;
   left: 1rem;

@@ -251,8 +251,13 @@ public sealed class TripApplicationService(
     {
         offset = ApplicationRules.Offset(offset);
         pageSize = ApplicationRules.PageSize(pageSize);
+        var now = NormalizeInstant(timeProvider.GetUtcNow());
         var page = await DetailQuery().Where(trip => trip.OwnerIssuer == actor.Issuer && trip.OwnerSubject == actor.Subject)
-            .OrderByDescending(trip => trip.DepartureAt).ThenBy(trip => trip.Id)
+            .OrderBy(trip => trip.DepartureAt > now && trip.State == TripState.Planned ? 0 :
+                trip.DepartureAt > now ? 1 : 2)
+            .ThenBy(trip => trip.DepartureAt > now ? trip.DepartureAt : now)
+            .ThenByDescending(trip => trip.DepartureAt)
+            .ThenBy(trip => trip.Id)
             .Skip(offset).Take(pageSize + 1).ToListAsync(cancellationToken);
         var more = page.Count > pageSize;
         if (more) page.RemoveAt(page.Count - 1);

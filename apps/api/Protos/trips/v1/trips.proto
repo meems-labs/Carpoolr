@@ -27,6 +27,7 @@ service BookingService {
   rpc RejectBooking(ChangeBookingRequest) returns (BookingResponse);
   rpc WithdrawBooking(ChangeBookingRequest) returns (BookingResponse);
   rpc ListMyBookings(ListMyBookingsRequest) returns (ListMyBookingsResponse);
+  rpc ListIncomingBookings(ListIncomingBookingsRequest) returns (ListMyBookingsResponse);
 }
 
 service RecurringTripService {
@@ -41,6 +42,11 @@ service BillingService {
   rpc ReportPayment(ReportPaymentRequest) returns (BillResponse);
   rpc ConfirmPayment(ChangePaymentRequest) returns (BillResponse);
   rpc RejectPayment(ChangePaymentRequest) returns (BillResponse);
+  rpc GetMyCostOverview(GetMyCostOverviewRequest) returns (GetMyCostOverviewResponse);
+}
+
+service DashboardService {
+  rpc GetPendingActions(GetPendingActionsRequest) returns (GetPendingActionsResponse);
 }
 
 message CreateTripRequest {
@@ -185,6 +191,8 @@ message RequestSeatRequest { string trip_id = 1; string request_id = 2; }
 message ChangeBookingRequest { string booking_id = 1; }
 message BookingResponse { Booking booking = 1; }
 message ListMyBookingsRequest { int32 offset = 1; int32 page_size = 2; }
+// Only requests on the caller's own offers. Pending-only excludes departed/cancelled trips.
+message ListIncomingBookingsRequest { int32 offset = 1; int32 page_size = 2; bool pending_only = 3; }
 message BookingWithTrip { Booking booking = 1; Trip trip = 2; }
 message ListMyBookingsResponse { repeated BookingWithTrip entries = 1; optional int32 next_offset = 2; }
 message RouteStop { string display_name = 1; string address = 2; }
@@ -265,3 +273,53 @@ message GetBillRequest { string trip_id = 1; }
 message BillResponse { Bill bill = 1; }
 message ReportPaymentRequest { string trip_id = 1; string request_id = 2; }
 message ChangePaymentRequest { string trip_id = 1; string profile_id = 2; }
+
+message GetMyCostOverviewRequest { int32 offset = 1; int32 page_size = 2; }
+// Exact EUR cents across all finalized bills, independent of the current result page.
+message CostOverviewTotals {
+  int64 own_cost_cents = 1;
+  int64 own_unpaid_cents = 2;
+  int64 own_reported_cents = 3;
+  int64 own_confirmed_cents = 4;
+  int64 own_rejected_cents = 5;
+  int64 driver_total_receivable_cents = 6;
+  // Includes reported payments until the driver confirms receipt.
+  int64 driver_outstanding_cents = 7;
+  int64 driver_reported_cents = 8;
+  int64 driver_confirmed_cents = 9;
+}
+message MyBillEntry {
+  Bill bill = 1;
+  string origin = 2;
+  string destination = 3;
+  google.protobuf.Timestamp departure_at = 4;
+}
+message GetMyCostOverviewResponse {
+  CostOverviewTotals totals = 1;
+  repeated MyBillEntry bills = 2;
+  optional int32 next_offset = 3;
+}
+
+enum PendingActionKind {
+  PENDING_ACTION_KIND_UNSPECIFIED = 0;
+  PENDING_ACTION_KIND_BOOKING_REQUEST = 1;
+  PENDING_ACTION_KIND_PAYMENT_REPORT = 2;
+}
+message PendingAction {
+  PendingActionKind kind = 1;
+  string trip_id = 2;
+  string booking_id = 3;
+  string profile_id = 4;
+  string display_name = 5;
+  string origin = 6;
+  string destination = 7;
+  google.protobuf.Timestamp departure_at = 8;
+  int64 amount_cents = 9;
+}
+message GetPendingActionsRequest {}
+message GetPendingActionsResponse {
+  int64 booking_request_count = 1;
+  int64 payment_report_count = 2;
+  // At most five actions per kind; counts include every actionable item.
+  repeated PendingAction actions = 3;
+}
