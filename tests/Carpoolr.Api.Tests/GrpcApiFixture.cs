@@ -32,14 +32,25 @@ public sealed class GrpcApiFixture : IAsyncLifetime
     public const string Audience = "carpoolr-tests";
 
     private static readonly SymmetricSecurityKey SigningKey = new(RandomNumberGenerator.GetBytes(64));
+    private static readonly SemaphoreSlim MigrationLock = new(1, 1);
 
     public ApiFactory Factory { get; } = new();
 
     public async Task InitializeAsync()
     {
-        await using var scope = Factory.Services.CreateAsyncScope();
-        var database = scope.ServiceProvider.GetRequiredService<CarpoolrDbContext>();
-        await database.Database.MigrateAsync();
+        // Different test classes create their own fixture against the same database.
+        // Serialize migration discovery and execution so a fresh database is migrated once.
+        await MigrationLock.WaitAsync();
+        try
+        {
+            await using var scope = Factory.Services.CreateAsyncScope();
+            var database = scope.ServiceProvider.GetRequiredService<CarpoolrDbContext>();
+            await database.Database.MigrateAsync();
+        }
+        finally
+        {
+            MigrationLock.Release();
+        }
     }
 
     public async Task DisposeAsync()
