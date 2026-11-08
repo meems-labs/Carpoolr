@@ -2,6 +2,8 @@
 
 Die Anwendung verwendet Vue 3, TypeScript und Vite. Die Oberfläche ist deutsch und mobil nutzbar. Alle Daten kommen von der API; es gibt keine erfundenen Fahrten, Adressen oder Fahrzeugwerte im Frontend.
 
+Carpoolr kann als PWA auf Mobilgeräten installiert werden. Installation, automatische sichere Updates und Offline-Grenzen sind unter [PWA](pwa.md) beschrieben.
+
 ## Person auswählen und Profil ergänzen
 
 Oben ausdrücklich eine der vom Server angebotenen Testpersonen auswählen. Es gibt keinen Login und keine automatisch gewählte Person. Eine früher gewählte Person wird nur wiederhergestellt, wenn sie weiterhin im Serverkatalog existiert. Gespeichert wird im Browser nur diese Auswahl, nicht die Abholadresse oder ein Token.

@@ -1,5 +1,6 @@
 import { createClient } from '@connectrpc/connect'
 import { createGrpcTransport } from './grpc'
+import { fetchApi } from './fetch'
 import {
   BillingService,
   BookingService,
@@ -18,6 +19,7 @@ export function clientsForPerson(personId: string) {
     baseUrl: apiBaseUrl,
     defaultTimeoutMs: 15_000,
     getHeaders: () => ({ 'X-Carpoolr-Demo-User': personId }),
+    fetch: fetchApi,
   })
   return {
     trips: createClient(TripService, transport),

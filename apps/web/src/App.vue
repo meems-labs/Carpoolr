@@ -4,6 +4,8 @@ import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { clientsForPerson } from './api/application'
 import OperationStatus from './components/OperationStatus.vue'
 import NotificationBell from './components/NotificationBell.vue'
+import PwaControls from './components/PwaControls.vue'
+import { updateApplying } from './pwa/client'
 import { errorMessage } from './composables/useOperation'
 import { currentProfile, loadPeople, people, selectedPersonId, selectPerson } from './state/session'
 
@@ -68,7 +70,7 @@ function select(event: Event) {
 
 <template>
   <a class="skip-link" href="#content">Zum Inhalt</a>
-  <header class="app-header">
+  <header class="app-header" data-pwa-update-lock :inert="updateApplying">
     <div class="container header-row">
       <RouterLink class="brand" to="/">
         Carpoolr
@@ -79,7 +81,12 @@ function select(event: Event) {
           <span class="badge warning">Testmodus</span>
           <label>
             Person auswählen
-            <select :value="selectedPersonId" :disabled="loading" @change="select">
+            <select
+              data-pwa-saved-selection
+              :value="selectedPersonId"
+              :disabled="loading"
+              @change="select"
+            >
               <option value="">Bitte auswählen …</option>
               <option v-for="person in people" :key="person.id" :value="person.id">
                 {{ person.displayName }}
@@ -100,7 +107,8 @@ function select(event: Event) {
       <RouterLink to="/profil">Mein Profil</RouterLink>
     </nav>
   </header>
-  <main id="content" class="container" tabindex="-1">
+  <div class="container"><PwaControls /></div>
+  <main id="content" class="container" tabindex="-1" data-pwa-update-lock :inert="updateApplying">
     <OperationStatus :error="error" />
     <div v-if="loading || profileLoading" class="card empty" role="status">
       Daten werden geladen …

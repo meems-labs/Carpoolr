@@ -12,6 +12,7 @@ import {
 import { type CallOptions } from '../api/grpc'
 import OperationStatus from '../components/OperationStatus.vue'
 import { useOperation } from '../composables/useOperation'
+import { useUnsavedChanges } from '../composables/useUnsavedChanges'
 import { decimal, formatDate, formatDecimal } from '../lib/format'
 import {
   bookingLabel,
@@ -32,6 +33,9 @@ const details = ref<GetTripResponse>()
 const bill = ref<Bill>()
 const trip = computed(() => details.value?.trip)
 const completion = reactive({ distance: '', consumption: '', price: '' })
+const { isDirty: completionDirty, markSaved: markCompletionSaved } = useUnsavedChanges(() => ({
+  ...completion,
+}))
 const requestIds = new Map<string, string>()
 
 const canRequest = computed(() => {
@@ -65,16 +69,24 @@ function requestId(key: string): string {
 async function refresh(options: CallOptions) {
   const response = await client.trips.getTrip({ tripId }, options)
   if (!response.trip) throw new Error('Die Fahrt konnte nicht geladen werden.')
-  details.value = response
-  completion.distance = response.trip.distanceKm
-  completion.consumption = response.trip.vehicle?.consumptionPer100Km ?? ''
-  completion.price = response.trip.vehicle?.unitPriceEur ?? ''
+  let loadedBill: Bill | undefined
   if (
     response.trip.state === TripState.COMPLETED &&
     (response.trip.isOwner || response.trip.myBooking?.state === BookingState.ACCEPTED)
   ) {
-    bill.value = (await client.billing.getBill({ tripId }, options)).bill
-  } else bill.value = undefined
+    loadedBill = (await client.billing.getBill({ tripId }, options)).bill
+  }
+  details.value = response
+  bill.value = loadedBill
+  // Refreshing bookings must not overwrite completion values the driver is still editing.
+  // A successful completion or cancellation closes the form and establishes a fresh baseline.
+  if (!completionDirty.value || response.trip.state !== TripState.PLANNED) {
+    completion.distance = loadedBill?.distanceKm ?? response.trip.distanceKm
+    completion.consumption =
+      loadedBill?.consumptionPer100Km ?? response.trip.vehicle?.consumptionPer100Km ?? ''
+    completion.price = loadedBill?.unitPriceEur ?? response.trip.vehicle?.unitPriceEur ?? ''
+    markCompletionSaved()
+  }
 }
 
 async function load() {

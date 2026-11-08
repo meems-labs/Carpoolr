@@ -1,7 +1,10 @@
-import { onBeforeUnmount, ref } from 'vue'
+import { onScopeDispose, ref } from 'vue'
 import { Code, ConnectError, type CallOptions } from '../api/grpc'
+import { beginOperation } from '../state/activity'
 
 export function errorMessage(cause: unknown): string {
+  if (cause instanceof TypeError && /fetch|network|load failed/i.test(cause.message))
+    return 'Die Verbindung zum Server konnte nicht hergestellt werden. Bitte erneut versuchen.'
   if (cause instanceof ConnectError) {
     if (cause.code === Code.Unavailable)
       return 'Der Server ist gerade nicht erreichbar. Bitte erneut versuchen.'
@@ -23,15 +26,16 @@ export function useOperation() {
   const controllers = new Set<AbortController>()
   let mounted = true
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     mounted = false
     for (const controller of controllers) controller.abort()
   })
 
   async function run<T>(operation: (options: CallOptions) => Promise<T>): Promise<T | undefined> {
-    if (pending.value) return undefined
+    if (!mounted || pending.value) return undefined
     const controller = new AbortController()
     controllers.add(controller)
+    const finish = beginOperation()
     pending.value = true
     error.value = ''
     success.value = ''
@@ -45,6 +49,7 @@ export function useOperation() {
     } finally {
       controllers.delete(controller)
       if (mounted) pending.value = false
+      finish()
     }
   }
 

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { clientsForPerson } from '../api/application'
-import { EnergyKind } from '../api/generated/trips/v1/trips_pb'
+import { EnergyKind, type UserProfile } from '../api/generated/trips/v1/trips_pb'
 import OperationStatus from '../components/OperationStatus.vue'
 import { useOperation } from '../composables/useOperation'
+import { useUnsavedChanges } from '../composables/useUnsavedChanges'
 import { decimal, normalizeAddress } from '../lib/format'
 import { unitLabel } from '../lib/labels'
 import { currentProfile, selectedPersonId } from '../state/session'
@@ -23,6 +24,28 @@ const form = reactive({
   consumption: profile?.vehicle?.consumptionPer100Km ?? '',
   price: profile?.vehicle?.unitPriceEur ?? '',
 })
+const { isDirty, markSaved } = useUnsavedChanges(() => ({ ...form, hasVehicle: hasVehicle.value }))
+
+function populateProfile(saved: UserProfile) {
+  form.displayName = saved.displayName
+  form.pickupAddress = saved.pickupAddress
+  hasVehicle.value = !!saved.vehicle
+  form.vehicleName = saved.vehicle?.name ?? ''
+  form.seats = saved.vehicle?.passengerSeats ?? 1
+  form.energy = saved.vehicle?.energyKind ?? EnergyKind.UNSPECIFIED
+  form.consumption = saved.vehicle?.consumptionPer100Km ?? ''
+  form.price = saved.vehicle?.unitPriceEur ?? ''
+}
+
+watch(
+  currentProfile,
+  (loaded) => {
+    if (!loaded || personId !== selectedPersonId.value || isDirty.value) return
+    populateProfile(loaded)
+    markSaved()
+  },
+  { flush: 'sync' },
+)
 
 async function save() {
   const response = await run((options) => {
@@ -47,7 +70,9 @@ async function save() {
     )
   })
   if (response?.profile && personId === selectedPersonId.value) {
+    populateProfile(response.profile)
     currentProfile.value = response.profile
+    markSaved()
     success.value = 'Dein Profil wurde gespeichert.'
   }
 }

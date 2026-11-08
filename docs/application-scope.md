@@ -30,6 +30,8 @@ Diese Datei haelt Entscheidungen fuer die weitere Umsetzung fest. Vorhandener Be
 | Anfrageeingang | Fahrer sieht und bearbeitet Anfragen ueber alle eigenen Angebote | Benutzeranforderung |
 | Aufgaben-Glocke | Offene Mitfahranfragen und gemeldete Zahlungen; vorerst kein Gelesen-/Ungelesen-Verlauf | Bestaetigte Erweiterung |
 | Sortierung der Angebote | Naechste zukuenftige Abfahrt zuerst | Benutzeranforderung |
+| Mobile Installation | Vue-Frontend als installierbare PWA mit automatischen Updates | Benutzeranforderung |
+| PWA-Updateverhalten | Automatisch aktivieren, sobald keine ungespeicherten Eingaben oder laufenden Aktionen offen sind; bis dahin Hinweis anzeigen | Bestaetigte Auswahl |
 | Backend | ASP.NET Core / .NET 10; .NET 11 spaeter angedacht | Urspruengliche Benutzeranforderung |
 | API-Kommunikation | gRPC fuer das Frontend; SignalR als spaetere Moeglichkeit | Urspruengliche Benutzeranforderung |
 | Identity Provider | Authentik im Zielcluster vorhanden; Integration spaeter vorgesehen | Urspruengliche Benutzeranforderung |

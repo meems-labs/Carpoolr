@@ -5,6 +5,7 @@ import { timestampFromDate } from '@bufbuild/protobuf/wkt'
 import { clientsForPerson } from '../api/application'
 import OperationStatus from '../components/OperationStatus.vue'
 import { useOperation } from '../composables/useOperation'
+import { useUnsavedChanges } from '../composables/useUnsavedChanges'
 import { berlinDateTime, decimal, localDateTime, normalizeAddress } from '../lib/format'
 import { weekdays } from '../lib/labels'
 import { currentProfile, selectedPersonId } from '../state/session'
@@ -24,6 +25,7 @@ const form = reactive({
   time: '',
   weekdays: [] as number[],
 })
+const { markSaved } = useUnsavedChanges(() => ({ ...form, recurring: recurring.value }))
 let lastAttempt: { fingerprint: string; id: string } | undefined
 
 function requestId(payload: object): string {
@@ -64,7 +66,10 @@ async function submit() {
     if (!created.trip) throw new Error('Der Server hat keine Fahrt zurückgegeben.')
     return { path: `/fahrten/${created.trip.id}` }
   })
-  if (response) await router.push(response.path)
+  if (response) {
+    markSaved()
+    await router.push(response.path)
+  }
 }
 </script>
 

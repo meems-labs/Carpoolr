@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { apiBaseUrl } from '../api/application'
+import { fetchApi } from '../api/fetch'
 import type { UserProfile } from '../api/generated/trips/v1/trips_pb'
 
 export interface DemoPerson {
@@ -13,7 +14,7 @@ export const selectedPersonId = ref('')
 export const currentProfile = ref<UserProfile>()
 
 export async function loadPeople(signal: AbortSignal): Promise<void> {
-  const response = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/demo/users`, { signal })
+  const response = await fetchApi(`${apiBaseUrl.replace(/\/$/, '')}/demo/users`, { signal })
   if (!response.ok)
     throw new Error('Die Testpersonen konnten nicht geladen werden. Bitte erneut versuchen.')
   const data: unknown = await response.json()
