@@ -1,9 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net.Security;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Npgsql;
 
@@ -24,23 +22,13 @@ public static class StagingDatabaseBootstrap
             throw new InvalidOperationException("Database bootstrap is restricted to the staging namespace.");
         }
 
-        using var certificateAuthority = X509Certificate2.CreateFromPemFile(CredentialsDirectory + "ca.crt");
+        using var certificateTrust = new KubernetesCertificateTrust(
+            await File.ReadAllTextAsync(CredentialsDirectory + "ca.crt"));
         using var handler = new HttpClientHandler
         {
             AllowAutoRedirect = false,
             ServerCertificateCustomValidationCallback = (_, certificate, _, errors) =>
-            {
-                if (certificate is null ||
-                    (errors & (SslPolicyErrors.RemoteCertificateNameMismatch | SslPolicyErrors.RemoteCertificateNotAvailable)) != 0)
-                    return false;
-
-                using var chain = new X509Chain();
-                chain.ChainPolicy.TrustMode = X509ChainTrustMode.CustomRootTrust;
-                chain.ChainPolicy.CustomTrustStore.Add(certificateAuthority);
-                chain.ChainPolicy.ApplicationPolicy.Add(new Oid("1.3.6.1.5.5.7.3.1"));
-                chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
-                return chain.Build(certificate);
-            },
+                certificateTrust.IsValidServerCertificate(certificate, errors),
         };
         using var client = new HttpClient(handler)
         {
