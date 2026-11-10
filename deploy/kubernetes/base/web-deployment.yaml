@@ -16,33 +16,70 @@ spec:
       automountServiceAccountToken: false
       imagePullSecrets:
         - name: ghcr-pull
+      securityContext:
+        # nginx-unprivileged runs as uid/gid 101. Declaring it here rather than
+        # relying on the image's USER means the kubelet enforces it: the
+        # container is rejected if the image were ever swapped for a root one.
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: web
           image: ghcr.io/meems-labs/carpoolr-web:fa6d7ac
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           resources:
+            # The image serves precompressed files from disk; the measured cost
+            # is a few milliseconds of CPU per thousand requests, so the request
+            # grant is deliberately small and the limit absorbs image pulls and
+            # bursts.
             requests:
-              cpu: 25m
-              memory: 64Mi
+              cpu: 10m
+              memory: 32Mi
             limits:
-              cpu: 250m
-              memory: 256Mi
+              cpu: 200m
+              memory: 128Mi
           startupProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             periodSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 24
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             periodSeconds: 30
+          volumeMounts:
+            # readOnlyRootFilesystem forbids nginx's default writable paths.
+            # These emptyDir mounts are the minimum the unprivileged image needs;
+            # without them nginx dies on `mkdir() "/tmp/client_temp" failed
+            # (30: Read-only file system)`.
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+            - name: nginx-tmp
+              mountPath: /tmp
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
