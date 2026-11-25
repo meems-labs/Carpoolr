@@ -59,26 +59,39 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
+          # 500m war zu eng: gemessen am 2026-11-25 wurden 454.571 von
+          # 1.741.677 CPU-Perioden gedrosselt (26 %, ~5,9 h kumuliert).
+          # Bei einer Drosselungsspitze reisst die 1-Sekunden-Probe das
+          # Zeitbudget und Kubernetes killt Postgres mitten in der Arbeit.
           resources:
             requests:
               cpu: 100m
               memory: 128Mi
             limits:
-              cpu: 500m
+              cpu: "1"
               memory: 512Mi
+          # timeoutSeconds fehlte = Default 1 s. `pg_isready` startet
+          # einen Prozess und verbindet sich; gemessen 112-277 ms im
+          # Leerlauf, unter Drosselung deutlich mehr. 57 Restarts in
+          # 16 Tagen waren die Folge ("command timed out ... after 1s").
           startupProbe:
             exec:
               command: [pg_isready, -U, carpoolr, -d, carpoolr]
             periodSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 60
+            timeoutSeconds: 5
           readinessProbe:
             exec:
               command: [pg_isready, -U, carpoolr, -d, carpoolr]
-            periodSeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
           livenessProbe:
             exec:
               command: [pg_isready, -U, carpoolr, -d, carpoolr]
             periodSeconds: 10
+            timeoutSeconds: 5
+            # 5 statt 3: ein einzelner Aussetzer soll nicht neu starten.
+            failureThreshold: 5
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
