@@ -12,7 +12,13 @@ namespace Carpoolr.Api.Infrastructure;
 public static class StagingDatabaseBootstrap
 {
     private const string CredentialsDirectory = "/var/run/secrets/kubernetes.io/serviceaccount/";
-    private const string SecretPath = "api/v1/namespaces/staging/secrets/carpoolr-database";
+    // Konfigurierbar, damit eine Migration ein NEUES Secret schreiben kann
+    // und das alte als Rollback liegen bleibt. Vorher war der Name fest,
+    // und ein bestehendes Secret wurde immer behalten - eine Umstellung des
+    // Ziels war damit unmoeglich.
+    private static string SecretName =>
+        Environment.GetEnvironmentVariable("BOOTSTRAP_SECRET_NAME") ?? "carpoolr-database";
+    private static string SecretPath => $"api/v1/namespaces/staging/secrets/{SecretName}";
 
     public static async Task RunAsync(IHostEnvironment environment)
     {
@@ -58,12 +64,19 @@ public static class StagingDatabaseBootstrap
             throw new InvalidOperationException($"Could not inspect staging database configuration ({(int)existing.StatusCode}).");
 
         var password = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+        // Host/DB/User kommen aus der Umgebung, damit derselbe Bootstrap-Job
+        // fuer die eigene Instanz (carpoolr-db) und fuer die geteilte
+        // postgres-staging-Instanz funktioniert. Vorher waren sie hier fest
+        // verdrahtet; jede Migration haette einen Code-Change gebraucht.
+        //
+        // Defaults bleiben die alte eigene Instanz, damit ein Bestandslauf
+        // ohne gesetzte Variablen unveraendert funktioniert.
         var connectionString = new NpgsqlConnectionStringBuilder
         {
-            Host = "carpoolr-db",
-            Port = 5432,
-            Database = "carpoolr",
-            Username = "carpoolr",
+            Host = Environment.GetEnvironmentVariable("BOOTSTRAP_DB_HOST") ?? "carpoolr-db",
+            Port = int.TryParse(Environment.GetEnvironmentVariable("BOOTSTRAP_DB_PORT"), out var port) ? port : 5432,
+            Database = Environment.GetEnvironmentVariable("BOOTSTRAP_DB_NAME") ?? "carpoolr",
+            Username = Environment.GetEnvironmentVariable("BOOTSTRAP_DB_USER") ?? "carpoolr",
             Password = password,
         };
         connectionString["GSS Encryption Mode"] = "Disable";
@@ -71,7 +84,7 @@ public static class StagingDatabaseBootstrap
         {
             apiVersion = "v1",
             kind = "Secret",
-            metadata = new { name = "carpoolr-database", @namespace = "staging" },
+            metadata = new { name = SecretName, @namespace = "staging" },
             type = "Opaque",
             stringData = new Dictionary<string, string>
             {

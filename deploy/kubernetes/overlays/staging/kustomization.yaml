@@ -6,7 +6,12 @@ namespace: staging
 resources:
   - ../../base
   - ingress.yaml
-  - postgres.yaml
+  # postgres.yaml NICHT mehr: die eigene carpoolr-db entfaellt. Die
+  # Staging-Daten liegen in der geteilten Instanz `postgres-staging`
+  # (Namespace database-staging), die getunt ist und ein Backup hat.
+  #
+  # Reihenfolge: die Instanz selbst wird von k3s-infra verwaltet
+  # (Application postgres-staging), nicht von hier.
   - database-bootstrap.yaml
   - database-migrate.yaml
 

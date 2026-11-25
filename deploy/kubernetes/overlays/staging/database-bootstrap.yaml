@@ -14,7 +14,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: [secrets]
-    resourceNames: [carpoolr-database]
+    resourceNames: [carpoolr-database, carpoolr-database-v2]
     verbs: [get]
   # Kubernetes RBAC cannot restrict create by resourceName. This is namespace-local;
   # the account cannot list, read other secrets, update or delete any secret.
@@ -62,6 +62,23 @@ spec:
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Staging
+            # Ziel der geteilten Staging-Instanz. Ohne diese Variablen
+            # schreibt der Job den alten Default (carpoolr-db) ins Secret -
+            # und die App zeigt nach der Migration ins Leere.
+            - name: BOOTSTRAP_DB_HOST
+              value: postgres-staging.database-staging.svc.cluster.local
+            - name: BOOTSTRAP_DB_PORT
+              value: "5432"
+            - name: BOOTSTRAP_DB_NAME
+              value: app
+            - name: BOOTSTRAP_DB_USER
+              value: app
+            # NEUES Secret, nicht das bestehende ueberschreiben. Der
+            # Bootstrap behaelt ein vorhandenes Secret absichtlich (kein
+            # Passwort-Rollover). Deshalb ein eigener Name fuer die
+            # Migration; `carpoolr-database` bleibt als Rollback liegen.
+            - name: BOOTSTRAP_SECRET_NAME
+              value: carpoolr-database-v2
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

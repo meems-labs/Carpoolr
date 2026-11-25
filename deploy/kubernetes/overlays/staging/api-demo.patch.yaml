@@ -17,5 +17,8 @@ spec:
             - name: ConnectionStrings__Default
               valueFrom:
                 secretKeyRef:
-                  name: carpoolr-database
+                  # v2 zeigt auf postgres-staging. `carpoolr-database`
+                  # (alte eigene Instanz) bleibt als Rollback im Cluster,
+                  # bis die Migration verifiziert ist.
+                  name: carpoolr-database-v2
                   key: ConnectionStrings__Default
